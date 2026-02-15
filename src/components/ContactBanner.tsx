@@ -1,7 +1,7 @@
 import { Button } from './Button'
 
 export function ContactBanner() {
-  return (
+  return ( //
     <section className="py-16 md:py-24 bg-slate-900">
       <div className="container-prose text-center">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white">
