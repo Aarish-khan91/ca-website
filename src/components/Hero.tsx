@@ -5,18 +5,18 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden bg-brand-dark">
       {/* Background Image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 ">
         <img
-          src="/images/home/Gemini_Generated_Image_15bldj15bldj15bl.png"
+          src="/images/home/hero-bg.png"
           alt="Office Background"
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 to-brand-dark/70" />
+        
       </div>
 
       <div className="container-prose py-20 md:py-32 relative z-10">
-        <div className="max-w-3xl">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white leading-tight">
+        <div className="max-w-2xl">
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-wider text-white leading-wider">
             Your Trusted Chartered Accountants for Tax, Compliance & Business Growth
           </h1>
           <p className="mt-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl">
