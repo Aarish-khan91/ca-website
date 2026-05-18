@@ -4,16 +4,25 @@ type Props = {
   title: string
   description: string
   href?: string
+  image?: string
 }
 
-export function ServiceCard({ title, description, href = '#' }: Props) {
+export function ServiceCard({ title, description, href = '#', image }: Props) {
   return (
     <div className="group rounded-none overflow-hidden bg-brand-dark flex flex-col h-full shadow-lg">
       {/* Image Placeholder */}
       <div className="h-48 w-full bg-blue-100 relative">
-        <div className="absolute inset-0 flex items-center justify-center text-brand-dark/50 font-bold bg-white/20">
+        {image ? (
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-brand-dark/50 font-bold bg-white/20">
           Image: {title}
         </div>
+        )}
       </div>
 
       <div className="p-6 flex-1 flex flex-col">
