@@ -4,59 +4,68 @@ export function InsightsHome() {
     const updates = [
         {
             title: 'Complete GST guide for Small Businesses in 2025',
-            category: 'Taxation | May 15, 2025',
-            imageSrc: '/images/home/Gemini_Generated_Image_jmnkmfjmnkmfjmnk.png',
+            category: 'Expert Advice, Industry insights.',
+            date: 'Nov 25, 2025',
+            excerpt: 'Stay ahead of the curve with emerging trends that are reshaping industries and customer expectations.',
+            imageSrc: '/images/home/1.png',
             href: '/blog/gst-guide-2025'
         },
         {
-            title: 'Maximize Your Business Growth: Financial Strategies',
-            category: 'Consulting | May 10, 2025',
-            imageSrc: '/images/home/Gemini_Generated_Image_ogwk7gogwk7gogwk.png',
-            href: '/blog/financial-strategies'
+            title: 'How We Helped a Retail Brand Increase Sales by 45%',
+            category: 'Success Story',
+            date: 'November 19, 2025',
+            excerpt: 'AI, automation, and shifting consumer behavior are shaping industries. Stay ahead with these key trends for 2024.',
+            imageSrc: '/images/home/2.png',
+            href: '/blog/retail-brand-sales'
         },
         {
-            title: 'Understanding the New Corporate Tax Regime',
-            category: 'Accounting | May 02, 2025',
-            imageSrc: '/images/home/Gemini_Generated_Image_x34l1ax34l1ax34l.png',
-            href: '/blog/corporate-tax-regime'
+            title: "From Startup to Scale: A Tech Company's Growth Journey",
+            category: 'Success Story',
+            date: 'November 03, 2025',
+            excerpt: 'Discover how one company navigated rapid growth, scaled operations, and stayed true to its vision.',
+            imageSrc: '/images/home/3.png',
+            href: '/blog/tech-company-growth'
         }
     ]
 
     return (
-        <section className="py-20 md:py-28 bg-white">
-            <div className="container-prose">
+        <section className="py-20 md:py-24 bg-[#f8f9fa]">
+            <div className="container-prose max-w-7xl mx-auto px-4 md:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold text-brand-dark">Latest Insights & Updates</h2>
+                    <h2 className="text-3xl md:text-[40px] font-bold text-brand-dark tracking-wide">Latest Insights & Updates</h2>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-3 gap-10">
                     {updates.map((post, idx) => (
-                        <div key={idx} className="group rounded-xl overflow-hidden border border-slate-100 hover:shadow-xl transition-shadow bg-white flex flex-col">
+                        <div key={idx} className="flex flex-col group">
                             {/* Image */}
-                            <div className="h-56 w-full relative overflow-hidden group-hover:opacity-95 transition-opacity">
+                            <Link href={post.href} className="block w-full aspect-[4/5] relative overflow-hidden rounded-[24px] mb-6 shadow-sm">
                                 <img
                                     src={post.imageSrc}
                                     alt={post.title}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
-                            </div>
+                            </Link>
 
-                            <div className="p-6 flex-1 flex flex-col">
-                                <div className="text-sm text-brand-orange font-semibold mb-3 tracking-wide uppercase">
-                                    {post.category}
-                                </div>
-                                <h3 className="text-xl font-bold text-slate-900 mb-4 leading-snug group-hover:text-brand-orange transition-colors">
-                                    {post.title}
-                                </h3>
-                                <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">
-                                    Stay updated with the latest trends and regulatory changes impacting your business...
-                                </p>
-                                <Link href="/blog" className="inline-flex items-center text-brand-dark font-bold hover:text-brand-orange transition-colors uppercase tracking-wide text-sm">
-                                    Read More
-                                    <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
+                            {/* Content */}
+                            <div className="flex flex-col px-1">
+                                <Link href={post.href}>
+                                    <h3 className="text-[22px] font-semibold text-brand-dark mb-4 leading-snug hover:text-brand-orange transition-colors">
+                                        {post.title}
+                                    </h3>
                                 </Link>
+                                
+                                <div className="space-y-4 mt-1">
+                                    <p className="text-slate-700 text-[15px]">
+                                        {post.category}
+                                    </p>
+                                    <p className="text-slate-500 text-[14.5px]">
+                                        {post.date}
+                                    </p>
+                                    <p className="text-slate-500 text-[14.5px] leading-relaxed">
+                                        {post.excerpt}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     ))}

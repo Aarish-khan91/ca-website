@@ -1,19 +1,25 @@
 export function TrustedBy() {
   const logos = [
-    { name: 'Agency One' },
-    { name: 'GovDept' },
-    { name: 'Industry Board' },
+    { name: 'Agency One', url: '/images/trusted/DC-1.png' },
+    { name: 'GovDept', url: '/images/trusted/DC-2.png' },
+    { name: 'Industry Board 1', url: '/images/trusted/DC-3.png' },
+    { name: 'Industry Board 2', url: '/images/trusted/DC-4.png' },
   ]
+
+  const logoData = [...logos, ...logos]
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 items-center">
-      {logos.map((l) => (
-        <div
-          key={l.name}
-          className="h-20 rounded-lg border border-slate-200 bg-white grid place-items-center text-slate-400 grayscale hover:grayscale-0 transition-all shadow-sm"
-        >
-          <div className="w-24 h-8 bg-slate-200 rounded" />
-        </div>
-      ))}
+    <div className="w-full overflow-hidden flex flex-nowrap relative">
+      <div className="max-w-7xl flex animate-marquee pause-on-hover shrink-0  justify-around items-center">
+        {logoData.map((l, idx) => (
+          <div
+            key={`first-${idx}`}
+            className="h-34 w-48 mx-4 sm:mx-8 rounded-lg flex items-center justify-center transition-all duration-300 shrink-0"
+          >
+            <img src={l.url} alt={l.name} className="max-h-30 max-w-[80%] object-contain" />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

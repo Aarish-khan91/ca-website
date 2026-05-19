@@ -9,7 +9,7 @@ type Props = {
 
 export function ServiceCard({ title, description, href = '#', image }: Props) {
   return (
-    <div className="group rounded-none overflow-hidden bg-brand-dark flex flex-col h-full shadow-lg">
+    <div className="group rounded-lg overflow-hidden bg-[#063047] flex flex-col h-full shadow-lg">
       {/* Image Placeholder */}
       <div className="h-48 w-full bg-blue-100 relative">
         {image ? (

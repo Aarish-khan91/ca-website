@@ -12,6 +12,40 @@ import { ServiceContact } from '@/components/ServiceContact'
 import Link from 'next/link'
 import { Button } from '@/components/Button'
 
+const coreServices = [
+  {
+    title: "Company Incorporation",
+    description: "Register your business with complete documentation, compliance, and startup support.",
+    href: "/services/company-incorporation",
+    image: "/images/home/1.png"
+  },
+  {
+    title: "GST Registration & Filing",
+    description: "End-to-end registration, timely filing, reconciliation, and dispute handling.",
+    image: "/images/home/2.png"
+  },
+  {
+    title: "Income Tax Advisory",
+    description: "Professional tax planning, return filing, and compliance management.",
+    image: "/images/home/3.png"
+  },
+  {
+    title: "Accounting & Bookkeeping",
+    description: "Monthly bookkeeping, financial reporting, and accurate ledger management.",
+    image: "/images/home/4.png"
+  },
+  {
+    title: "Audit & Assurance",
+    description: "Internal, statutory, and compliance audits with actionable insights.",
+    image: "/images/home/1.png"
+  },
+  {
+    title: "Business Compliance Management",
+    description: "ROC, MCA, and statutory compliance management to keep your business protected.",
+    image: "/images/home/2.png"
+  }
+];
+
 export default function Page() {
   return (
     <>
@@ -26,31 +60,15 @@ export default function Page() {
           className="bg-white py-20"
         >
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ServiceCard
-              title="Company Incorporation"
-              description="Register your business with complete documentation, compliance, and startup support."
-              href="/services/company-incorporation"
-            />
-            <ServiceCard
-              title="GST Registration & Filing"
-              description="End-to-end registration, timely filing, reconciliation, and dispute handling."
-            />
-            <ServiceCard
-              title="Income Tax Advisory"
-              description="Professional tax planning, return filing, and compliance management."
-            />
-            <ServiceCard
-              title="Accounting & Bookkeeping"
-              description="Monthly bookkeeping, financial reporting, and accurate ledger management."
-            />
-            <ServiceCard
-              title="Audit & Assurance"
-              description="Internal, statutory, and compliance audits with actionable insights."
-            />
-            <ServiceCard
-              title="Business Compliance Management"
-              description="ROC, MCA, and statutory compliance management to keep your business protected."
-            />
+            {coreServices.map((service, index) => (
+              <ServiceCard
+                key={index}
+                title={service.title}
+                description={service.description}
+                href={service.href}
+                image={service.image}
+              />
+            ))}
           </div>
           <div className="mt-12 flex justify-center">
             <Link href="/services">
