@@ -4,7 +4,12 @@ export function ReadyToStart() {
     return (
         <section className="relative overflow-hidden bg-[#0f283d] py-20 text-center">
             {/* Radial background effect */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-[#0f283d] to-[#0f283d]" />
+            <div 
+        className="absolute inset-0 opacity-80" 
+        style={{ 
+          backgroundImage: "repeating-conic-gradient(from 0deg at 50% 10%, rgba(255,255,255,0.03) 0deg 2deg, transparent 2deg 4deg)" 
+        }} 
+      />
 
             <div className="relative container-prose">
                 <h2 className="text-3xl md:text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>

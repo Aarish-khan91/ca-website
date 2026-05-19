@@ -1,19 +1,22 @@
 export function PricingHero() {
     return (
-        <section className="relative overflow-hidden bg-slate-900 py-20 md:py-28">
-            {/* Abstract Background - mimicking the wavy lines with gradients */}
-            <div className="absolute inset-0 opacity-50">
-                <div className="absolute top-0 right-0 w-3/4 h-full bg-gradient-to-bl from-orange-500/30 via-blue-600/20 to-transparent blur-3xl rounded-full transform translate-x-1/4 -translate-y-1/4" />
-                <div className="absolute bottom-0 left-0 w-3/4 h-full bg-gradient-to-tr from-blue-600/30 via-orange-500/20 to-transparent blur-3xl rounded-full transform -translate-x-1/4 translate-y-1/4" />
+        <section className="relative overflow-hidden min-h-[350px] md:min-h-[400px] flex items-center bg-[#0b293d]">
+            <div className="absolute inset-0">
+                <img 
+                    src="/images/pricing/pricing-hero.png" 
+                    alt="Pricing Background" 
+                    className="w-full h-full object-cover object-center"
+                />
             </div>
 
-            <div className="relative container-prose text-center md:text-left">
+            <div className="relative z-10 container-prose px-4 md:px-8 w-full text-left">
                 <div className="max-w-3xl">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
+                    <h1 className="text-[36px] md:text-[48px] lg:text-[56px] font-bold tracking-tight text-white mb-4">
                         Pricing
                     </h1>
-                    <p className="text-lg md:text-xl text-white/80 max-w-2xl leading-relaxed">
-                        Flexible pricing designed around your business needs transparent, fair, and fully compliant.
+                    <p className="text-[16px] md:text-[20px] text-white/95 max-w-xl leading-relaxed font-normal">
+                        Flexible pricing designed around your business needs.<br className="hidden md:block" />
+                        transparent, fair, and fully compliant.
                     </p>
                 </div>
             </div>

@@ -1,109 +1,92 @@
-import { Button } from './Button'
-
 export function PricingCards() {
+    const plans = [
+        {
+            name: 'Basic',
+            price: '499',
+            buttonText: 'Choose Basic',
+            features: [
+                'GST Registration',
+                'Basic Income Tax Filing',
+                'Limited Support'
+            ]
+        },
+        {
+            name: 'Standard',
+            badge: 'Recommended',
+            price: '999',
+            buttonText: 'Choose Standard',
+            features: [
+                'GST Registration & Filing',
+                'Comprehensive Income Tax Filing',
+                'Priority Support',
+                'Basic Accounting'
+            ]
+        },
+        {
+            name: 'Premium',
+            badge: 'Best Value',
+            price: '1999',
+            buttonText: 'Choose Premium',
+            features: [
+                'GST Registration & Filing',
+                'Advanced Income Tax Filing',
+                'Dedicated Support',
+                'Full Accounting & Bookkeeping',
+                'Payroll & HR Compliance'
+            ]
+        }
+    ]
+
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
-            <div className="container-prose">
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-10 text-center md:text-left">Compliance Packages</h2>
+        <section className="py-16 md:py-24 bg-[#f8f9fa]">
+            <div className="container-prose max-w-6xl mx-auto px-4">
+                <h2 className="text-[32px] md:text-[36px] font-bold text-brand-dark mb-12 text-center">
+                    Compliance Packages
+                </h2>
 
-                <div className="grid md:grid-cols-3 gap-8">
-                    {/* Basic Plan */}
-                    <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 flex flex-col hover:shadow-lg transition-shadow">
-                        <h3 className="text-xl font-bold text-slate-700">Basic</h3>
-                        <div className="mt-4 flex items-baseline">
-                            <span className="text-4xl font-extrabold text-slate-900">$499</span>
-                            <span className="ml-1 text-slate-500">/ year</span>
+                <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+                    {plans.map((plan, index) => (
+                        <div key={index} className="bg-white rounded-[5px] p-4 shadow-sm border border-slate-200 flex flex-col hover:shadow-lg transition-shadow duration-300">
+                            
+                            {/* Header row: Name + Badge */}
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-[18px] font-medium text-slate-500">{plan.name}</h3>
+                                {plan.badge && (
+                                    <span className="px-3 py-1 bg-[#ffecd1] text-[#f28e2b] text-[13px] font-medium rounded-full">
+                                        {plan.badge}
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Price */}
+                            <div className="flex items-baseline mb-6">
+                                <span className="text-[40px] md:text-[44px] font-bold text-brand-dark leading-none">
+                                    ${plan.price}
+                                </span>
+                                <span className="ml-2 text-[16px] text-brand-dark font-medium">
+                                    per year
+                                </span>
+                            </div>
+
+                            {/* Button */}
+                            <button className="w-full py-3 px-4 bg-[#eef1f5] hover:bg-[#e2e8f0] text-brand-dark font-medium rounded-[8px] transition-colors mb-8">
+                                {plan.buttonText}
+                            </button>
+
+                            {/* Features */}
+                            <ul className="space-y-2 flex-1">
+                                {plan.features.map((feature, fIndex) => (
+                                    <li key={fIndex} className="flex items-start text-slate-500 text-[15px]">
+                                        <svg className="w-5 h-5 text-slate-600 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            
                         </div>
-
-                        <Button variant="secondary" className="mt-8 w-full bg-slate-200 text-slate-900 hover:bg-slate-300">
-                            Choose Basic
-                        </Button>
-
-                        <ul className="mt-8 space-y-4 flex-1">
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                GST Registration
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Basic Income Tax Filing
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Limited Support
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Standard Plan */}
-                    <div className="bg-white rounded-2xl p-8 shadow-md border border-slate-100 flex flex-col relative transform md:-translate-y-4 hover:shadow-xl transition-shadow">
-                        <div className="absolute top-0 right-0 -mt-3 mr-3 px-3 py-1 bg-orange-100 text-orange-600 text-xs font-bold uppercase rounded-full">
-                            Recommended
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-700">Standard</h3>
-                        <div className="mt-4 flex items-baseline">
-                            <span className="text-4xl font-extrabold text-slate-900">$999</span>
-                            <span className="ml-1 text-slate-500">/ year</span>
-                        </div>
-
-                        <Button variant="secondary" className="mt-8 w-full bg-slate-200 text-slate-900 hover:bg-slate-300">
-                            Choose Standard
-                        </Button>
-
-                        <ul className="mt-8 space-y-4 flex-1">
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                GST Registration & Filing
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Income Tax Filing
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Priority Support
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Basic Accounting
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Premium Plan */}
-                    <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 flex flex-col hover:shadow-lg transition-shadow">
-                        <div className="absolute top-0 right-0 -mt-3 mr-3 px-3 py-1 bg-orange-100 text-orange-600 text-xs font-bold uppercase rounded-full">
-                            Best Value
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-700">Premium</h3>
-                        <div className="mt-4 flex items-baseline">
-                            <span className="text-4xl font-extrabold text-slate-900">$1999</span>
-                            <span className="ml-1 text-slate-500">/ year</span>
-                        </div>
-
-                        <Button variant="secondary" className="mt-8 w-full bg-slate-200 text-slate-900 hover:bg-slate-300">
-                            Choose Premium
-                        </Button>
-
-                        <ul className="mt-8 space-y-4 flex-1">
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                GST Registration & Filing
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Advanced Tax Filing
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Dedicated Support
-                            </li>
-                            <li className="flex items-center text-slate-600">
-                                <svg className="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                Accounting & Payroll
-                            </li>
-                        </ul>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>

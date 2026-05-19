@@ -2,7 +2,7 @@ import { Navbar } from '@/components/Navbar'
 import { AboutHero } from '@/components/AboutHero'
 import { OurStory } from '@/components/OurStory'
 import { MissionVision } from '@/components/MissionVision'
-import { Timeline } from '@/components/Timeline'
+import { OurJourney } from '@/components/OurJourney'
 import { TeamGrid } from '@/components/TeamGrid'
 import { ContactBanner } from '@/components/ContactBanner'
 import { FloatingChat } from '@/components/FloatingChat'
@@ -16,7 +16,7 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <main className="bg-white">
         <AboutHero />
 
@@ -24,17 +24,7 @@ export default function AboutPage() {
 
         <MissionVision />
 
-        <section className="py-16 md:py-24 bg-slate-50 text-slate-900">
-          <div className="container-prose">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">Our Journey</h2>
-              <p className="mt-4 text-slate-600 text-lg max-w-2xl mx-auto">
-                Key milestones that shaped our practice over the years.
-              </p>
-            </div>
-            <Timeline />
-          </div>
-        </section>
+        <OurJourney />
 
         <section className="py-16 md:py-24 bg-white text-slate-900">
           <div className="container-prose">
@@ -48,10 +38,10 @@ export default function AboutPage() {
           </div>
         </section>
 
+<div className=' '>
         <ContactBanner />
-        <Footer className="mt-0" />
+        </div>
       </main>
-      <FloatingChat />
     </>
   )
 }

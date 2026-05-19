@@ -49,7 +49,7 @@ const coreServices = [
 export default function Page() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <main className="bg-white">
         <Hero />
 

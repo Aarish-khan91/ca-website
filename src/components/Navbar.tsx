@@ -6,7 +6,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
+    <header className="fixed w-full top-0 z-50 bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
       <div className="max-w-[1400px] mx-auto py-3 flex items-center justify-between px-4 lg:px-8">
         
         {/* Left: Logo */}
