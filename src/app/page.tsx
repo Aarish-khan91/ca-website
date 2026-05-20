@@ -109,7 +109,6 @@ export default function Page() {
         {/* Contact Form Section - Deep Blue */}
         <ServiceContact />
 
-        <Footer />
       </main>
     </>
   )
