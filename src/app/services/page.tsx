@@ -15,16 +15,12 @@ export const metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <Navbar />
       <main className="bg-slate-50 min-h-screen flex flex-col">
         <ServiceHero />
         <ServiceGrid />
         <ServiceTestimonials />
         <ServiceFAQ />
-        <ServiceContact />
-        <Footer className="mt-0" />
       </main>
-      <FloatingChat />
     </>
   )
 }

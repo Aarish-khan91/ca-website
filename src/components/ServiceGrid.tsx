@@ -5,64 +5,61 @@ export function ServiceGrid() {
         {
             title: 'Company Incorporation',
             desc: 'Register your business with complete documentation, compliance, and startup support.',
-            imageColor: 'bg-amber-100', // Placeholder for image
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png',
             href: '/services/company-incorporation'
         },
         {
             title: 'GST Registration & Filing',
-            desc: 'End-to-end registration, timely filing, reconciliation, and dispute handling.',
-            imageColor: 'bg-blue-100',
+            desc: 'End-to-end GST registration, timely filing, reconciliation, and expert dispute handling.',
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (2).png',
         },
         {
             title: 'Income Tax Advisory',
-            desc: 'Professional tax planning, return filing, and compliance management.',
-            imageColor: 'bg-green-100',
+            desc: 'Professional tax planning, return filing, and year-round compliance management.',
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (3).png',
         },
         {
             title: 'Accounting & Bookkeeping',
             desc: 'Monthly bookkeeping, financial reporting, and accurate ledger management.',
-            imageColor: 'bg-purple-100',
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (4).png',
         },
         {
             title: 'Audit & Assurance',
             desc: 'Internal, statutory, and compliance audits with actionable insights and transparency.',
-            imageColor: 'bg-rose-100',
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2.png',
         },
         {
             title: 'Business Compliance Management',
-            desc: 'ROC, MCA, and statutory compliance management to keep your business protected.',
-            imageColor: 'bg-indigo-100',
+            desc: 'End-to-end ROC, MCA, and statutory compliance management to keep your business legally protected.',
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png', // Re-used for now
         },
     ]
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
-            <div className="container-prose">
+        <section className="py-16 md:py-24 bg-[#f8f9fa]">
+            <div className="container-prose px-4 max-w-6xl mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Core Services</h2>
-                    <p className="text-slate-600">Expert CA services to support individuals, startups, and enterprises.</p>
+                    <h2 className="text-[28px] md:text-[36px] font-bold text-[#0b293d] mb-4">Our Core Services</h2>
+                    <p className="text-slate-600 text-[15px] md:text-[16px]">Expert CA services to support individuals, startups, and enterprises.</p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {services.map((s) => (
-                        <div key={s.title} className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-[#0f283d] flex flex-col"> {/* Dark blue card background */}
-                            {/* Image Placeholder Area */}
-                            <div className={`h-48 w-full ${s.imageColor} relative overflow-hidden`}>
-                                <div className="absolute inset-0 flex items-center justify-center text-slate-500 font-medium bg-slate-200">
-                                    Image: {s.title}
-                                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {services.map((s, idx) => (
+                        <div key={idx} className="group rounded-[8px] overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-[#0b293d] flex flex-col h-full">
+                            {/* Image Area */}
+                            <div className="h-[220px] w-full relative overflow-hidden bg-slate-200 shrink-0">
+                                <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             </div>
 
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-orange-400 transition-colors">
+                            <div className="p-6 md:p-8 flex-1 flex flex-col">
+                                <h3 className="text-[18px] md:text-[20px] font-medium text-white mb-3">
                                     {s.title}
                                 </h3>
-                                <p className="text-white/70 text-sm mb-6 flex-grow leading-relaxed">
+                                <p className="text-slate-300 font-light text-[14px] leading-relaxed mb-8 flex-1">
                                     {s.desc}
                                 </p>
-                                <Link href={s.href || '#'} className="inline-flex items-center text-orange-400 text-sm font-semibold hover:text-orange-300 transition-colors uppercase tracking-wide">
-                                    Learn More
-                                    <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                <Link href={s.href || '#'} className="inline-flex items-center text-[#f28e2b] text-[14px] font-medium hover:text-[#e07b1a] transition-colors mt-auto">
+                                    Learn More <span className="ml-1">→</span>
                                 </Link>
                             </div>
                         </div>

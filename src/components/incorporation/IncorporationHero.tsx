@@ -3,31 +3,24 @@ import { Button } from '@/components/Button'
 
 export function IncorporationHero() {
     return (
-        <section className="relative overflow-hidden bg-slate-900 py-20 md:py-32">
-            {/* Abstract Background - Consistent Wave Pattern */}
-            <div className="absolute inset-0 opacity-40">
-                <div className="absolute top-0 right-0 w-3/4 h-full bg-gradient-to-bl from-orange-500/30 via-blue-600/20 to-transparent blur-3xl rounded-full transform translate-x-1/4 -translate-y-1/4" />
-                <div className="absolute bottom-0 left-0 w-3/4 h-full bg-gradient-to-tr from-blue-600/30 via-orange-500/20 to-transparent blur-3xl rounded-full transform -translate-x-1/4 translate-y-1/4" />
-                {/* Additional geometric accent */}
-                <div className="absolute top-10 left-10 w-24 h-24 border border-white/10 rounded-full" />
-                <div className="absolute bottom-10 right-10 w-32 h-32 border border-white/5 rounded-full" />
+        <section className="relative overflow-hidden h-[450px] md:h-[500px] flex items-center bg-[#0b293d]">
+            {/* Background Image */}
+            <div className="absolute inset-0">
+                <img 
+                    src="/images/pricing/pricing-hero.png" 
+                    alt="Company Incorporation" 
+                    className="w-full h-full object-cover object-center mix-blend-overlay opacity-80"
+                />
             </div>
 
-            <div className="relative container-prose text-center">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
+            <div className="relative container-prose px-4 md:px-8">
+                <div className="max-w-2xl">
+                    <h1 className="text-[36px] md:text-[48px] lg:text-[56px] font-bold tracking-tight text-white mb-4 leading-tight">
                         Company Incorporation
                     </h1>
-                    <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-                        Company registration is the primary process by which business owners establish or incorporate their company.
+                    <p className="text-[16px] md:text-[20px] text-white/95 leading-relaxed font-normal">
+                        Complete support to register your company in India with confidence and compliance.
                     </p>
-                    <div className="mt-8">
-                        <Link href="/contact">
-                            <Button variant="primary" size="lg" className="bg-orange-500 hover:bg-orange-600 border-none text-white">
-                                Book free consultation
-                            </Button>
-                        </Link>
-                    </div>
                 </div>
             </div>
         </section>

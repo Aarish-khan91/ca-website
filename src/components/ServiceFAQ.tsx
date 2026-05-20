@@ -9,27 +9,27 @@ export function ServiceFAQ() {
             a: 'You generally need your sales and purchase invoices, bank statements, and details of input tax credit. Specific requirements may vary based on your business type.'
         },
         {
-            q: 'How does tax residency work?',
-            a: 'Tax residency depends on the number of days you reside in India during a financial year. We can help you determine your status and applicable tax liabilities.'
+            q: 'How long does incorporation take?',
+            a: 'Company incorporation typically takes 10-15 working days, provided all necessary documents are in order and name approval is granted promptly.'
         },
         {
-            q: 'When should I file my returns?',
-            a: 'Due dates vary for different returns (GST, Income Tax, TDS). Missing deadlines can lead to penalties. We monitor these dates and ensure timely compliance for you.'
+            q: 'What are your service charges?',
+            a: 'Our service charges vary depending on the scope and complexity of the work. We offer transparent pricing and can provide a detailed quote after an initial consultation.'
         },
         {
             q: 'Do you handle notices?',
             a: 'Yes, we provide end-to-end support for handling tax notices, drafting responses, and representing you before tax authorities.'
         },
         {
-            q: 'Can you manage my payroll needs?',
-            a: 'Absolutely. We offer comprehensive payroll services including salary processing, TDS deduction, and issuing Form 16 to employees.'
+            q: 'Can you manage everything monthly?',
+            a: 'Absolutely. We offer comprehensive monthly retainers covering bookkeeping, GST filings, TDS compliance, and general advisory.'
         },
     ]
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
-            <div className="container-prose max-w-4xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-10 text-center">Frequently Asked Questions</h2>
+        <section className="py-16 md:py-24 bg-[#f8f9fa]">
+            <div className="container-prose max-w-4xl mx-auto px-4">
+                <h2 className="text-[28px] md:text-[36px] font-bold text-[#0b293d] mb-10 text-center">Frequently Asked Questions</h2>
 
                 <div className="space-y-4">
                     {faqs.map((item, idx) => (
@@ -45,14 +45,14 @@ function Accordion({ question, answer, isOpen: initialOpen }: { question: string
     const [isOpen, setIsOpen] = useState(initialOpen || false)
 
     return (
-        <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+        <div className="border border-slate-300 rounded-[6px] overflow-hidden bg-[#f8f9fa] md:bg-white shadow-sm hover:shadow-md transition-shadow">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 text-left transition-colors"
+                className="w-full flex items-center justify-between px-6 py-5 bg-transparent hover:bg-slate-50 text-left transition-colors"
             >
-                <span className="font-semibold text-slate-800">{question}</span>
+                <span className="font-medium text-[#0b293d] text-[16px] md:text-[18px]">{question}</span>
                 <svg
-                    className={clsx("w-5 h-5 text-slate-400 transition-transform duration-200", isOpen ? "transform rotate-180" : "")}
+                    className={clsx("w-5 h-5 text-slate-500 transition-transform duration-200", isOpen ? "transform rotate-180" : "")}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -62,7 +62,7 @@ function Accordion({ question, answer, isOpen: initialOpen }: { question: string
             </button>
             <div
                 className={clsx(
-                    "px-6 text-slate-600 bg-white transition-all duration-300 ease-in-out",
+                    "px-6 text-slate-600 font-light text-[15px] leading-relaxed transition-all duration-300 ease-in-out",
                     isOpen ? "max-h-48 pb-6 opacity-100" : "max-h-0 py-0 opacity-0 overflow-hidden"
                 )}
             >

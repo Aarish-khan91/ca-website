@@ -2,12 +2,10 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { IncorporationHero } from '@/components/incorporation/IncorporationHero'
 import { IncorporationOverview } from '@/components/incorporation/IncorporationOverview'
-import { EntityComparison } from '@/components/incorporation/EntityComparison'
+import { HowWeHelp } from '@/components/incorporation/HowWeHelp'
 import { IncorporationSteps } from '@/components/incorporation/IncorporationSteps'
-import { IncorporationForm } from '@/components/incorporation/IncorporationForm'
-import { IncorporationClosure } from '@/components/incorporation/IncorporationClosure'
+import { WhoShouldOpt } from '@/components/incorporation/WhoShouldOpt'
 import { IncorporationFAQ } from '@/components/incorporation/IncorporationFAQ'
-import { RelatedBlogs } from '@/components/incorporation/RelatedBlogs'
 import { FloatingChat } from '@/components/FloatingChat'
 
 export const metadata = {
@@ -19,18 +17,14 @@ export default function CompanyIncorporationPage() {
     return (
         <>
             <Navbar />
-            <main className="min-h-screen flex flex-col">
+            <main className="min-h-screen flex flex-col bg-[#f8f9fa]">
                 <IncorporationHero />
                 <IncorporationOverview />
-                <EntityComparison />
+                <HowWeHelp />
                 <IncorporationSteps />
-                <IncorporationClosure />
-                <IncorporationForm />
+                <WhoShouldOpt />
                 <IncorporationFAQ />
-                <RelatedBlogs />
-                <Footer className="mt-0" />
             </main>
-            <FloatingChat />
         </>
     )
 }
