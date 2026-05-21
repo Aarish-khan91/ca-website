@@ -8,7 +8,7 @@ export function Navbar() {
   return (
     <header className="fixed w-full top-0 z-50 bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
       <div className="max-w-[1400px] mx-auto py-3 flex items-center justify-between px-4 lg:px-8">
-        
+
         {/* Left: Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex flex-col items-center">

@@ -1,108 +1,73 @@
-import { Navbar } from '@/components/Navbar'
+import { mockPosts } from '@/data/blogPosts'
 import { InsightsHero } from '@/components/InsightsHero'
-import { SearchFilters } from '@/components/SearchFilters'
 import { NewsletterCTA } from '@/components/NewsletterCTA'
-import { Footer } from '@/components/Footer'
-import { FloatingChat } from '@/components/FloatingChat'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Blog | Ritesh Arora & Associates',
   description: 'Expert advice, real-world case studies, and actionable strategies.'
 }
 
-const posts = [
-  {
-    title: 'Complete GST guide for Small Businesses in 2025',
-    category: 'Expert Advice',
-    date: 'Nov 25, 2025',
-    author: 'Ritesh Arora',
-    excerpt: 'A comprehensive breakdown of the new GST regulations affecting MSMEs and how to stay compliant while maximizing benefits.'
-  },
-  {
-    title: 'How We Helped a Retail Brand Increase Sales by 45%',
-    category: 'Success Story',
-    date: 'Nov 19, 2025',
-    author: 'Anita Sharma',
-    excerpt: 'Discover the strategic financial planning and inventory management techniques that transformed a local retailer.'
-  },
-  {
-    title: 'From Startup to Scale: A Tech Company’s Growth Journey',
-    category: 'Success Story',
-    date: 'Nov 03, 2025',
-    author: 'Varun Patel',
-    excerpt: 'Navigating the complex landscape of fundraising, equity management, and international expansion.'
-  },
-  {
-    title: 'Understanding the New Income Tax Regime',
-    category: 'Expert Advice',
-    date: 'Oct 28, 2025',
-    author: 'Ritesh Arora',
-    excerpt: 'Key differences between the old and new tax regimes and which one is right for your financial goals.'
-  },
-  {
-    title: 'Audit Readiness: A Checklist for Corporate Compliance',
-    category: 'Expert Advice',
-    date: 'Oct 15, 2025',
-    author: 'Vikram D.',
-    excerpt: 'Essential steps to ensure your company is always audit-ready and compliant with statutory requirements.'
-  }
-]
-
 export default function InsightsPage() {
-  return (
-    <>
-      <Navbar />
-      <main className="bg-white min-h-screen flex flex-col">
-        <InsightsHero />
-        <SearchFilters />
+  const allPosts = Object.values(mockPosts)
+  // Repeat the posts list to fill up the 6-card design layout
+  const postsGrid = [...allPosts, ...allPosts]
 
-        <section className="py-16 md:py-24 bg-white flex-grow">
-          <div className="container-prose">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((p) => (
-                <article key={p.title} className="group flex flex-col h-full bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
-                  {/* Image Placeholder */}
-                  <div className="h-48 w-full bg-slate-100 relative overflow-hidden group-hover:opacity-90 transition-opacity">
-                    <div className="absolute inset-0 flex items-center justify-center text-slate-300 text-sm font-medium">
-                      <span className="sr-only">Article Image</span>
-                      Image Placeholder
-                    </div>
+  return (
+    <main className="bg-white min-h-screen flex flex-col">
+      <InsightsHero />
+
+      <section className="py-20 md:py-28 bg-white flex-grow">
+        <div className="container-prose">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+            {postsGrid.map((p, index) => {
+              // Use gst_guide.png for the vertical cards instead of wide banner
+              const cardImage = p.slug === 'complete-gst-guide-for-small-businesses-in-2025' 
+                ? '/images/blog/gst_guide.png' 
+                : p.image
+
+              return (
+                <article key={p.slug + '-' + index} className="group flex flex-col h-full bg-white transition-all duration-300">
+                  {/* Aspect-ratio fully rounded card image */}
+                  <div className="w-full aspect-[4/5] relative overflow-hidden rounded-[24px] mb-6 shadow-sm group-hover:shadow-md transition-all duration-300">
+                    <Link href={`/blog/${p.slug}`}>
+                      <img
+                        src={cardImage}
+                        alt={p.title}
+                        className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out cursor-pointer"
+                      />
+                    </Link>
                   </div>
 
-                  <div className="flex-1 p-6 flex flex-col">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-wide">
-                        {p.category}
-                      </span>
-                      <span className="text-slate-400 text-sm">{p.date}</span>
-                    </div>
-
-                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                      <a href="#" className="focus:outline-none">
-                        <span className="absolute inset-0" aria-hidden="true" />
+                  {/* Card Content - aligned directly below image */}
+                  <div className="flex-grow flex flex-col">
+                    <h3 className="text-xl md:text-[22px] font-bold text-slate-800 tracking-tight leading-snug mb-3 hover:text-[#F19020] transition-colors">
+                      <Link href={`/blog/${p.slug}`} className="focus:outline-none">
                         {p.title}
-                      </a>
+                      </Link>
                     </h3>
 
-                    <p className="text-slate-600 mb-4 line-clamp-3 text-sm flex-grow">
+                    <div className="flex flex-col gap-1 mb-4">
+                      <span className="text-sm font-semibold text-slate-500 tracking-wide">
+                        {p.category}
+                      </span>
+                      <span className="text-xs text-slate-400 font-medium">
+                        {p.date}
+                      </span>
+                    </div>
+
+                    <p className="text-slate-500 text-sm leading-relaxed font-light line-clamp-3">
                       {p.excerpt}
                     </p>
-
-                    <div className="mt-auto pt-4 border-t border-slate-100 flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-slate-200" /> {/* Avatar placeholder */}
-                      <span className="text-sm font-medium text-slate-700">{p.author}</span>
-                    </div>
                   </div>
                 </article>
-              ))}
-            </div>
+              )
+            })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <NewsletterCTA />
-        <Footer className="mt-0" />
-      </main>
-      <FloatingChat />
-    </>
+      <NewsletterCTA />
+    </main>
   )
 }
