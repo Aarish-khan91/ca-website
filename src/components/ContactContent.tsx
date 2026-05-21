@@ -51,7 +51,7 @@ export function ContactContent() {
                     {/* Right Column: Consultation Form */}
                     <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-100">
                         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Request a Consultation</h2>
-                        <p className="text-slate-500 mb-8">We'll get back to you within 24 hours.</p>
+                        <p className="text-slate-500 mb-8">We&apos;ll get back to you within 24 hours.</p>
 
                         <form className="space-y-6">
                             <div>
