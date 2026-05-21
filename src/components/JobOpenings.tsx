@@ -5,7 +5,7 @@ import { useState } from 'react'
 const MOCK_JOBS = [
     {
         id: 1,
-        title: 'Assistant Manager - Audit',
+        title: 'Assistant Manager — Audit',
         department: 'Audit & Assurance',
         type: 'Full Time',
         location: 'New Delhi',
@@ -87,7 +87,7 @@ const MOCK_JOBS = [
     },
     {
         id: 6,
-        title: 'Assistant Manager - Audit',
+        title: 'Assistant Manager — Audit',
         department: 'Audit & Assurance',
         type: 'Full Time',
         location: 'New Delhi',
@@ -121,11 +121,41 @@ const ClockIcon = () => (
 
 export function JobOpenings() {
     const [selectedJob, setSelectedJob] = useState<typeof MOCK_JOBS[0] | null>(null)
+    const [isApplying, setIsApplying] = useState(false)
+    const [fullName, setFullName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [portfolio, setPortfolio] = useState('')
+    const [message, setMessage] = useState('')
+    const [resumeFile, setResumeFile] = useState<File | null>(null)
+    const [isSubmitted, setIsSubmitted] = useState(false)
+
+    const resetForm = () => {
+        setFullName('')
+        setEmail('')
+        setPhone('')
+        setPortfolio('')
+        setMessage('')
+        setResumeFile(null)
+        setIsSubmitted(false)
+        setIsApplying(false)
+    }
+
+    const handleClose = () => {
+        setSelectedJob(null)
+        resetForm()
+    }
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setResumeFile(e.target.files[0])
+        }
+    }
 
     return (
         <section className="py-16 md:py-24 bg-[#f8f9fa] min-h-screen">
             <div className="container-prose max-w-6xl mx-auto px-4">
-                
+
                 {/* Filters */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
                     <select className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]">
@@ -150,7 +180,7 @@ export function JobOpenings() {
                             <p className="text-[14px] text-slate-300 leading-relaxed mb-6 font-light">
                                 {job.description}
                             </p>
-                            
+
                             <div className="mt-auto">
                                 <div className="flex items-center justify-between text-slate-400 text-[13px] mb-8">
                                     <div className="flex items-center">
@@ -162,7 +192,7 @@ export function JobOpenings() {
                                         {job.experience}
                                     </div>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setSelectedJob(job)}
                                     className="text-[#f28e2b] text-[14px] font-medium hover:text-[#e07b1a] transition-colors flex items-center"
                                 >
@@ -176,67 +206,273 @@ export function JobOpenings() {
 
             {/* Job Details Modal */}
             {selectedJob && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-                    <div className="bg-white rounded-[16px] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
-                        {/* Close button */}
-                        <button 
-                            onClick={() => setSelectedJob(null)}
-                            className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors"
-                        >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-
-                        <div className="p-8 md:p-10">
-                            {/* Badges */}
-                            <div className="flex flex-wrap gap-3 mb-6">
-                                <span className="px-4 py-1.5 bg-[#ffecd1] text-[#f28e2b] text-[13px] font-medium rounded-full">
-                                    {selectedJob.department}
-                                </span>
-                                <span className="px-4 py-1.5 bg-[#ffecd1] text-[#f28e2b] text-[13px] font-medium rounded-full">
-                                    {selectedJob.type}
-                                </span>
-                            </div>
-
-                            <h2 className="text-[28px] md:text-[32px] font-bold text-[#0b293d] mb-4">
-                                {selectedJob.title}
-                            </h2>
-
-                            <div className="flex flex-wrap items-center gap-6 text-[14px] text-slate-500 mb-10 border-b border-slate-100 pb-8">
-                                <div className="flex items-center">
-                                    <MapPinIcon />
-                                    {selectedJob.location}
-                                </div>
-                                <div className="flex items-center">
-                                    <ClockIcon />
-                                    Posted {selectedJob.postedDate}
-                                </div>
-                            </div>
-
-                            <div className="prose prose-slate max-w-none">
-                                <h3 className="text-[20px] font-medium text-[#0b293d] mb-3">Job Description</h3>
-                                <p className="text-slate-600 font-light leading-relaxed mb-8 text-[15px]">
-                                    {selectedJob.fullDescription}
-                                </p>
-
-                                <h3 className="text-[20px] font-medium text-[#0b293d] mb-4">Key Responsibilities</h3>
-                                <ul className="space-y-3">
-                                    {selectedJob.responsibilities.map((resp, i) => (
-                                        <li key={i} className="flex items-start text-slate-600 font-light text-[15px]">
-                                            <span className="text-slate-400 mr-3 mt-1">•</span>
-                                            {resp}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            
-                            <div className="mt-12 pt-8 border-t border-slate-100">
-                                <button className="w-full sm:w-auto px-8 py-3 bg-[#f28e2b] hover:bg-[#e07b1a] text-white font-medium rounded-[8px] transition-colors">
-                                    Apply Now
+                <div
+                    onClick={handleClose}
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto"
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white rounded-[16px] w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col"
+                    >
+                        {/* Modal Header Actions (Sticky) */}
+                        <div className="sticky top-0 bg-white z-30 flex items-center justify-between px-8 md:px-10 py-5 border-b border-slate-100">
+                            {isApplying && !isSubmitted ? (
+                                <button
+                                    onClick={() => setIsApplying(false)}
+                                    className="flex items-center gap-2 text-slate-500 hover:text-slate-800 text-[14px] font-medium transition-colors focus:outline-none"
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                                        <polyline points="12 19 5 12 12 5"></polyline>
+                                    </svg>
+                                    Back to Job Details
                                 </button>
-                            </div>
+                            ) : (
+                                <div />
+                            )}
+                            <button
+                                onClick={handleClose}
+                                className="text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                                aria-label="Close modal"
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="p-8 md:p-10 pt-6 md:pt-8 flex-1">
+                            {isSubmitted ? (
+                                <div className="text-center py-10">
+                                    <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-6">
+                                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-slate-900 mb-2">Application Submitted!</h3>
+                                    <p className="text-slate-500 text-sm max-w-sm mx-auto leading-relaxed mb-8">
+                                        Thank you for applying, {fullName}! Our recruitment team will review your resume and get back to you shortly.
+                                    </p>
+                                    <button
+                                        onClick={handleClose}
+                                        className="px-6 py-2.5 bg-[#F19020] hover:bg-[#D87F1C] text-white font-semibold rounded-[8px] text-[14px] transition-colors focus:outline-none"
+                                    >
+                                        Close Window
+                                    </button>
+                                </div>
+                            ) : isApplying ? (
+                                <form onSubmit={(e) => { e.preventDefault(); setIsSubmitted(true); }} className="space-y-6">
+                                    {/* Header info */}
+                                    <div>
+                                        <div className="flex flex-wrap gap-2.5 mb-4">
+                                            <span className="px-3.5 py-1 bg-[#FFF5E9] text-[#F19020] text-[12px] font-medium rounded-full">
+                                                {selectedJob.department}
+                                            </span>
+                                            <span className="px-3.5 py-1 bg-[#FFF5E9] text-[#F19020] text-[12px] font-medium rounded-full">
+                                                {selectedJob.type}
+                                            </span>
+                                        </div>
+
+                                        <h2 className="text-[26px] md:text-[30px] font-bold text-[#0b293d] tracking-tight leading-snug mb-3">
+                                            {selectedJob.title}
+                                        </h2>
+
+                                        <div className="flex flex-wrap items-center gap-5 text-[13px] text-slate-500 font-medium">
+                                            <div className="flex items-center">
+                                                <MapPinIcon />
+                                                {selectedJob.location}
+                                            </div>
+                                            <div className="flex items-center">
+                                                <ClockIcon />
+                                                Posted {selectedJob.postedDate}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Fields Grid */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <div>
+                                            <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Full Name</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                placeholder="Enter your Name"
+                                                value={fullName}
+                                                onChange={(e) => setFullName(e.target.value)}
+                                                className="w-full h-11 border border-slate-200 rounded-[8px] px-4 text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#F19020] focus:ring-1 focus:ring-[#F19020] transition-colors bg-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Email</label>
+                                            <input
+                                                type="email"
+                                                required
+                                                placeholder="Naveed@gmail.com"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className="w-full h-11 border border-slate-200 rounded-[8px] px-4 text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#F19020] focus:ring-1 focus:ring-[#F19020] transition-colors bg-white"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <div>
+                                            <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Phone</label>
+                                            <input
+                                                type="tel"
+                                                required
+                                                placeholder="+91 98765 43210"
+                                                value={phone}
+                                                onChange={(e) => setPhone(e.target.value)}
+                                                className="w-full h-11 border border-slate-200 rounded-[8px] px-4 text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#F19020] focus:ring-1 focus:ring-[#F19020] transition-colors bg-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Job Applied For</label>
+                                            <input
+                                                type="text"
+                                                readOnly
+                                                value={selectedJob.title}
+                                                className="w-full h-11 border border-slate-200 rounded-[8px] px-4 text-[14px] text-slate-500 bg-slate-50 cursor-not-allowed outline-none"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Upload */}
+                                    <div>
+                                        <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Resume (PDF, Max 5MB) *</label>
+                                        <div className="relative border-2 border-dashed border-slate-200 bg-white hover:bg-slate-50/50 rounded-[12px] p-7 text-center transition-colors group flex flex-col items-center justify-center min-h-[140px]">
+                                            {resumeFile ? (
+                                                <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-[8px] p-2.5 px-4 shadow-sm max-w-sm pointer-events-auto relative z-20">
+                                                    <svg className="w-6 h-6 text-[#F19020] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    <div className="text-left overflow-hidden">
+                                                        <p className="text-[13px] text-slate-700 font-semibold truncate max-w-[200px]">{resumeFile.name}</p>
+                                                        <p className="text-[11px] text-slate-400">{(resumeFile.size / (1024 * 1024)).toFixed(2)} MB</p>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => { e.preventDefault(); setResumeFile(null); }}
+                                                        className="ml-auto text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                                                    >
+                                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <input
+                                                        type="file"
+                                                        required
+                                                        accept=".pdf"
+                                                        onChange={handleFileChange}
+                                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                    />
+                                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#0b293d] mb-3 transition-transform group-hover:scale-105 duration-300">
+                                                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                                        <polyline points="14 2 14 8 20 8" />
+                                                        <path d="M12 18v-6" />
+                                                        <polyline points="9 15 12 12 15 15" />
+                                                    </svg>
+                                                    <p className="text-[14px] font-bold text-[#0b293d] mb-1">Click to upload or drag and drop</p>
+                                                    <p className="text-xs text-slate-400 font-medium">PDF only (Max, 5MB)</p>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Portfolio */}
+                                    <div>
+                                        <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Portfolio link (Optional)</label>
+                                        <input
+                                            type="url"
+                                            placeholder="https://linkedin.com/in/naveed"
+                                            value={portfolio}
+                                            onChange={(e) => setPortfolio(e.target.value)}
+                                            className="w-full h-11 border border-slate-200 rounded-[8px] px-4 text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#F19020] focus:ring-1 focus:ring-[#F19020] transition-colors bg-white"
+                                        />
+                                    </div>
+
+                                    {/* Notes */}
+                                    <div>
+                                        <label className="block text-[#0b293d] text-[14px] font-medium mb-1.5">Message / Notes (Optional)</label>
+                                        <textarea
+                                            rows={4}
+                                            placeholder="Tell us why you're a good fit..."
+                                            value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
+                                            className="w-full rounded-[8px] border border-slate-200 p-4 text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#F19020] focus:ring-1 focus:ring-[#F19020] transition-colors resize-none bg-white"
+                                        />
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="flex items-center justify-end pt-6">
+                                        <button
+                                            type="submit"
+                                            className="px-8 py-3 bg-[#F19020] hover:bg-[#D87F1C] text-white font-semibold rounded-[8px] text-[14px] shadow-md hover:shadow-lg transition-all focus:outline-none active:scale-[0.98]"
+                                        >
+                                            Submit Application
+                                        </button>
+                                    </div>
+                                </form>
+                            ) : (
+                                <>
+                                    {/* Badges */}
+                                    <div className="flex flex-wrap gap-3 mb-6">
+                                        <span className="px-4 py-1.5 bg-[#FFF5E9] text-[#F19020] text-[13px] font-medium rounded-full">
+                                            {selectedJob.department}
+                                        </span>
+                                        <span className="px-4 py-1.5 bg-[#FFF5E9] text-[#F19020] text-[13px] font-medium rounded-full">
+                                            {selectedJob.type}
+                                        </span>
+                                    </div>
+
+                                    <h2 className="text-[28px] md:text-[32px] font-bold text-[#0b293d] mb-4">
+                                        {selectedJob.title}
+                                    </h2>
+
+                                    <div className="flex flex-wrap items-center gap-6 text-[14px] text-slate-500 mb-10 border-b border-slate-100 pb-8">
+                                        <div className="flex items-center">
+                                            <MapPinIcon />
+                                            {selectedJob.location}
+                                        </div>
+                                        <div className="flex items-center">
+                                            <ClockIcon />
+                                            Posted {selectedJob.postedDate}
+                                        </div>
+                                    </div>
+
+                                    <div className="prose prose-slate max-w-none">
+                                        <h3 className="text-[20px] font-medium text-[#0b293d] mb-3">Job Description</h3>
+                                        <p className="text-slate-600 font-light leading-relaxed mb-8 text-[15px]">
+                                            {selectedJob.fullDescription}
+                                        </p>
+
+                                        <h3 className="text-[20px] font-medium text-[#0b293d] mb-4">Key Responsibilities</h3>
+                                        <ul className="space-y-3">
+                                            {selectedJob.responsibilities.map((resp, i) => (
+                                                <li key={i} className="flex items-start text-slate-600 font-light text-[15px]">
+                                                    <span className="text-slate-400 mr-3 mt-1">•</span>
+                                                    {resp}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="mt-12 pt-8 border-t border-slate-100">
+                                        <button
+                                            onClick={() => setIsApplying(true)}
+                                            className="w-full sm:w-auto px-8 py-3 bg-[#f28e2b] hover:bg-[#e07b1a] text-white font-medium rounded-[8px] transition-colors"
+                                        >
+                                            Apply Now
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
