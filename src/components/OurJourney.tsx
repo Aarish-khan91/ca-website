@@ -2,7 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export function OurJourney() {
+export interface Milestone {
+  id: number
+  yearTitle: string
+  description: string
+}
+
+export interface OurJourneyProps {
+  title: string
+  subtitle: string
+  milestones: Milestone[]
+}
+
+export function OurJourney({ title, subtitle, milestones }: OurJourneyProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
 
@@ -29,34 +41,6 @@ export function OurJourney() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const milestones = [
-    {
-      year: '2015',
-      title: 'Firm established',
-      description: 'Founded with a vision to simplify financial complexities for small businesses. We started with a small team of 3 passionate accountants in a shared workspace.'
-    },
-    {
-      year: '2017',
-      title: 'Introduced GST compliance services',
-      description: 'Launched specialized GST compliance services to help businesses navigate the new tax regime seamlessly, establishing our reputation for reliability.'
-    },
-    {
-      year: '2019',
-      title: 'Expanded to corporate advisory & audits',
-      description: 'Expanded our portfolio to include high-level corporate advisory and comprehensive audit services, catering to mid-sized enterprises and startups.'
-    },
-    {
-      year: '2022',
-      title: 'Served 500+ recurring clients',
-      description: 'Achieved a significant milestone of serving over 500 recurring clients across various industries, solidifying our position as a trusted market leader.'
-    },
-    {
-      year: '2025',
-      title: 'Achieved 1000+ successful compliance filings',
-      description: 'Reached the landmark of 1000+ successful compliance filings. We continue to innovate with AI-driven auditing tools and global expansion plans.'
-    }
-  ]
-
   return (
     <section className="py-20 md:py-28 bg-[#fdfdfd] overflow-hidden">
       <div className="container-prose max-w-6xl mx-auto px-4">
@@ -64,10 +48,10 @@ export function OurJourney() {
         {/* Header */}
         <div className="text-center mb-16 md:mb-24">
           <h2 className="text-[32px] md:text-[40px] font-bold text-[#1f3b55] tracking-wide mb-4">
-            Our Journey
+            {title}
           </h2>
           <p className="text-slate-500 text-[15px] md:text-[16px] max-w-2xl mx-auto leading-relaxed">
-            Tracing our path from inception to industry leadership, marked by dedication and innovation.
+            {subtitle}
           </p>
         </div>
 
@@ -93,7 +77,7 @@ export function OurJourney() {
               const isLast = index === milestones.length - 1
 
               return (
-                <div key={index} className="relative flex items-center w-full md:h-56">
+                <div key={m.id || index} className="relative flex items-center w-full md:h-56">
                   
                   {/* Center Dot */}
                   <div className={`absolute left-8 md:left-1/2 -translate-x-1/2 w-[22px] h-[22px] rounded-full bg-white border-[3px] flex items-center justify-center z-10 transition-colors duration-500 ${isActive ? 'border-[#f28e2b]' : 'border-[#1f3b55]'}`}>
@@ -114,7 +98,7 @@ export function OurJourney() {
                     {/* Card Component */}
                     <div className={`w-[calc(100%-4rem)] ml-16 md:ml-0 md:w-[45%] bg-[#0b293d] rounded-xl p-8 shadow-xl text-white transform transition-all duration-500 hover:-translate-y-1 ${isEven ? 'md:text-right' : 'md:text-left'}`}>
                       <h3 className="text-[18px] md:text-[20px] font-medium mb-3 text-white leading-snug">
-                        {m.year} &ndash; {m.title}
+                        {m.yearTitle}
                       </h3>
                       <p className="text-white/70 leading-relaxed text-[13.5px] md:text-[14.5px] font-light">
                         {m.description}

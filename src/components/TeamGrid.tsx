@@ -1,31 +1,19 @@
-type Member = {
+export interface TeamMember {
   name: string
   role: string
   image: string
+  linkedInUrl?: string
+  twitterUrl?: string
 }
 
-const team: Member[] = [
-  { 
-    name: 'Ritesh Arora', 
-    role: 'Taxation, Corporate Compliance & Audit — 15+ years experience',
-    image: '/images/team/ritesh.png'
-  },
-  { 
-    name: 'Anita Sharma', 
-    role: 'GST advisory & income tax planning for SMEs',
-    image: '/images/team/anita.png'
-  },
-  { 
-    name: 'Vikram Patel', 
-    role: 'GST advisory & income tax planning for SMEs',
-    image: '/images/team/vikram.png'
-  },
-]
+export interface TeamGridProps {
+  members: TeamMember[]
+}
 
-export function TeamGrid() {
+export function TeamGrid({ members }: TeamGridProps) {
   return (
     <div className="grid md:grid-cols-3 gap-8">
-      {team.map((m) => (
+      {members.map((m) => (
         <div key={m.name} className="group rounded-[20px] bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden border border-slate-100">
           
           {/* Image taking full width at the top */}
@@ -46,12 +34,16 @@ export function TeamGrid() {
             
             {/* Social Icons */}
             <div className="mt-6 flex items-center gap-4">
-              <a href="#" aria-label="LinkedIn" className="hover:opacity-75 transition-opacity">
-                <img src="/images/social/linkedin.png" alt="LinkedIn" className="w-5 h-5 object-contain" />
-              </a>
-              <a href="#" aria-label="Instagram" className="hover:opacity-75 transition-opacity">
-                <img src="/images/social/instagram.png" alt="Instagram" className="w-5 h-5 object-contain" />
-              </a>
+              {m.linkedInUrl && (
+                <a href={m.linkedInUrl} aria-label="LinkedIn" className="hover:opacity-75 transition-opacity">
+                  <img src="/images/social/linkedin.png" alt="LinkedIn" className="w-5 h-5 object-contain" />
+                </a>
+              )}
+              {m.twitterUrl && (
+                <a href={m.twitterUrl} aria-label="Twitter" className="hover:opacity-75 transition-opacity">
+                  <img src="/images/social/instagram.png" alt="Twitter" className="w-5 h-5 object-contain" />
+                </a>
+              )}
             </div>
           </div>
         </div>

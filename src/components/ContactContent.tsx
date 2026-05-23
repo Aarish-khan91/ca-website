@@ -1,6 +1,29 @@
+'use client'
 import { Button } from './Button'
 
-export function ContactContent() {
+export interface ContactContentProps {
+  officeAddressTitle: string
+  officeAddress: string
+  contactDetailsTitle: string
+  email: string
+  phone: string
+  officeHoursTitle: string
+  officeHours: string
+  formTitle: string
+  formDescription: string
+}
+
+export function ContactContent({
+  officeAddressTitle,
+  officeAddress,
+  contactDetailsTitle,
+  email,
+  phone,
+  officeHoursTitle,
+  officeHours,
+  formTitle,
+  formDescription
+}: ContactContentProps) {
     return (
         <section className="py-16 md:py-24 bg-slate-50">
             <div className="container-prose">
@@ -23,26 +46,22 @@ export function ContactContent() {
 
                         <div className="space-y-6">
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 mb-2">Office Address</h3>
-                                <p className="text-slate-600 leading-relaxed">
-                                    Ritesh Arora & Associates<br />
-                                    XYZ Tower, 2nd Floor<br />
-                                    Sector - 20, New Delhi, 110001<br />
-                                    India
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">{officeAddressTitle}</h3>
+                                <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                                    {officeAddress}
                                 </p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 mb-2">Contact Details</h3>
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">{contactDetailsTitle}</h3>
                                 <p className="text-slate-600 leading-relaxed">
-                                    <a href="mailto:info@ritesharoraassociates.com" className="hover:text-primary transition-colors">info@ritesharoraassociates.com</a><br />
-                                    <a href="tel:+919876512345" className="hover:text-primary transition-colors">+91 98765 12345</a>
+                                    <a href={`mailto:${email}`} className="hover:text-primary transition-colors">{email}</a><br />
+                                    <a href={`tel:${phone}`} className="hover:text-primary transition-colors">{phone}</a>
                                 </p>
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 mb-2">Office Hours</h3>
-                                <p className="text-slate-600 leading-relaxed">
-                                    Mon–Sat: 10:00 AM – 7:00 PM<br />
-                                    Sunday: Closed
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">{officeHoursTitle}</h3>
+                                <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                                    {officeHours}
                                 </p>
                             </div>
                         </div>
@@ -50,10 +69,10 @@ export function ContactContent() {
 
                     {/* Right Column: Consultation Form */}
                     <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-100">
-                        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Request a Consultation</h2>
-                        <p className="text-slate-500 mb-8">We&apos;ll get back to you within 24 hours.</p>
+                        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{formTitle}</h2>
+                        <p className="text-slate-500 mb-8 whitespace-pre-line">{formDescription}</p>
 
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
                                 <input type="text" placeholder="Full Name" className="w-full h-12 rounded-lg border border-slate-300 px-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow" />

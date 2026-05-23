@@ -1,6 +1,12 @@
 import { Button } from './Button'
 
-export function ServiceContact() {
+export interface ServiceContactProps {
+  title?: string
+}
+
+export function ServiceContact({
+  title = "Need Professional Tax or Compliance Help?"
+}: ServiceContactProps) {
     return (
         <section className="relative py-20 md:py-24 bg-brand-dark overflow-hidden">
             {/* Background Pattern: Sunburst */}
@@ -14,7 +20,7 @@ export function ServiceContact() {
             <div className="container-prose relative z-10 max-w-4xl flex flex-col justify-center items-center mx-auto px-4">
                 <div className="text-center mb-10">
                     <h2 className="text-[28px] md:text-[36px] font-bold text-white tracking-wide">
-                        Need Professional Tax or Compliance Help?
+                        {title}
                     </h2>
                 </div>
 
