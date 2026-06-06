@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getPostBySlug, BlogPostContentBlock, Comment } from '@/data/blogPosts'
 import { NewsletterCTA } from '@/components/NewsletterCTA'
+import { getBlogPostBySlug, getBlogPosts, getStrapiMedia } from '@/lib/strapi'
 
 export default function BlogPostDetailPage({ params }: { params: any }) {
   const [slug, setSlug] = useState<string>('')
-  const [commentsList, setCommentsList] = useState<Comment[]>([])
+  const [commentsList, setCommentsList] = useState<any[]>([])
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [commentText, setCommentText] = useState('')
+  const [post, setPost] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [relatedPosts, setRelatedPosts] = useState<any[]>([])
 
   // Resolve params safely whether it is a Promise (Next.js 15) or plain object (Next.js 13/14)
   useEffect(() => {
@@ -25,15 +28,24 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
     }
   }, [params])
 
-  // Get the blog post from our mock database
-  const post = slug ? getPostBySlug(slug) : null
-
-  // Initialize comments once the post is resolved
   useEffect(() => {
-    if (post) {
-      setCommentsList(post.comments)
+    if (slug) {
+      getBlogPostBySlug(slug).then(data => {
+        setPost(data)
+        if (data) {
+          setCommentsList(data.comments || [])
+        }
+        setLoading(false)
+      })
+      getBlogPosts().then(posts => {
+        setRelatedPosts(posts.filter(p => p.slug !== slug).slice(0, 2))
+      })
     }
-  }, [post])
+  }, [slug])
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-white text-slate-800">Loading...</div>
+  }
 
   if (!slug || !post) {
     return (
@@ -46,11 +58,6 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
       </div>
     )
   }
-
-  // Fetch related posts
-  const relatedPosts = post.relatedPostsSlugs
-    .map(s => getPostBySlug(s))
-    .filter((p): p is NonNullable<typeof p> => p !== undefined)
 
   // Color mappings for tag pills
   const tagColors: Record<string, string> = {
@@ -66,7 +73,7 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
     e.preventDefault()
     if (!name.trim() || !email.trim() || !commentText.trim()) return
 
-    const newComment: Comment = {
+    const newComment = {
       id: Date.now(),
       author: name,
       date: new Date().toLocaleDateString('en-US', {
@@ -83,35 +90,37 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
     setCommentText('')
   }
 
-  // Dynamic content block renderer - mimics a Strapi rich text / block parser
-  function renderBlock(block: BlogPostContentBlock, index: number) {
+  // Dynamic content block renderer - parses Strapi rich text blocks
+  function renderBlock(block: any, index: number) {
+    const textContent = block.children?.map((c: any) => c.text).join('') || '';
     switch (block.type) {
       case 'paragraph':
         return (
           <p key={index} className="text-slate-600 text-[16px] leading-relaxed mb-6 font-light">
-            {block.text}
+            {textContent}
           </p>
         )
       case 'heading':
-        const headingId = block.text?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || ''
+        const headingId = textContent?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || ''
         if (block.level === 2) {
           return (
             <h2 key={index} id={headingId} className="text-xl md:text-2xl font-bold text-[#003B49] tracking-tight mt-10 mb-4 font-sans scroll-mt-24">
-              {block.text}
+              {textContent}
             </h2>
           )
         }
         return (
           <h3 key={index} id={headingId} className="text-lg md:text-xl font-bold text-[#003B49] tracking-tight mt-8 mb-3 font-sans scroll-mt-24">
-            {block.text}
+            {textContent}
           </h3>
         )
       case 'list':
-        if (block.listType === 'number') {
+        if (block.format === 'ordered') {
           return (
             <ol key={index} className="list-decimal pl-6 text-slate-600 space-y-2 mb-6 font-light text-[15px]">
-              {block.items?.map((item, i) => {
-                const parts = item.split(' - ')
+              {block.children?.map((item: any, i: number) => {
+                const itemText = item.children?.map((c: any) => c.text).join('') || ''
+                const parts = itemText.split(' - ')
                 if (parts.length > 1) {
                   return (
                     <li key={i}>
@@ -119,46 +128,41 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
                     </li>
                   )
                 }
-                return <li key={i}>{item}</li>
+                return <li key={i}>{itemText}</li>
               })}
             </ol>
           )
         }
         return (
           <ul key={index} className="list-disc pl-6 text-slate-600 space-y-2 mb-6 font-light text-[15px]">
-            {block.items?.map((item, i) => <li key={i}>{item}</li>)}
+            {block.children?.map((item: any, i: number) => {
+              const itemText = item.children?.map((c: any) => c.text).join('') || ''
+              return <li key={i}>{itemText}</li>
+            })}
           </ul>
         )
-      case 'callout':
-        const isWarning = block.calloutType === 'warning'
+      case 'quote':
         return (
           <div
             key={index}
-            className={`flex gap-4 p-5 my-6 rounded-[8px] border-l-[4px] bg-slate-50 text-[15px] leading-relaxed ${
-              isWarning ? 'border-[#F19020] text-slate-700' : 'border-[#003B49] text-slate-700'
-            }`}
+            className="flex gap-4 p-5 my-6 rounded-[8px] border-l-[4px] bg-slate-50 text-[15px] leading-relaxed border-[#003B49] text-slate-700"
           >
             <div className="flex-shrink-0 mt-0.5">
-              {isWarning ? (
-                <svg className="w-5 h-5 text-[#F19020]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5 text-[#003B49]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
+              <svg className="w-5 h-5 text-[#003B49]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </div>
-            <p className="font-light">{block.text}</p>
+            <p className="font-light">{textContent}</p>
           </div>
         )
       case 'image':
+        const imgUrl = getStrapiMedia(block.image?.url)
         return (
           <div key={index} className="my-8 text-center">
             <div className="w-full aspect-[16/10] md:aspect-[21/11] relative overflow-hidden rounded-[16px] shadow-sm mb-2">
-              <img src={block.src} alt={block.caption || 'Article image'} className="w-full h-full object-cover" />
+              {imgUrl && <img src={imgUrl} alt={block.image?.alternativeText || 'Article image'} className="w-full h-full object-cover" />}
             </div>
-            {block.caption && <p className="text-xs text-slate-400 font-light italic mt-1">{block.caption}</p>}
+            {block.image?.caption && <p className="text-xs text-slate-400 font-light italic mt-1">{block.image.caption}</p>}
           </div>
         )
       default:
@@ -166,12 +170,27 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
     }
   }
 
+  const heroImage = getStrapiMedia(post.coverImage?.url) || '/images/blog/blog_hero_1.jpg'
+  
+  // Extract table of contents from content headings
+  const tableOfContents = post.content?.filter((b: any) => b.type === 'heading').map((b: any) => {
+    const text = b.children?.map((c: any) => c.text).join('') || ''
+    return {
+      id: text.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      label: text,
+      level: b.level
+    }
+  }) || []
+
+  // Create tags array
+  const tagsList = post.tags?.map((t: any) => t.name) || []
+
   return (
     <div className="bg-white min-h-screen text-slate-800">
       {/* 1. Large Top Hero Banner */}
       <section className="relative w-full h-[320px] sm:h-[400px] md:h-[480px] lg:h-[540px] overflow-hidden">
         <img
-          src={post.image}
+          src={heroImage}
           alt={post.title}
           className="w-full h-full object-cover object-center"
         />
@@ -192,23 +211,25 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
             {/* Left Content Column */}
             <article className="col-span-1 lg:col-span-8 flex flex-col">
               <div className="prose max-w-none">
-                {post.content.map((block, idx) => renderBlock(block, idx))}
+                {post.content.map((block: any, idx: number) => renderBlock(block, idx))}
               </div>
 
               {/* Tags block */}
-              <div className="flex flex-wrap items-center gap-2.5 mt-10 pt-8 border-t border-slate-100">
-                <span className="text-[14px] font-semibold text-slate-500 mr-2">Tags:</span>
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className={`px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${
-                      tagColors[tag] || 'bg-slate-100 text-slate-600'
-                    }`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {tagsList.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2.5 mt-10 pt-8 border-t border-slate-100">
+                  <span className="text-[14px] font-semibold text-slate-500 mr-2">Tags:</span>
+                  {tagsList.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className={`px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${
+                        tagColors[tag] || 'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               {/* Share block */}
               <div className="flex items-center gap-4 mt-6 pt-4 border-t border-slate-100">
@@ -295,8 +316,8 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
 
                 {/* Comments List */}
                 <div className="space-y-6">
-                  {commentsList.map((comment) => {
-                    const initials = comment.author.split(' ').map(n => n[0]).join('')
+                  {commentsList.map((comment: any) => {
+                    const initials = comment.author?.split(' ').map((n: string) => n[0]).join('') || ''
                     return (
                       <div key={comment.id} className="flex gap-4 p-5 rounded-[12px] bg-white border border-slate-100 shadow-sm">
                         {/* Initials Avatar */}
@@ -326,28 +347,19 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
                   On this page
                 </h4>
                 <nav className="space-y-3">
-                  {post.tableOfContents.map((item) => (
-                    <div key={item.id} className="space-y-2">
+                  {tableOfContents.map((item: any) => (
+                    <div key={item.id} className={`space-y-2 ${item.level > 2 ? 'pl-4 border-l border-slate-100 ml-1' : ''}`}>
                       <a
                         href={`#${item.id}`}
-                        className="block text-[14px] font-medium text-slate-600 hover:text-[#F19020] transition-colors"
+                        className={`block transition-colors ${
+                          item.level > 2 
+                            ? 'text-[13px] text-slate-500 hover:text-[#F19020] flex items-center gap-1.5' 
+                            : 'text-[14px] font-medium text-slate-600 hover:text-[#F19020]'
+                        }`}
                       >
+                        {item.level > 2 && <span className="w-1 h-1 rounded-full bg-slate-400"></span>}
                         {item.label}
                       </a>
-                      {item.subitems && item.subitems.length > 0 && (
-                        <div className="pl-4 space-y-1.5 border-l border-slate-100 ml-1">
-                          {item.subitems.map((sub) => (
-                            <a
-                              key={sub.id}
-                              href={`#${sub.id}`}
-                              className="block text-[13px] text-slate-500 hover:text-[#F19020] transition-colors flex items-center gap-1.5"
-                            >
-                              <span className="w-1 h-1 rounded-full bg-slate-400"></span>
-                              {sub.label}
-                            </a>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   ))}
                 </nav>
@@ -372,35 +384,38 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
-              {relatedPosts.map((r, i) => (
-                <article key={r.slug + '-' + i} className="group flex flex-col h-full bg-white rounded-[24px] overflow-hidden border border-slate-200/50 shadow-sm hover:shadow-md transition-all duration-300">
-                  {/* Image */}
-                  <div className="w-full aspect-[16/10] relative overflow-hidden">
-                    <img
-                      src={r.image}
-                      alt={r.title}
-                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                    />
-                  </div>
-                  {/* Content */}
-                  <div className="p-6 flex-grow flex flex-col">
-                    <span className="text-xs font-semibold text-[#F19020] uppercase tracking-wide mb-2 block">
-                      {r.category}
-                    </span>
-                    <h3 className="text-lg font-bold text-slate-800 leading-snug mb-3 group-hover:text-[#F19020] transition-colors line-clamp-2">
-                      <Link href={`/blog/${r.slug}`}>
-                        {r.title}
-                      </Link>
-                    </h3>
-                    <span className="text-[11px] text-slate-400 font-medium mb-3 block">
-                      {r.date}
-                    </span>
-                    <p className="text-slate-500 text-[13px] leading-relaxed line-clamp-3 font-light">
-                      {r.excerpt}
-                    </p>
-                  </div>
-                </article>
-              ))}
+              {relatedPosts.map((r, i) => {
+                const rImage = getStrapiMedia(r.coverImage?.url) || '/images/blog/blog_hero_1.jpg'
+                return (
+                  <article key={r.slug + '-' + i} className="group flex flex-col h-full bg-white rounded-[24px] overflow-hidden border border-slate-200/50 shadow-sm hover:shadow-md transition-all duration-300">
+                    {/* Image */}
+                    <div className="w-full aspect-[16/10] relative overflow-hidden">
+                      <img
+                        src={rImage}
+                        alt={r.title}
+                        className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                      />
+                    </div>
+                    {/* Content */}
+                    <div className="p-6 flex-grow flex flex-col">
+                      <span className="text-xs font-semibold text-[#F19020] uppercase tracking-wide mb-2 block">
+                        {r.category?.name || 'Uncategorized'}
+                      </span>
+                      <h3 className="text-lg font-bold text-slate-800 leading-snug mb-3 group-hover:text-[#F19020] transition-colors line-clamp-2">
+                        <Link href={`/blog/${r.slug}`}>
+                          {r.title}
+                        </Link>
+                      </h3>
+                      <span className="text-[11px] text-slate-400 font-medium mb-3 block">
+                        {r.date ? new Date(r.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
+                      </span>
+                      <p className="text-slate-500 text-[13px] leading-relaxed line-clamp-3 font-light">
+                        {r.excerpt}
+                      </p>
+                    </div>
+                  </article>
+                )
+              })}
             </div>
           </div>
         </section>
