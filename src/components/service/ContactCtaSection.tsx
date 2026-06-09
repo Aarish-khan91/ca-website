@@ -1,10 +1,71 @@
 'use client'
+import React, { useState } from 'react'
 
 interface ContactCtaSectionProps {
   block: any
 }
 
 export function ContactCtaSection({ block }: ContactCtaSectionProps) {
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [serviceInterest, setServiceInterest] = useState('')
+  const [message, setMessage] = useState('')
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrorMessage('')
+    setSuccessMessage('')
+
+    if (!fullName.trim() || !email.trim() || !phone.trim() || !message.trim()) {
+      setErrorMessage('Please fill in all required fields.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL
+      const response = await fetch(`${STRAPI_URL}/api/contact-requests`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          data: {
+            fullName,
+            email,
+            phone,
+            serviceInterest,
+            message
+          }
+        })
+      })
+
+      if (!response.ok) {
+        const errJson = await response.json()
+        console.error('Submit error:', errJson)
+        throw new Error(errJson?.error?.message || 'Failed to submit request')
+      }
+
+      setSuccessMessage('Thank you! Your request has been submitted successfully.')
+      setFullName('')
+      setEmail('')
+      setPhone('')
+      setServiceInterest('')
+      setMessage('')
+    } catch (err: any) {
+      console.error(err)
+      setErrorMessage(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <section id="contact-form-section" className="bg-[#0b293d] py-20 text-white border-b border-slate-900 relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(242,142,43,0.1)_0%,_transparent_40%)] pointer-events-none"></div>
@@ -63,41 +124,73 @@ export function ContactCtaSection({ block }: ContactCtaSectionProps) {
               Request a Free Consultation
             </h3>
 
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            {successMessage && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded text-sm font-medium">
+                {successMessage}
+              </div>
+            )}
+
+            {errorMessage && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded text-sm font-medium">
+                {errorMessage}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
                 placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
+                required
+                disabled={isSubmitting}
               />
               <input
                 type="email"
                 placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
+                required
+                disabled={isSubmitting}
               />
               <input
                 type="text"
                 placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
+                required
+                disabled={isSubmitting}
               />
               <select
+                value={serviceInterest}
+                onChange={(e) => setServiceInterest(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d]"
+                disabled={isSubmitting}
               >
                 <option value="">Select Service Needed</option>
-                <option value="incorporation">Company Incorporation</option>
-                <option value="gst">GST Filing & Advisory</option>
-                <option value="tax">Income Tax Advisory</option>
-                <option value="audit">Audit & Compliance</option>
+                <option value="Company Incorporation">Company Incorporation</option>
+                <option value="GST Filing & Advisory">GST Filing & Advisory</option>
+                <option value="Income Tax Advisory">Income Tax Advisory</option>
+                <option value="Audit & Compliance">Audit & Compliance</option>
               </select>
               <textarea
                 placeholder="Briefly describe your requirements..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] h-20 outline-none focus:border-[#0b293d] placeholder:text-slate-400 resize-none"
+                required
+                disabled={isSubmitting}
               ></textarea>
 
               <button
                 type="submit"
                 className="w-full py-3 bg-[#0b293d] text-white font-bold text-[14px] rounded hover:bg-slate-900 transition-all duration-300 uppercase tracking-wider shadow-md"
+                disabled={isSubmitting}
               >
-                Submit Request
+                {isSubmitting ? 'Submitting...' : 'Submit Request'}
               </button>
             </form>
           </div>
