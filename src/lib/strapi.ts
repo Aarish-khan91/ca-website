@@ -24,7 +24,7 @@ export async function getBlogPosts(): Promise<StrapiBlogPost[]> {
     const res = await fetch(`${STRAPI_URL}/api/blog-posts?populate=*`, {
       next: { revalidate: 60 }, // Revalidate every 60 seconds
     });
-    
+
     if (!res.ok) {
       console.error('Failed to fetch blog posts from Strapi:', res.status, res.statusText);
       return [];
@@ -51,11 +51,11 @@ export async function getBlogPostBySlug(slug: string): Promise<StrapiBlogPost | 
 
     const json = await res.json();
     const data = json.data;
-    
+
     if (data && data.length > 0) {
       return data[0];
     }
-    
+
     return null;
   } catch (error) {
     console.error(`Error fetching blog post by slug (${slug}):`, error);
@@ -105,11 +105,49 @@ export interface StrapiService {
   documentId: string;
   title: string;
   slug: string;
-  shortDescription: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  shortDescription?: string;
   coverImage?: {
     url: string;
   } | null;
   contentBlocks?: any[];
+  faqs?: any[];
+  relatedBlogs?: any[];
+  seo?: any;
+}
+
+export interface StrapiTestimonial {
+  id: number;
+  documentId: string;
+  authorName: string;
+  authorTitle?: string;
+  rating?: number;
+  content: string;
+}
+
+export interface StrapiFaq {
+  id: number;
+  documentId: string;
+  question: string;
+  answer: string;
+}
+
+export interface StrapiServicesPage {
+  id: number;
+  documentId: string;
+  heroTitle: string;
+  heroSubtitle?: string;
+  heroBackgroundImage?: {
+    url: string;
+  } | null;
+  primaryButtonText?: string;
+  primaryButtonLink?: string;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  services?: StrapiService[];
+  testimonials?: StrapiTestimonial[];
+  faqs?: StrapiFaq[];
 }
 
 export async function getServices(): Promise<StrapiService[]> {
@@ -117,7 +155,7 @@ export async function getServices(): Promise<StrapiService[]> {
     const res = await fetch(`${STRAPI_URL}/api/services?populate=*`, {
       next: { revalidate: 60 },
     });
-    
+
     if (!res.ok) {
       console.error('Failed to fetch services from Strapi:', res.status, res.statusText);
       return [];
@@ -133,8 +171,15 @@ export async function getServices(): Promise<StrapiService[]> {
 
 export async function getServiceBySlug(slug: string): Promise<StrapiService | null> {
   try {
-    // Populate the dynamic zone using populate[contentBlocks][populate]=*
-    const res = await fetch(`${STRAPI_URL}/api/services?filters[slug][$eq]=${slug}&populate[contentBlocks][populate]=*&populate[coverImage]=true`, {
+    // Populate dynamic zones, FAQs, related blogs, and SEO metadata
+    const query = new URLSearchParams({
+      'filters[slug][$eq]': slug,
+      'populate[contentBlocks][populate]': '*',
+      'populate[faqs][populate]': '*',
+      'populate[relatedBlogs][populate]': '*',
+      'populate[seo][populate]': '*'
+    });
+    const res = await fetch(`${STRAPI_URL}/api/services?${query.toString()}`, {
       next: { revalidate: 60 },
     });
 
@@ -145,14 +190,34 @@ export async function getServiceBySlug(slug: string): Promise<StrapiService | nu
 
     const json = await res.json();
     const data = json.data;
-    
+
     if (data && data.length > 0) {
       return data[0];
     }
-    
+
     return null;
   } catch (error) {
     console.error(`Error fetching service by slug (${slug}):`, error);
     return null;
   }
 }
+
+export async function getServicesPage(): Promise<StrapiServicesPage | null> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/services-page?populate[heroBackgroundImage]=true&populate[services][populate]=*&populate[testimonials]=*&populate[faqs]=*`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      console.error('Failed to fetch services-page from Strapi:', res.status, res.statusText);
+      return null;
+    }
+
+    const json = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error('Error fetching services-page:', error);
+    return null;
+  }
+}
+

@@ -171,9 +171,9 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
   }
 
   const heroImage = getStrapiMedia(post.coverImage?.url) || '/images/blog/blog_hero_1.jpg'
-  
+
   // Extract table of contents from content headings
-  const tableOfContents = post.content?.filter((b: any) => b.type === 'heading').map((b: any) => {
+  const tableOfContents = post?.content?.filter((b: any) => b.type === 'heading').map((b: any) => {
     const text = b.children?.map((c: any) => c.text).join('') || ''
     return {
       id: text.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -207,7 +207,7 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            
+
             {/* Left Content Column */}
             <article className="col-span-1 lg:col-span-8 flex flex-col">
               <div className="prose max-w-none">
@@ -221,9 +221,8 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
                   {tagsList.map((tag: string) => (
                     <span
                       key={tag}
-                      className={`px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${
-                        tagColors[tag] || 'bg-slate-100 text-slate-600'
-                      }`}
+                      className={`px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${tagColors[tag] || 'bg-slate-100 text-slate-600'
+                        }`}
                     >
                       {tag}
                     </span>
@@ -351,11 +350,10 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
                     <div key={item.id} className={`space-y-2 ${item.level > 2 ? 'pl-4 border-l border-slate-100 ml-1' : ''}`}>
                       <a
                         href={`#${item.id}`}
-                        className={`block transition-colors ${
-                          item.level > 2 
-                            ? 'text-[13px] text-slate-500 hover:text-[#F19020] flex items-center gap-1.5' 
-                            : 'text-[14px] font-medium text-slate-600 hover:text-[#F19020]'
-                        }`}
+                        className={`block transition-colors ${item.level > 2
+                          ? 'text-[13px] text-slate-500 hover:text-[#F19020] flex items-center gap-1.5'
+                          : 'text-[14px] font-medium text-slate-600 hover:text-[#F19020]'
+                          }`}
                       >
                         {item.level > 2 && <span className="w-1 h-1 rounded-full bg-slate-400"></span>}
                         {item.label}

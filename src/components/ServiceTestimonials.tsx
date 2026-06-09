@@ -1,5 +1,11 @@
-export function ServiceTestimonials() {
-    const testimonials = [
+import { StrapiTestimonial } from '@/lib/strapi'
+
+interface ServiceTestimonialsProps {
+    testimonials?: StrapiTestimonial[];
+}
+
+export function ServiceTestimonials({ testimonials: fetchedTestimonials }: ServiceTestimonialsProps) {
+    const staticTestimonials = [
         {
             quote: "“Their team has been handling our GST filings and monthly compliance for over two years now. Everything is extremely organized, accurate, and always filed on time. It's a huge relief knowing our business is in safe, expert hands.”",
             author: "Rohit Malhotra",
@@ -16,6 +22,17 @@ export function ServiceTestimonials() {
             role: "Senior Software Engineer"
         }
     ]
+
+    const testimonials = fetchedTestimonials && fetchedTestimonials.length > 0
+        && fetchedTestimonials.map(t => ({
+            quote: t.content,
+            author: t.authorName,
+            role: t.authorTitle || ''
+        }))
+
+    if (!testimonials) {
+        return null;
+    }
 
     return (
         <section className="py-16 md:py-24 bg-[#f8f9fa]">
