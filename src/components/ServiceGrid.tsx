@@ -18,16 +18,19 @@ export function ServiceGrid() {
             title: 'Accounting & Bookkeeping',
             desc: 'Monthly bookkeeping, financial reporting, and accurate ledger management.',
             image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (4).png',
+            href: '/services/accounting-bookkeeping'
         },
         {
             title: 'Audit & Assurance',
             desc: 'Internal, statutory, and compliance audits with actionable insights and transparency.',
             image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2.png',
+            href: '/services/audit-assurance'
         },
         {
             title: 'Business Compliance Management',
             desc: 'End-to-end ROC, MCA, and statutory compliance management to keep your business legally protected.',
             image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png', // Re-used for now
+            href: '/services/business-compliance-management'
         },
     ]
 
