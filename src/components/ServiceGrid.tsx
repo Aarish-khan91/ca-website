@@ -59,7 +59,7 @@ export function ServiceGrid({ services: fetchedServices }: ServiceGridProps) {
         && fetchedServices.map((s, idx) => ({
             title: s.title,
             desc: s.heroSubtitle || s.shortDescription || '',
-            image: getStrapiMedia(s.coverImage?.url) || undefined,
+            image: getStrapiMedia(s?.image?.url) || undefined,
             href: `/services/${s.slug}`
         }))
 
@@ -80,7 +80,7 @@ export function ServiceGrid({ services: fetchedServices }: ServiceGridProps) {
                         <div key={idx} className="group rounded-[8px] overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-[#0b293d] flex flex-col h-full">
                             {/* Image Area */}
                             <div className="h-[220px] w-full relative overflow-hidden bg-slate-200 shrink-0">
-                                <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                <img src={s.image} alt={s?.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             </div>
 
                             <div className="p-6 md:p-8 flex-1 flex flex-col">

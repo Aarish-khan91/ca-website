@@ -108,7 +108,7 @@ export interface StrapiService {
   heroTitle?: string;
   heroSubtitle?: string;
   shortDescription?: string;
-  coverImage?: {
+  image?: {
     url: string;
   } | null;
   contentBlocks?: any[];

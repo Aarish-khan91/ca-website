@@ -15,7 +15,6 @@ export const metadata = {
 
 export default async function ServicesPage() {
   const pageData = await getServicesPage();
-  console.log('pageData-->', pageData)
   return (
     <>
       <main className="bg-slate-50 min-h-screen flex flex-col">
