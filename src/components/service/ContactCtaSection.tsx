@@ -1,0 +1,203 @@
+'use client'
+import React, { useState } from 'react'
+
+export function ContactCtaSection() {
+  const title = "Ready to start?"
+  const subtitle = "Get in touch with us today for a free consultation."
+  const phone = "+91 9876543210"
+  const email = "contact@riteshassociates.com"
+
+  const [fullName, setFullName] = useState('')
+  const [emailValue, setEmailValue] = useState('')
+  const [phoneValue, setPhoneValue] = useState('')
+  const [serviceInterest, setServiceInterest] = useState('')
+  const [message, setMessage] = useState('')
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrorMessage('')
+    setSuccessMessage('')
+
+    if (!fullName.trim() || !emailValue.trim() || !phoneValue.trim() || !message.trim()) {
+      setErrorMessage('Please fill in all required fields.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL
+      const response = await fetch(`${STRAPI_URL}/api/contact-requests`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          data: {
+            fullName,
+            email: emailValue,
+            phone: phoneValue,
+            serviceInterest,
+            message
+          }
+        })
+      })
+
+      if (!response.ok) {
+        const errJson = await response.json()
+        console.error('Submit error:', errJson)
+        throw new Error(errJson?.error?.message || 'Failed to submit request')
+      }
+
+      setSuccessMessage('Thank you! Your request has been submitted successfully.')
+      setFullName('')
+      setEmailValue('')
+      setPhoneValue('')
+      setServiceInterest('')
+      setMessage('')
+    } catch (err: any) {
+      console.error(err)
+      setErrorMessage(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <section id="contact-form-section" className="bg-[#0b293d] py-20 text-white border-b border-slate-900 relative">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(242,142,43,0.1)_0%,_transparent_40%)] pointer-events-none"></div>
+
+      <div className="relative container-prose px-4 md:px-8 mx-auto max-w-6xl">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* Left Side: Call to Action text */}
+          <div className="max-w-xl text-left">
+            <h2 className="text-[32px] md:text-[42px] font-bold mb-4 leading-tight">
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-slate-300 text-[15px] md:text-[17px] mb-8 font-light leading-relaxed">
+                {subtitle}
+              </p>
+            )}
+
+            <div className="space-y-4">
+              {phone && (
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#f28e2b]">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-[12px] uppercase text-slate-400 block tracking-wider font-semibold">Call Us Direct</span>
+                    <a href={`tel:${phone}`} className="text-white hover:text-[#f28e2b] transition-colors font-semibold text-[16px] md:text-[18px]">
+                      {phone}
+                    </a>
+                  </div>
+                </div>
+              )}
+              {email && (
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#f28e2b]">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-[12px] uppercase text-slate-400 block tracking-wider font-semibold">Email Us Direct</span>
+                    <a href={`mailto:${email}`} className="text-white hover:text-[#f28e2b] transition-colors font-semibold text-[16px] md:text-[18px]">
+                      {email}
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Side: Consultation Form (Orange box) */}
+          <div className="bg-[#f28e2b] p-6 md:p-8 rounded-[8px] shadow-2xl text-slate-800">
+            <h3 className="text-[#0b293d] font-bold text-[20px] mb-4 text-center">
+              Request a Free Consultation
+            </h3>
+
+            {successMessage && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded text-sm font-medium">
+                {successMessage}
+              </div>
+            )}
+
+            {errorMessage && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded text-sm font-medium">
+                {errorMessage}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
+                required
+                disabled={isSubmitting}
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={emailValue}
+                onChange={(e) => setEmailValue(e.target.value)}
+                className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
+                required
+                disabled={isSubmitting}
+              />
+              <input
+                type="text"
+                placeholder="Phone Number"
+                value={phoneValue}
+                onChange={(e) => setPhoneValue(e.target.value)}
+                className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
+                required
+                disabled={isSubmitting}
+              />
+              <select
+                value={serviceInterest}
+                onChange={(e) => setServiceInterest(e.target.value)}
+                className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d]"
+                disabled={isSubmitting}
+              >
+                <option value="">Select Service Needed</option>
+                <option value="Company Incorporation">Company Incorporation</option>
+                <option value="GST Filing & Advisory">GST Filing & Advisory</option>
+                <option value="Income Tax Advisory">Income Tax Advisory</option>
+                <option value="Audit & Compliance">Audit & Compliance</option>
+              </select>
+              <textarea
+                placeholder="Briefly describe your requirements..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] h-20 outline-none focus:border-[#0b293d] placeholder:text-slate-400 resize-none"
+                required
+                disabled={isSubmitting}
+              ></textarea>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-[#0b293d] text-white font-bold text-[14px] rounded hover:bg-slate-900 transition-all duration-300 uppercase tracking-wider shadow-md"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Request'}
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  )
+}

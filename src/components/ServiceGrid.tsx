@@ -9,14 +9,10 @@ export function ServiceGrid() {
             href: '/services/company-incorporation'
         },
         {
-            title: 'GST Registration & Filing',
-            desc: 'End-to-end GST registration, timely filing, reconciliation, and expert dispute handling.',
-            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (2).png',
-        },
-        {
             title: 'Income Tax Advisory',
             desc: 'Professional tax planning, return filing, and year-round compliance management.',
             image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (3).png',
+            href: '/services/income-tax-advisory'
         },
         {
             title: 'Accounting & Bookkeeping',
