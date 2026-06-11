@@ -11,7 +11,6 @@ export const metadata = {
 export default async function InsightsPage() {
   const allPosts = await getBlogPosts()
 
-  // Provide a default image array or generic placeholder if coverImage is null
   const defaultImages = [
     '/images/blog/blog_hero_1.jpg',
     '/images/blog/blog_hero_2.jpg',
