@@ -1,5 +1,4 @@
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://127.0.0.1:1337';
-
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 export interface StrapiBlogPost {
   id: number;
   documentId: string;
@@ -22,7 +21,7 @@ export interface StrapiBlogPost {
 export async function getBlogPosts(): Promise<StrapiBlogPost[]> {
   try {
     const res = await fetch(`${STRAPI_URL}/api/blog-posts?populate=*`, {
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {
@@ -43,7 +42,7 @@ export async function getBlogPostBySlug(slug: string): Promise<StrapiBlogPost | 
     const res = await fetch(`${STRAPI_URL}/api/blog-posts?filters[slug][$eq]=${slug}&populate=*`, {
       next: { revalidate: 60 },
     });
-
+    console.log('res==>', res)
     if (!res.ok) {
       console.error(`Failed to fetch blog post by slug (${slug}):`, res.status, res.statusText);
       return null;

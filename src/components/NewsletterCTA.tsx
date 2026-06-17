@@ -1,15 +1,37 @@
-import { getBlogSubscribe } from '@/lib/strapi'
+'use client' // Added to make it safe for your client-side detail page
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getBlogSubscribe } from '@/lib/strapi'
 import { NewsletterForm } from './NewsletterForm'
 
-export async function NewsletterCTA() {
-    const subscribeData = await getBlogSubscribe()
+export function NewsletterCTA() {
+    const [subscribeData, setSubscribeData] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
 
-    const title = subscribeData?.subscribeTitle
-    const placeholder = subscribeData?.subscribePlaceholder
-    const buttonText = subscribeData?.subscribeButtonText
-    const disclaimer = subscribeData?.subscribeDisclaimer
-    const privacyText = subscribeData?.privacyPolicyLinkText
+    useEffect(() => {
+        // Handle the async data fetching inside a client side effect hook
+        getBlogSubscribe()
+            .then((data) => {
+                setSubscribeData(data)
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.error("Error fetching newsletter config:", err)
+                setLoading(false)
+            })
+    }, [])
+
+    // While loading configuration, return a matching empty layout skeleton to avoid layout shifts
+    if (loading) {
+        return <section className="relative py-12 md:py-16 bg-[#0a2e3b] overflow-hidden border-t border-slate-800 h-[200px]" />
+    }
+
+    const title = subscribeData?.subscribeTitle || "Subscribe to our newsletter"
+    const placeholder = subscribeData?.subscribePlaceholder || "Enter your email address"
+    const buttonText = subscribeData?.subscribeButtonText || "Subscribe"
+    const disclaimer = subscribeData?.subscribeDisclaimer || "We protect your data."
+    const privacyText = subscribeData?.privacyPolicyLinkText || "Privacy Policy"
     const privacyUrl = subscribeData?.privacyPolicyLinkUrl
 
     return (

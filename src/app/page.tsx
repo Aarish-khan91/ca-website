@@ -12,41 +12,6 @@ import Link from 'next/link'
 import { Button } from '@/components/Button'
 import { fetchHomepageData, getStrapiUrl } from '@/data/strapi'
 
-// Fallback core services if the CMS does not have featured services
-const coreServices = [
-  {
-    title: "Company Incorporation",
-    description: "Register your business with complete documentation, compliance, and startup support.",
-    href: "/services/company-incorporation",
-    image: "/images/home/1.png"
-  },
-  {
-    title: "GST Registration & Filing",
-    description: "End-to-end registration, timely filing, reconciliation, and dispute handling.",
-    image: "/images/home/2.png"
-  },
-  {
-    title: "Income Tax Advisory",
-    description: "Professional tax planning, return filing, and compliance management.",
-    image: "/images/home/3.png"
-  },
-  {
-    title: "Accounting & Bookkeeping",
-    description: "Monthly bookkeeping, financial reporting, and accurate ledger management.",
-    image: "/images/home/4.png"
-  },
-  {
-    title: "Audit & Assurance",
-    description: "Internal, statutory, and compliance audits with actionable insights.",
-    image: "/images/home/1.png"
-  },
-  {
-    title: "Business Compliance Management",
-    description: "ROC, MCA, and statutory compliance management to keep your business protected.",
-    image: "/images/home/2.png"
-  }
-];
-
 // Dynamically generate SEO Metadata using the CMS SEO fields
 export async function generateMetadata(): Promise<Metadata> {
   const cmsData = await fetchHomepageData();

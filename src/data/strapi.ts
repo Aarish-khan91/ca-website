@@ -4,7 +4,10 @@ export function getStrapiUrl(path: string = '') {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+  if (!process.env.NEXT_PUBLIC_STRAPI_URL) {
+    throw new Error("Please provide NEXT_PUBLIC_STRAPI_URL in the environment variables")
+  }
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
   // Remove trailing slash from base and leading slash from path
   const sanitizedBase = baseUrl.replace(/\/$/, '');
   const sanitizedPath = path.replace(/^\//, '');
@@ -12,9 +15,8 @@ export function getStrapiUrl(path: string = '') {
 }
 
 export async function fetchHomepageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
-  
-  // Clean population keys to query deep nested fields for media in components
+  const apiUrl = getStrapiUrl('api/home-page');
+  console.log('apiUrl--->', apiUrl)
   const populateQuery = [
     'heroImage',
     'services',
@@ -30,15 +32,15 @@ export async function fetchHomepageData() {
   ].map((field, idx) => `populate[${idx}]=${field}`).join('&');
 
   try {
-    const response = await fetch(`${baseUrl}/api/home-page?${populateQuery}`, {
+    const response = await fetch(`${apiUrl}?${populateQuery}`, {
       next: { revalidate: 60 } // Next.js 13+ Incremental Static Regeneration (ISR)
     });
-    
+
     if (!response.ok) {
       console.error('Failed to fetch homepage data from Strapi:', response.statusText);
       return null;
     }
-    
+
     const json = await response.json();
     return json?.data || null;
   } catch (error) {
@@ -48,7 +50,7 @@ export async function fetchHomepageData() {
 }
 
 export async function fetchAboutPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
   const populateQuery = [
     'heroBackgroundImage',
@@ -81,7 +83,7 @@ export async function fetchAboutPageData() {
 }
 
 export async function fetchPricingPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
   const populateQuery = [
     'packages',
@@ -113,7 +115,7 @@ export async function fetchPricingPageData() {
 }
 
 export async function fetchNewsletterPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
   const populateQuery = [
     'features',
@@ -140,7 +142,7 @@ export async function fetchNewsletterPageData() {
 }
 
 export async function fetchContactPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
   const populateQuery = [
     'seo',
