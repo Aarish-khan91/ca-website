@@ -1,12 +1,15 @@
-export function TrustedBy() {
-  const logos = [
-    { name: 'Agency One', url: '/images/trusted/DC-1.png' },
-    { name: 'GovDept', url: '/images/trusted/DC-2.png' },
-    { name: 'Industry Board 1', url: '/images/trusted/DC-3.png' },
-    { name: 'Industry Board 2', url: '/images/trusted/DC-4.png' },
-  ]
+export interface LogoItem {
+  name: string
+  url: string
+}
 
-  const logoData = [...logos, ...logos]
+export interface TrustedByProps {
+  logos?: LogoItem[]
+}
+
+export function TrustedBy({ logos }: TrustedByProps) {
+  const items = logos && logos.length > 0 ? logos : []
+  const logoData = [...items, ...items]
 
   return (
     <div className="w-full overflow-hidden flex flex-nowrap relative">

@@ -1,6 +1,14 @@
 import { Button } from './Button'
+import Link from 'next/link'
 
-export function ContactBanner() {
+export interface ContactBannerProps {
+  title: string
+  subtitle: string
+  buttonText: string
+  buttonLink: string
+}
+
+export function ContactBanner({ title, subtitle, buttonText, buttonLink }: ContactBannerProps) {
   return (
     <section className="relative py-8 md:py-20 bg-brand-dark overflow-hidden">
       {/* Background Pattern: Sunburst */}
@@ -13,16 +21,20 @@ export function ContactBanner() {
 
       <div className="relative z-10 container-prose text-center px-4">
         <h2 className="text-[28px] md:text-[36px] font-bold tracking-wide text-white mb-4">
-          Need Expert Financial or Compliance Guidance?
+          {title}
         </h2>
         <p className="text-slate-300 max-w-2xl mx-auto text-[15px] md:text-[16px] font-light">
-          Our CA team is here to support individuals, startups, and businesses of all sizes.
+          {subtitle}
         </p>
-        <div className="mt-8">
-          <Button variant="primary" className="bg-[#f28e2b] hover:bg-[#e07b1a] text-white px-8 py-2.5 rounded-[8px] text-[15px] font-medium border-none shadow-sm transition-colors">
-            Book free consultation
-          </Button>
-        </div>
+        {buttonText && buttonLink && (
+          <div className="mt-8">
+            <Link href={buttonLink}>
+              <Button variant="primary" className="bg-[#f28e2b] hover:bg-[#e07b1a] text-white px-8 py-2.5 rounded-[8px] text-[15px] font-medium border-none shadow-sm transition-colors">
+                {buttonText}
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   )

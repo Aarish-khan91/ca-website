@@ -1,13 +1,11 @@
-export function FeatureGridSection() {
-  const cards = [
-    { title: "Expert Team", description: "Experienced professionals handling your case." },
-    { title: "Fast Turnaround", description: "Quick and efficient processing." },
-    { title: "Affordable Pricing", description: "Transparent and competitive rates." },
-    { title: "24/7 Support", description: "We are here whenever you need us." },
-    { title: "Compliance First", description: "Strict adherence to all regulations." }
-  ]
-  const title = "Why Choose Us"
-  const subtitle = "Top tier services for your business"
+interface FeatureGridSectionProps {
+  block: any
+}
+
+export function FeatureGridSection({ block }: FeatureGridSectionProps) {
+  const cards = block.cards || []
+  const title = block.section_title || block.sectionTitle || ''
+  const subtitle = block.section_subtitle || block.sectionSubtitle || ''
 
   const positions = [
     'left-[8%] top-[8%]',       // Node 1 (Top Left)

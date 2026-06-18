@@ -1,4 +1,4 @@
-import { mockPosts } from '@/data/blogPosts'
+import { getBlogPosts, getStrapiMedia } from '@/lib/strapi'
 import { InsightsHero } from '@/components/InsightsHero'
 import { NewsletterCTA } from '@/components/NewsletterCTA'
 import Link from 'next/link'
@@ -8,11 +8,21 @@ export const metadata = {
   description: 'Expert advice, real-world case studies, and actionable strategies.'
 }
 
-export default function InsightsPage() {
-  const allPosts = Object.values(mockPosts)
-  // Repeat the posts list to fill up the 6-card design layout
-  const postsGrid = [...allPosts, ...allPosts]
+export default async function InsightsPage() {
+  const allPosts = await getBlogPosts()
 
+  const defaultImages = [
+    '/images/blog/blog_hero_1.jpg',
+    '/images/blog/blog_hero_2.jpg',
+    '/images/blog/blog_hero_3.jpg',
+    '/images/blog/blog_hero_4.jpg',
+    '/images/blog/blog_hero_5.jpg'
+  ]
+
+  // We can still repeat posts if we want to fill up the grid, or just use what's fetched.
+  // Using the fetched posts directly.
+  const postsGrid = allPosts
+  console.log("postsGrid-->", postsGrid)
   return (
     <main className="bg-white min-h-screen flex flex-col">
       <InsightsHero />
@@ -21,10 +31,11 @@ export default function InsightsPage() {
         <div className="container-prose">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
             {postsGrid.map((p, index) => {
-              // Use gst_guide.png for the vertical cards instead of wide banner
-              const cardImage = p.slug === 'complete-gst-guide-for-small-businesses-in-2025' 
-                ? '/images/blog/gst_guide.png' 
-                : p.image
+              let cardImage = getStrapiMedia(p.coverImage?.url)
+              console.log("cardImage--->", cardImage)
+              if (!cardImage) {
+                cardImage = defaultImages[index % defaultImages.length]
+              }
 
               return (
                 <article key={p.slug + '-' + index} className="group flex flex-col h-full bg-white transition-all duration-300">
@@ -49,10 +60,14 @@ export default function InsightsPage() {
 
                     <div className="flex flex-col gap-1 mb-4">
                       <span className="text-sm font-semibold text-slate-500 tracking-wide">
-                        {p.category}
+                        {p.category?.name || 'Uncategorized'}
                       </span>
                       <span className="text-xs text-slate-400 font-medium">
-                        {p.date}
+                        {p.date ? new Date(p.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        }) : ''}
                       </span>
                     </div>
 
@@ -63,6 +78,12 @@ export default function InsightsPage() {
                 </article>
               )
             })}
+
+            {postsGrid.length === 0 && (
+              <div className="col-span-full py-12 text-center text-slate-500">
+                No blog posts found. Check back later!
+              </div>
+            )}
           </div>
         </div>
       </section>

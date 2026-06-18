@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 
-export function ServiceFaqAccordion() {
+interface ServiceFaqAccordionProps {
+  faqs: any[]
+}
+
+export function ServiceFaqAccordion({ faqs }: ServiceFaqAccordionProps) {
   const [openIdx, setOpenIdx] = useState<number | null>(null)
-  const faqs = [
-    { question: "How long does the process take?", answer: "The timeline depends on the specific service, but typically takes 7-15 business days." },
-    { question: "What documents are required?", answer: "Basic KYC documents along with service-specific forms. We will provide you with a comprehensive checklist before we start." },
-    { question: "Are there any hidden charges?", answer: "No, our pricing is transparent and completely upfront." }
-  ]
 
   if (!faqs || faqs.length === 0) return null
 
@@ -35,9 +34,8 @@ export function ServiceFaqAccordion() {
                   </span>
                 </button>
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isOpen ? 'max-h-[500px]' : 'max-h-0'
-                  }`}
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[500px]' : 'max-h-0'
+                    }`}
                 >
                   <div className="p-6 pt-0 border-t border-slate-50 text-slate-600 text-[14px] md:text-[15px] leading-relaxed">
                     {faq.answer}

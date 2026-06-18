@@ -2,15 +2,13 @@
 
 import { useState } from 'react'
 
-export function TabbedRichText() {
+interface TabbedRichTextProps {
+  block: any
+}
+
+export function TabbedRichText({ block }: TabbedRichTextProps) {
   const [activeTabIdx, setActiveTabIdx] = useState(0)
-  const title = "Service Details"
-  const subtitle = "Explore the different aspects of our service"
-  const tabs = [
-    { tabName: "Overview", content: "<p>General overview of the service scope.</p>" },
-    { tabName: "Requirements", content: "<p>Documents and prerequisites needed.</p>" },
-    { tabName: "Deliverables", content: "<p>What you will receive at the end of the process.</p>" }
-  ]
+  const tabs = block.tabs || []
 
   if (tabs.length === 0) return null
 
@@ -19,11 +17,11 @@ export function TabbedRichText() {
       <div className="container-prose px-4 md:px-8 mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <h2 className="text-[28px] md:text-[36px] font-bold text-[#0b293d] mb-4">
-            {title}
+            {block.title}
           </h2>
-          {subtitle && (
+          {block.subtitle && (
             <p className="text-slate-600 text-[15px] md:text-[16px] max-w-3xl mx-auto">
-              {subtitle}
+              {block.subtitle}
             </p>
           )}
         </div>

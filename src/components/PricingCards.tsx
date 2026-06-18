@@ -1,47 +1,24 @@
-export function PricingCards() {
-    const plans = [
-        {
-            name: 'Basic',
-            price: '499',
-            buttonText: 'Choose Basic',
-            features: [
-                'GST Registration',
-                'Basic Income Tax Filing',
-                'Limited Support'
-            ]
-        },
-        {
-            name: 'Standard',
-            badge: 'Recommended',
-            price: '999',
-            buttonText: 'Choose Standard',
-            features: [
-                'GST Registration & Filing',
-                'Comprehensive Income Tax Filing',
-                'Priority Support',
-                'Basic Accounting'
-            ]
-        },
-        {
-            name: 'Premium',
-            badge: 'Best Value',
-            price: '1999',
-            buttonText: 'Choose Premium',
-            features: [
-                'GST Registration & Filing',
-                'Advanced Income Tax Filing',
-                'Dedicated Support',
-                'Full Accounting & Bookkeeping',
-                'Payroll & HR Compliance'
-            ]
-        }
-    ]
+export interface PricingPackageItem {
+  name: string
+  price: string | number
+  billingPeriod: string
+  badge?: string
+  ctaText: string
+  ctaLink?: string
+  features: string[]
+}
 
+export interface PricingCardsProps {
+  title: string
+  plans: PricingPackageItem[]
+}
+
+export function PricingCards({ title, plans }: PricingCardsProps) {
     return (
         <section className="py-16 md:py-24 bg-[#f8f9fa]">
             <div className="container-prose max-w-6xl mx-auto px-4">
                 <h2 className="text-[32px] md:text-[36px] font-bold text-brand-dark mb-12 text-center">
-                    Compliance Packages
+                    {title}
                 </h2>
 
                 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
@@ -64,13 +41,13 @@ export function PricingCards() {
                                     ${plan.price}
                                 </span>
                                 <span className="ml-2 text-[16px] text-brand-dark font-medium">
-                                    per year
+                                    {plan.billingPeriod}
                                 </span>
                             </div>
 
                             {/* Button */}
                             <button className="w-full py-3 px-4 bg-[#eef1f5] hover:bg-[#e2e8f0] text-brand-dark font-medium rounded-[8px] transition-colors mb-8">
-                                {plan.buttonText}
+                                {plan.ctaText}
                             </button>
 
                             {/* Features */}

@@ -2,30 +2,25 @@
 import { useState } from 'react'
 import clsx from 'clsx'
 
-export function FAQ() {
-    const faqs = [
-        {
-            q: 'What factors influence the cost of your services?',
-            a: 'The cost of our services depends on the complexity of your financial situation, the scope of work required, and the specific services you choose. We offer transparent pricing and will provide a detailed quote tailored to your needs.'
-        },
-        {
-            q: 'Do you offer customized pricing for specific needs?',
-            a: 'Yes, we understand every business is unique. We are happy to discuss a custom package that aligns perfectly with your requirements and budget.'
-        },
-        {
-            q: 'How do I get a detailed quote for my requirements?',
-            a: 'Simply click the "Book free consultation" button below or contact us directly. Our experts will assess your needs and provide a comprehensive quote.'
-        },
-    ]
+export interface FAQItem {
+  question: string
+  answer: string
+}
 
+export interface FAQProps {
+  title: string
+  faqs: FAQItem[]
+}
+
+export function FAQ({ title, faqs }: FAQProps) {
     return (
         <section className="py-16 md:py-24 bg-white">
             <div className="container-prose">
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-10">Frequently Asked Questions</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-10">{title}</h2>
 
                 <div className="space-y-4">
                     {faqs.map((item, idx) => (
-                        <Accordion key={idx} question={item.q} answer={item.a} isOpen={idx === 0} />
+                        <Accordion key={idx} question={item.question} answer={item.answer} isOpen={idx === 0} />
                     ))}
                 </div>
             </div>

@@ -1,6 +1,39 @@
-import { Button } from './Button'
+'use client' // Added to make it safe for your client-side detail page
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { getBlogSubscribe } from '@/lib/strapi'
+import { NewsletterForm } from './NewsletterForm'
 
 export function NewsletterCTA() {
+    const [subscribeData, setSubscribeData] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        // Handle the async data fetching inside a client side effect hook
+        getBlogSubscribe()
+            .then((data) => {
+                setSubscribeData(data)
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.error("Error fetching newsletter config:", err)
+                setLoading(false)
+            })
+    }, [])
+
+    // While loading configuration, return a matching empty layout skeleton to avoid layout shifts
+    if (loading) {
+        return <section className="relative py-12 md:py-16 bg-[#0a2e3b] overflow-hidden border-t border-slate-800 h-[200px]" />
+    }
+
+    const title = subscribeData?.subscribeTitle || "Subscribe to our newsletter"
+    const placeholder = subscribeData?.subscribePlaceholder || "Enter your email address"
+    const buttonText = subscribeData?.subscribeButtonText || "Subscribe"
+    const disclaimer = subscribeData?.subscribeDisclaimer || "We protect your data."
+    const privacyText = subscribeData?.privacyPolicyLinkText || "Privacy Policy"
+    const privacyUrl = subscribeData?.privacyPolicyLinkUrl
+
     return (
         <section className="relative py-12 md:py-16 bg-[#0a2e3b] overflow-hidden border-t border-slate-800">
             {/* Background Pattern: Sunburst radiating from the bottom center */}
@@ -14,32 +47,25 @@ export function NewsletterCTA() {
             <div className="relative z-10 max-w-6xl mx-auto px-4">
                 {/* Heading */}
                 <h2 className="text-[24px] md:text-[32px] font-bold text-white mb-6 md:mb-8 tracking-tight text-center">
-                    Stay Ahead. Subscribe For Expert Insights.
+                    {title}
                 </h2>
 
                 {/* Form and Disclaimer Horizontal Layout */}
-                <form className="flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 max-w-5xl mx-auto">
-                    {/* Input & Button Container */}
-                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            className="w-full sm:w-[285px] md:w-[320px] h-[48px] px-5 rounded-[8px] bg-white text-slate-800 placeholder-slate-400 focus:outline-none text-[15px] shadow-inner"
-                            required
-                        />
-                        <button
-                            type="submit"
-                            className="w-full sm:w-auto h-[48px] px-8 bg-[#F19020] hover:bg-[#D87F1C] text-white font-medium rounded-[8px] transition-colors whitespace-nowrap text-[15px] shadow-sm focus:outline-none"
-                        >
-                            Subscribe
-                        </button>
-                    </div>
+                <div className="flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 max-w-5xl mx-auto">
+                    <NewsletterForm placeholder={placeholder} buttonText={buttonText} />
 
                     {/* Disclaimer Text */}
                     <p className="text-[13px] text-white/80 max-w-sm leading-relaxed text-center lg:text-left">
-                        You can unsubscribe at any time using the link in the footer of our emails. <span className="underline cursor-pointer hover:text-white transition-colors">View our Privacy Policy</span>.
+                        {disclaimer}{" "}
+                        {privacyUrl ? (
+                            <Link href={privacyUrl} className="underline cursor-pointer hover:text-white transition-colors">
+                                {privacyText}
+                            </Link>
+                        ) : (
+                            <span className="underline cursor-pointer hover:text-white transition-colors">{privacyText}</span>
+                        )}
                     </p>
-                </form>
+                </div>
             </div>
         </section>
     )

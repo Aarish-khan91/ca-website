@@ -1,15 +1,14 @@
 'use client'
 import React, { useState } from 'react'
 
-export function ContactCtaSection() {
-  const title = "Ready to start?"
-  const subtitle = "Get in touch with us today for a free consultation."
-  const phone = "+91 9876543210"
-  const email = "contact@riteshassociates.com"
+interface ContactCtaSectionProps {
+  block: any
+}
 
+export function ContactCtaSection({ block }: ContactCtaSectionProps) {
   const [fullName, setFullName] = useState('')
-  const [emailValue, setEmailValue] = useState('')
-  const [phoneValue, setPhoneValue] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [serviceInterest, setServiceInterest] = useState('')
   const [message, setMessage] = useState('')
 
@@ -22,7 +21,7 @@ export function ContactCtaSection() {
     setErrorMessage('')
     setSuccessMessage('')
 
-    if (!fullName.trim() || !emailValue.trim() || !phoneValue.trim() || !message.trim()) {
+    if (!fullName.trim() || !email.trim() || !phone.trim() || !message.trim()) {
       setErrorMessage('Please fill in all required fields.')
       return
     }
@@ -39,8 +38,8 @@ export function ContactCtaSection() {
         body: JSON.stringify({
           data: {
             fullName,
-            email: emailValue,
-            phone: phoneValue,
+            email,
+            phone,
             serviceInterest,
             message
           }
@@ -55,8 +54,8 @@ export function ContactCtaSection() {
 
       setSuccessMessage('Thank you! Your request has been submitted successfully.')
       setFullName('')
-      setEmailValue('')
-      setPhoneValue('')
+      setEmail('')
+      setPhone('')
       setServiceInterest('')
       setMessage('')
     } catch (err: any) {
@@ -77,16 +76,16 @@ export function ContactCtaSection() {
           {/* Left Side: Call to Action text */}
           <div className="max-w-xl text-left">
             <h2 className="text-[32px] md:text-[42px] font-bold mb-4 leading-tight">
-              {title}
+              {block.title}
             </h2>
-            {subtitle && (
+            {block.subtitle && (
               <p className="text-slate-300 text-[15px] md:text-[17px] mb-8 font-light leading-relaxed">
-                {subtitle}
+                {block.subtitle}
               </p>
             )}
 
             <div className="space-y-4">
-              {phone && (
+              {block.phone && (
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#f28e2b]">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,13 +94,13 @@ export function ContactCtaSection() {
                   </div>
                   <div>
                     <span className="text-[12px] uppercase text-slate-400 block tracking-wider font-semibold">Call Us Direct</span>
-                    <a href={`tel:${phone}`} className="text-white hover:text-[#f28e2b] transition-colors font-semibold text-[16px] md:text-[18px]">
-                      {phone}
+                    <a href={`tel:${block.phone}`} className="text-white hover:text-[#f28e2b] transition-colors font-semibold text-[16px] md:text-[18px]">
+                      {block.phone}
                     </a>
                   </div>
                 </div>
               )}
-              {email && (
+              {block.email && (
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#f28e2b]">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,8 +109,8 @@ export function ContactCtaSection() {
                   </div>
                   <div>
                     <span className="text-[12px] uppercase text-slate-400 block tracking-wider font-semibold">Email Us Direct</span>
-                    <a href={`mailto:${email}`} className="text-white hover:text-[#f28e2b] transition-colors font-semibold text-[16px] md:text-[18px]">
-                      {email}
+                    <a href={`mailto:${block.email}`} className="text-white hover:text-[#f28e2b] transition-colors font-semibold text-[16px] md:text-[18px]">
+                      {block.email}
                     </a>
                   </div>
                 </div>
@@ -150,8 +149,8 @@ export function ContactCtaSection() {
               <input
                 type="email"
                 placeholder="Email Address"
-                value={emailValue}
-                onChange={(e) => setEmailValue(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
                 required
                 disabled={isSubmitting}
@@ -159,8 +158,8 @@ export function ContactCtaSection() {
               <input
                 type="text"
                 placeholder="Phone Number"
-                value={phoneValue}
-                onChange={(e) => setPhoneValue(e.target.value)}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full p-3 bg-white rounded border border-orange-400 text-slate-800 text-[14px] outline-none focus:border-[#0b293d] placeholder:text-slate-400"
                 required
                 disabled={isSubmitting}

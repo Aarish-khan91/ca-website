@@ -1,11 +1,12 @@
 import Link from 'next/link'
+import { getStrapiMedia } from '@/lib/strapi'
 
-export function RelatedBlogsSection() {
-  const blogs = [
-    { category: { name: "Taxation" }, slug: "tax-planning-2026", title: "Tax Planning Strategies for 2026", excerpt: "Learn how to optimize your taxes effectively this year with our comprehensive guide.", coverImage: { url: "/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png" } },
-    { category: { name: "Compliance" }, slug: "mca-updates", title: "Recent MCA Updates", excerpt: "Stay compliant with the latest changes from MCA and ensure your business operates smoothly.", coverImage: { url: "/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (2).png" } },
-    { category: { name: "Business" }, slug: "startup-guide", title: "Startup Incorporation Guide", excerpt: "Everything you need to know before registering your startup in India.", coverImage: { url: "/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (3).png" } }
-  ]
+interface RelatedBlogsSectionProps {
+  blogs?: any[]
+}
+
+export function RelatedBlogsSection({ blogs }: RelatedBlogsSectionProps) {
+  console.log('blogs--->', blogs)
 
   return (
     <section className="py-16 md:py-24 bg-white border-t border-slate-100">
@@ -20,7 +21,7 @@ export function RelatedBlogsSection() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {blogs?.map((blog: any, idx: number) => {
-            const coverUrl = blog.coverImage?.url ? blog.coverImage.url : blog.image
+            const coverUrl = blog.coverImage?.url ? getStrapiMedia(blog.coverImage.url) : blog.image
             return (
               <article key={idx} className="flex flex-col h-full bg-white rounded-[8px] border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="h-[200px] w-full overflow-hidden bg-slate-200 shrink-0">

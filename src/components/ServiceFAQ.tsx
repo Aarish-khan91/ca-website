@@ -1,9 +1,14 @@
 'use client'
 import { useState } from 'react'
 import clsx from 'clsx'
+import { StrapiFaq } from '@/lib/strapi'
 
-export function ServiceFAQ() {
-    const faqs = [
+interface ServiceFAQProps {
+    faqs?: StrapiFaq[];
+}
+
+export function ServiceFAQ({ faqs: fetchedFaqs }: ServiceFAQProps) {
+    const staticFaqs = [
         {
             q: 'What documents are required for GST filing?',
             a: 'You generally need your sales and purchase invoices, bank statements, and details of input tax credit. Specific requirements may vary based on your business type.'
@@ -25,6 +30,16 @@ export function ServiceFAQ() {
             a: 'Absolutely. We offer comprehensive monthly retainers covering bookkeeping, GST filings, TDS compliance, and general advisory.'
         },
     ]
+
+    const faqs = fetchedFaqs && fetchedFaqs.length > 0
+        && fetchedFaqs.map(item => ({
+            q: item.question,
+            a: item.answer
+        }))
+
+    if (!faqs) {
+        return null;
+    }
 
     return (
         <section className="py-16 md:py-24 bg-[#f8f9fa]">

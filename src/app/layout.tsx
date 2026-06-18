@@ -4,6 +4,7 @@ import '../styles/globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { FloatingChat } from '@/components/FloatingChat'
+import { getServices, getServicesPage } from '@/lib/strapi'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -46,16 +47,18 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const servicePageData = await getServicesPage()
+
   return (
     <html lang="en" className={montserrat.variable}>
       <body className="font-sans bg-slate-950 text-white antialiased">
         <div className="mb-28">
-        <Navbar />
+          <Navbar services={servicePageData?.services} />
         </div>
         {children}
         <div className="">
-        <Footer />
+          <Footer />
         </div>
         <FloatingChat />
       </body>

@@ -1,16 +1,20 @@
+import { getStrapiMedia } from '@/lib/strapi'
 
-export function ServiceHeroSection() {
-  const title = "Professional Services"
-  const subtitle = "Expert guidance and comprehensive solutions for your business."
-  const bgUrl = "/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png"
+interface ServiceHeroSectionProps {
+  service: any
+}
+
+export function ServiceHeroSection({ service }: ServiceHeroSectionProps) {
+  const bgUrl = service.coverImage?.url
+    && getStrapiMedia(service.coverImage.url)
 
   return (
     <section className="relative overflow-hidden h-[400px] md:h-[450px] flex items-center bg-[#0b293d]">
       {/* Wave Background Pattern */}
       <div className="absolute inset-0">
         <img
-          src={bgUrl}
-          alt={title}
+          src={bgUrl || ''}
+          alt={service.title}
           className="w-full h-full object-cover object-center mix-blend-overlay opacity-30"
         />
         {/* Abstract blue/orange light mesh overlay */}
@@ -21,11 +25,13 @@ export function ServiceHeroSection() {
       <div className="relative container-prose px-4 md:px-8 mx-auto max-w-6xl w-full">
         <div className="max-w-3xl">
           <h1 className="text-[36px] md:text-[48px] lg:text-[54px] font-bold tracking-tight text-white mb-4 leading-tight">
-            {title}
+            {service.heroTitle || service.title}
           </h1>
-          <p className="text-[15px] md:text-[18px] text-slate-200 leading-relaxed font-light max-w-2xl">
-            {subtitle}
-          </p>
+          {service.heroSubtitle && (
+            <p className="text-[15px] md:text-[18px] text-slate-200 leading-relaxed font-light max-w-2xl">
+              {service.heroSubtitle}
+            </p>
+          )}
         </div>
       </div>
     </section>

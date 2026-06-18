@@ -2,21 +2,13 @@
 
 import { useState } from 'react'
 
-export function ProcessSection() {
+interface ProcessSectionProps {
+  block: any
+}
+
+export function ProcessSection({ block }: ProcessSectionProps) {
   const [activeTabIdx, setActiveTabIdx] = useState(0)
-  const title = "Our Working Process"
-  const subtitle = "A structured approach to ensure success"
-  const tabs = [
-    {
-      tabName: "Standard Process",
-      steps: [
-        { title: "Initial Consultation" },
-        { title: "Document Collection" },
-        { title: "Filing and Registration" },
-        { title: "Final Handover" }
-      ]
-    }
-  ]
+  const tabs = block.tabs || []
 
   if (tabs.length === 0) return null
 
@@ -30,11 +22,11 @@ export function ProcessSection() {
       <div className="relative container-prose px-4 md:px-8 mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <h2 className="text-[28px] md:text-[36px] font-bold mb-4">
-            {title}
+            {block.title}
           </h2>
-          {subtitle && (
+          {block.subtitle && (
             <p className="text-slate-300 text-[14px] md:text-[15px] font-light max-w-2xl mx-auto">
-              {subtitle}
+              {block.subtitle}
             </p>
           )}
         </div>
@@ -48,11 +40,10 @@ export function ProcessSection() {
                 <button
                   key={idx}
                   onClick={() => setActiveTabIdx(idx)}
-                  className={`px-6 py-2.5 rounded-full text-[14px] font-semibold border transition-all duration-300 ${
-                    isActive
+                  className={`px-6 py-2.5 rounded-full text-[14px] font-semibold border transition-all duration-300 ${isActive
                       ? 'bg-[#f28e2b] text-white border-[#f28e2b] shadow-md'
                       : 'bg-slate-800/50 text-slate-300 border-slate-700 hover:bg-slate-800 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {tab.tab_name || tab.tabName}
                 </button>
@@ -63,7 +54,7 @@ export function ProcessSection() {
 
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-5 gap-10 items-start">
-          
+
           {/* Left Column: Timeline Steps */}
           <div className="lg:col-span-3 space-y-6 relative before:absolute before:left-6 before:top-4 before:bottom-4 before:w-[2px] before:bg-slate-700/50">
             {(tabs[activeTabIdx]?.steps || []).map((step: any, idx: number) => (
@@ -72,7 +63,7 @@ export function ProcessSection() {
                 <div className="absolute left-3 -translate-x-1/2 bg-[#f28e2b] text-white font-bold text-[14px] w-8 h-8 rounded-full flex items-center justify-center shadow-md border-2 border-[#0b293d] group-hover:scale-110 transition-transform duration-300">
                   {idx + 1}
                 </div>
-                
+
                 <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-[8px] flex-1 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
                   <h3 className="text-white text-[16px] md:text-[18px] font-semibold">
                     {step.title}
@@ -96,7 +87,7 @@ export function ProcessSection() {
               </p>
 
               <div className="flex flex-col gap-3 mb-6">
-                <button 
+                <button
                   onClick={() => {
                     const el = document.getElementById('contact-form-section');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -105,7 +96,7 @@ export function ProcessSection() {
                 >
                   Start Registration
                 </button>
-                <a 
+                <a
                   href="#contact-form-section"
                   className="w-full py-3 border border-[#0b293d] text-[#0b293d] font-semibold text-[14px] rounded-[4px] hover:bg-slate-50 transition-all duration-300 text-center"
                 >

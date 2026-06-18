@@ -1,12 +1,24 @@
 import Link from 'next/link'
+import { StrapiService, getStrapiMedia } from '@/lib/strapi'
 
-export function ServiceGrid() {
-    const services = [
+interface ServiceGridProps {
+    services?: StrapiService[];
+}
+
+export function ServiceGrid({ services: fetchedServices }: ServiceGridProps) {
+    console.log('fetchedServices-->', fetchedServices)
+    const staticServices = [
         {
             title: 'Company Incorporation',
             desc: 'Register your business with complete documentation, compliance, and startup support.',
             image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png',
             href: '/services/company-incorporation'
+        },
+        {
+            title: 'GST Registration & Filing',
+            desc: 'End-to-end GST registration, timely filing, reconciliation, and expert dispute handling.',
+            image: '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (2).png',
+            href: '/services/gst-registration-filing'
         },
         {
             title: 'Income Tax Advisory',
@@ -34,6 +46,27 @@ export function ServiceGrid() {
         },
     ]
 
+    const fallbackImages = [
+        '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png',
+        '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (2).png',
+        '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (3).png',
+        '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (4).png',
+        '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2.png',
+        '/images/services/Gemini_Generated_Image_f9dqq0f9dqq0f9dq 2 (1).png'
+    ]
+
+    const services = fetchedServices && fetchedServices.length > 0
+        && fetchedServices.map((s, idx) => ({
+            title: s.title,
+            desc: s.heroSubtitle || s.shortDescription || '',
+            image: getStrapiMedia(s?.image?.url) || undefined,
+            href: `/services/${s.slug}`
+        }))
+
+    if (!services) {
+        return null;
+    }
+
     return (
         <section className="py-16 md:py-24 bg-[#f8f9fa]">
             <div className="container-prose px-4 max-w-6xl mx-auto">
@@ -43,11 +76,11 @@ export function ServiceGrid() {
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {services.map((s, idx) => (
+                    {services?.map((s, idx) => (
                         <div key={idx} className="group rounded-[8px] overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-[#0b293d] flex flex-col h-full">
                             {/* Image Area */}
                             <div className="h-[220px] w-full relative overflow-hidden bg-slate-200 shrink-0">
-                                <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                <img src={s.image} alt={s?.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             </div>
 
                             <div className="p-6 md:p-8 flex-1 flex flex-col">
