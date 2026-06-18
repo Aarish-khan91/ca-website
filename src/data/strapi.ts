@@ -47,7 +47,7 @@ export async function fetchHomepageData() {
 }
 
 export async function fetchAboutPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
   const populateQuery = [
     'heroBackgroundImage',
