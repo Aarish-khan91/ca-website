@@ -24,14 +24,18 @@ export function AboutHero({
     <section className="relative overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center">
       <div className="absolute inset-0">
         {backgroundImageUrl && (
-          <img 
-            src={backgroundImageUrl} 
-            alt={title} 
+          <img
+            src={backgroundImageUrl}
+            alt={title}
             className="w-full h-full object-cover object-center"
           />
         )}
+
+
+
+
       </div>
-      
+
       <div className="relative container-prose w-full px-4 md:px-8">
         <div className="max-w-5xl">
           <h1 className="text-[36px] md:text-[48px] lg:text-[56px] font-bold tracking-tight text-white leading-tight">
@@ -53,6 +57,8 @@ export function AboutHero({
                 <Button variant="outline" className="border border-white text-white hover:bg-white hover:text-slate-900 px-6 py-2.5 rounded-[8px] text-[16px] font-medium transition-colors bg-transparent">
                   {secondaryButtonText}
                 </Button>
+
+
               </Link>
             )}
           </div>

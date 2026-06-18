@@ -4,10 +4,7 @@ export function getStrapiUrl(path: string = '') {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
-  if (!process.env.NEXT_PUBLIC_STRAPI_URL) {
-    throw new Error("Please provide NEXT_PUBLIC_STRAPI_URL in the environment variables")
-  }
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
   // Remove trailing slash from base and leading slash from path
   const sanitizedBase = baseUrl.replace(/\/$/, '');
   const sanitizedPath = path.replace(/^\//, '');
