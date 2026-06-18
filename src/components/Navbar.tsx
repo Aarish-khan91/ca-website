@@ -6,7 +6,6 @@ import { StrapiService } from '@/lib/strapi'
 
 export function Navbar({ services = [] }: { services?: StrapiService[] }) {
   const [open, setOpen] = useState(false)
-  console.log('displayServices==>', services)
 
   const displayServices = services && services.length > 0 ? services.map(s => ({
     title: s.title,
