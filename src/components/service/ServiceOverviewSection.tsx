@@ -12,7 +12,7 @@ export function ServiceOverviewSection({ service }: ServiceOverviewSectionProps)
         <div className="bg-white p-8 md:p-12 shadow-sm rounded-[8px] border border-slate-100 mb-16">
           {service.introQuote && (
             <div className="border-l-4 border-[#f28e2b] pl-4 italic text-[18px] text-[#0b293d] mb-6 font-medium">
-              "{service.introQuote}"
+              &quot;{service.introQuote}&quot;
             </div>
           )}
           {service.introDescription && (
