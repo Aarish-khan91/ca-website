@@ -126,7 +126,7 @@ interface JobOpeningsProps {
 }
 
 export function JobOpenings({ jobs = [] }: JobOpeningsProps) {
-    const displayJobs = jobs && jobs.length > 0 && jobs.map(job => {
+    const displayJobs = jobs && jobs.length > 0 ? jobs.map(job => {
         const parsedResponsibilities = job.responsibilities
             ? typeof job.responsibilities === 'string'
                 ? job.responsibilities.split('\n').map(r => r.replace(/^- /, '').trim()).filter(Boolean)
@@ -152,9 +152,20 @@ export function JobOpenings({ jobs = [] }: JobOpeningsProps) {
             responsibilities: parsedResponsibilities,
             requirements: parsedRequirements
         }
-    });
+    }) : [];
 
     const [selectedJob, setSelectedJob] = useState<typeof displayJobs[0] | null>(null)
+    const [filterDepartment, setFilterDepartment] = useState('')
+    const [filterLocation, setFilterLocation] = useState('')
+
+    const uniqueDepartments = Array.from(new Set(displayJobs.map(job => job.department).filter(Boolean)));
+    const uniqueLocations = Array.from(new Set(displayJobs.map(job => job.location).filter(Boolean)));
+
+    const filteredJobs = displayJobs.filter(job => {
+        const matchDepartment = filterDepartment ? job.department === filterDepartment : true;
+        const matchLocation = filterLocation ? job.location === filterLocation : true;
+        return matchDepartment && matchLocation;
+    });
     const [isApplying, setIsApplying] = useState(false)
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
@@ -259,21 +270,35 @@ export function JobOpenings({ jobs = [] }: JobOpeningsProps) {
 
                 {/* Filters */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                    <select className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]">
-                        <option value="">Department</option>
-                        <option value="audit">Audit & Assurance</option>
-                        <option value="tax">Tax</option>
+                    <select 
+                        value={filterDepartment}
+                        onChange={(e) => setFilterDepartment(e.target.value)}
+                        className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]"
+                    >
+                        <option value="">All Departments</option>
+                        {uniqueDepartments.map(dept => (
+                            <option key={dept} value={dept}>{dept}</option>
+                        ))}
                     </select>
-                    <select className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]">
-                        <option value="">Location</option>
-                        <option value="delhi">New Delhi</option>
-                        <option value="mumbai">Mumbai</option>
+                    <select 
+                        value={filterLocation}
+                        onChange={(e) => setFilterLocation(e.target.value)}
+                        className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]"
+                    >
+                        <option value="">All Locations</option>
+                        {uniqueLocations.map(loc => (
+                            <option key={loc} value={loc}>{loc}</option>
+                        ))}
                     </select>
                 </div>
 
                 {/* Job Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {displayJobs?.map((job) => (
+                    {filteredJobs.length === 0 ? (
+                        <div className="col-span-full py-12 text-center text-slate-500">
+                            No open positions found matching your filters.
+                        </div>
+                    ) : filteredJobs?.map((job) => (
                         <div key={job.id} className="bg-[#0b293d] rounded-[12px] p-6 flex flex-col h-full hover:-translate-y-1 transition-transform duration-300">
                             <h3 className="text-[18px] md:text-[20px] font-medium text-white mb-3">
                                 {job.title}
