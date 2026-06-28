@@ -337,3 +337,59 @@ export async function getServicesPage(): Promise<StrapiServicesPage | null> {
   }
 }
 
+export interface StrapiCareerPage {
+  id: number;
+  documentId: string;
+  heroTitle: string;
+  heroDescription?: string;
+  heroImage?: {
+    url: string;
+  } | null;
+  seo?: any;
+}
+
+export interface StrapiJob {
+  id: number;
+  documentId: string;
+  title: string;
+  department: string;
+  location: string;
+  experience: string;
+  jobType: string;
+  shortDescription?: string;
+  description?: string;
+  fullDescription?: string;
+  responsibilities?: string;
+  requirements?: string;
+  publishedAt?: string;
+  postedDate?: string;
+}
+
+export async function getCareerPageData(): Promise<StrapiCareerPage | null> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/career?populate=*`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error('Error fetching career page data:', error);
+    return null;
+  }
+}
+
+export async function getJobs(): Promise<StrapiJob[]> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/jobs?populate=*`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    console.log("json===========>>>", json)
+    return json.data || [];
+  } catch (error) {
+    console.error('Error fetching jobs:', error);
+    return [];
+  }
+}

@@ -129,7 +129,7 @@ export default async function Page() {
           className="bg-white py-20"
         >
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {servicesData.map((service: any, index: number) => (
+            {servicesData?.map((service: any, index: number) => (
               <ServiceCard
                 key={index}
                 title={service.title}
