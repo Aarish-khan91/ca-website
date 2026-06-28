@@ -356,7 +356,7 @@ export function Navbar({
 
   return (
     <header className="fixed w-full top-0 z-50 bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
-      <div className="max-w-[1400px] mx-auto py-3 flex items-center justify-between px-4 lg:px-8">
+      <div className="relative max-w-[1400px] mx-auto py-3 flex items-center justify-between px-4 lg:px-8">
 
         {/* Logo */}
         <div className="flex items-center">
@@ -395,7 +395,7 @@ export function Navbar({
         </button>
 
         {/* Desktop: Search */}
-        <div className="hidden lg:flex items-center flex-1 max-w-[400px] ml-12 xl:ml-20">
+        <div className="hidden lg:flex items-center flex-1 max-w-[180px] xl:max-w-[300px] 2xl:max-w-[400px] ml-6 xl:ml-12">
           <div className="relative w-full">
             <svg width="18" height="18" viewBox="0 0 24 24" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -410,18 +410,18 @@ export function Navbar({
         </div>
 
         {/* Desktop: Nav links */}
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-8 ml-auto">
-          <Link href="/" className="text-slate-600 hover:text-brand-dark transition-colors text-[15px]">Home</Link>
-          <Link href="/about" className="text-slate-600 hover:text-brand-dark transition-colors text-[15px]">About</Link>
+        <nav className="hidden lg:flex items-center gap-3 xl:gap-6 2xl:gap-8 ml-auto mr-6 xl:mr-12">
+          <Link href="/" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Home</Link>
+          <Link href="/about" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">About</Link>
 
           {/* Desktop: Services mega-menu */}
-          <div className="relative group">
-            <Link href="/services" className="text-slate-600 group-hover:text-brand-dark transition-colors text-[15px] flex items-center gap-1 py-4">
+          <div className="group">
+            <Link href="/services" className="text-slate-600 group-hover:text-brand-dark transition-colors text-[14px] xl:text-[15px] flex items-center gap-1 py-4">
               Services
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180"><path d="M6 9l6 6 6-6" /></svg>
             </Link>
 
-            <div className="absolute left-1/2 -translate-x-1/2 top-full w-[1100px] max-w-[95vw] bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+            <div className="absolute left-0 right-0 mx-auto w-[1100px] max-w-[calc(100%-2rem)] lg:max-w-[calc(100%-4rem)] top-full bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
               <div className="flex h-[450px]">
 
                 {/* Col 1: Main Modules */}
@@ -434,9 +434,9 @@ export function Navbar({
                         <div
                           key={module.id || mIdx}
                           onMouseEnter={() => { setActiveMainModuleId(module.id); setActiveCategoryId(null); setActiveSubcategoryId(null); setActiveServiceId(null) }}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 ${isActive ? 'bg-gray-800 text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-gray-800 text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                         >
-                          <span className="text-[14px] truncate pr-2">{module.title}</span>
+                          <span className="text-[14px] truncate pr-2 min-w-0">{module.title}</span>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
                         </div>
                       )
@@ -454,9 +454,9 @@ export function Navbar({
                         <div
                           key={cat.id || cIdx}
                           onMouseEnter={() => { setActiveCategoryId(cat.id); setActiveSubcategoryId(null); setActiveServiceId(null) }}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                         >
-                          <span className="text-[14px] truncate pr-2">{cat.title}</span>
+                          <span className="text-[14px] truncate pr-2 min-w-0">{cat.title}</span>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
                         </div>
                       )
@@ -475,9 +475,9 @@ export function Navbar({
                         <div
                           key={sub.id || sIdx}
                           onMouseEnter={() => { setActiveSubcategoryId(sub.id); setActiveServiceId(null) }}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
                         >
-                          <span className="text-[14px] truncate pr-2">{sub.title}</span>
+                          <span className="text-[14px] truncate pr-2 min-w-0">{sub.title}</span>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
                         </div>
                       )
@@ -496,9 +496,9 @@ export function Navbar({
                         <div
                           key={srv.id || sIdx}
                           onMouseEnter={() => setActiveServiceId(srv.id)}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-all duration-200 ${isActive ? 'bg-[#f28e2b] text-white font-medium border border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]' : 'text-gray-700 hover:bg-gray-50'}`}
+                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex items-center rounded transition-all duration-200 min-w-0 ${isActive ? 'bg-[#f28e2b] text-white font-medium border border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]' : 'text-gray-700 hover:bg-gray-50'}`}
                         >
-                          <Link href={`/services/${srv.slug}`} className="w-full text-[14px] truncate block">{srv.title}</Link>
+                          <Link href={`/services/${srv.slug}`} className="w-full text-[14px] truncate block min-w-0">{srv.title}</Link>
                         </div>
                       )
                     })}
@@ -510,10 +510,10 @@ export function Navbar({
             </div>
           </div>
 
-          <Link href="/blog" className="text-slate-600 hover:text-brand-dark transition-colors text-[15px]">Blog</Link>
-          <Link href="/pricing" className="text-slate-600 hover:text-brand-dark transition-colors text-[15px]">Pricing</Link>
-          <Link href="/careers" className="text-slate-600 hover:text-brand-dark transition-colors text-[15px]">Careers</Link>
-          <Link href="/contact" className="text-slate-600 hover:text-brand-dark transition-colors text-[15px]">Contact</Link>
+          <Link href="/blog" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Blog</Link>
+          <Link href="/pricing" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Pricing</Link>
+          <Link href="/careers" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Careers</Link>
+          <Link href="/contact" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Contact</Link>
         </nav>
       </div>
 

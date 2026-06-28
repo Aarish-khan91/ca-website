@@ -1,8 +1,6 @@
 import Link from 'next/link'
-import { StrapiSubService } from '@/lib/strapi'
-
 interface ServiceSubservicesProps {
-  subServices?: StrapiSubService[]
+  subServices?: any[]
 }
 
 export function ServiceSubservices({ subServices }: ServiceSubservicesProps) {
