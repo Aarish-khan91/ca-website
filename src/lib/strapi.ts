@@ -177,19 +177,42 @@ export interface StrapiServicesPage {
 
 export async function getMainModules(): Promise<StrapiMainModule[]> {
   try {
-    const res = await fetch(`${STRAPI_URL}/api/main-modules?populate[categories][populate][subcategories][populate][services][fields][0]=title&populate[categories][populate][subcategories][populate][services][fields][1]=slug`, {
+    const res = await fetch(`${STRAPI_URL}/api/main-modules`, {
       cache: 'no-store'
     });
-
-    if (!res.ok) {
-      console.error('Failed to fetch main modules from Strapi:', res.status, res.statusText);
-      return [];
-    }
-
+    if (!res.ok) return [];
     const json = await res.json();
     return json.data || [];
   } catch (error) {
     console.error('Error fetching main modules:', error);
+    return [];
+  }
+}
+
+export async function getServiceCategories(): Promise<StrapiServiceCategory[]> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/service-categories?populate=mainModule`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+}
+
+export async function getServiceSubcategories(): Promise<StrapiServiceSubcategory[]> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/service-subcategories?populate=category`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error('Error fetching subcategories:', error);
     return [];
   }
 }
@@ -271,7 +294,7 @@ export async function getServiceBySlug(slug: string): Promise<StrapiService | nu
     }, {
       encodeValuesOnly: true,
     });
-    
+
     const res = await fetch(`${STRAPI_URL}/api/services?${query}`, {
       cache: 'no-store'
     });

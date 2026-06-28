@@ -46,10 +46,10 @@ export function FloatingChat() {
     // Simulate bot response delay
     setTimeout(() => {
       const botResponse = (chatReplies as Record<string, string>)[reply] || chatReplies["Leave a Message"]
-      setMessages(prev => [...prev, { 
-        sender: 'bot', 
-        text: botResponse, 
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+      setMessages(prev => [...prev, {
+        sender: 'bot',
+        text: botResponse,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }])
     }, 600)
   }
@@ -59,13 +59,13 @@ export function FloatingChat() {
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     setMessages(prev => [...prev, { sender: 'user', text: inputValue, time }])
     setInputValue('')
-    
+
     // Simulate generic bot response for custom input
     setTimeout(() => {
-      setMessages(prev => [...prev, { 
-        sender: 'bot', 
-        text: chatReplies["Leave a Message"], 
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+      setMessages(prev => [...prev, {
+        sender: 'bot',
+        text: chatReplies["Leave a Message"],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }])
     }, 600)
   }
@@ -108,7 +108,7 @@ export function FloatingChat() {
       {/* Chat Popup Box */}
       {isOpen && (
         <div className="fixed bottom-6 right-6 z-50 w-[350px] bg-[#f8f9fa] rounded-xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col h-[550px] animate-fade-in-up">
-          
+
           {/* Header */}
           <div className="bg-[#f28e2b] px-4 py-4 flex items-center justify-between shadow-sm z-10">
             <div className="flex items-center gap-3">
@@ -117,7 +117,7 @@ export function FloatingChat() {
               </div>
               <span className="text-white font-semibold text-lg">Live Chat</span>
             </div>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="text-white/80 hover:text-white transition-colors"
               aria-label="Close Chat"
@@ -132,12 +132,11 @@ export function FloatingChat() {
           <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
-                <div 
-                  className={`px-4 py-3 max-w-[85%] rounded-2xl whitespace-pre-wrap text-[15px] ${
-                    msg.sender === 'user' 
-                      ? 'bg-[#0b293d] text-white rounded-br-sm' 
+                <div
+                  className={`px-4 py-3 max-w-[85%] rounded-2xl whitespace-pre-wrap text-[15px] ${msg.sender === 'user'
+                      ? 'bg-[#0b293d] text-white rounded-br-sm'
                       : 'bg-white text-slate-800 rounded-bl-sm shadow-sm border border-slate-100'
-                  }`}
+                    }`}
                 >
                   {msg.text}
                 </div>
@@ -146,7 +145,7 @@ export function FloatingChat() {
                 </span>
               </div>
             ))}
-            
+
             {/* Quick Replies (Only show if last message is from bot) */}
             {messages[messages.length - 1].sender === 'bot' && (
               <div className="mt-2 flex flex-col items-start gap-2 animate-fade-in">
@@ -170,15 +169,15 @@ export function FloatingChat() {
           {/* Input Area */}
           <div className="p-4 bg-white border-t border-slate-200">
             <div className="relative">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="How can I help you today?"
                 className="w-full pl-4 pr-12 py-3 rounded-full border border-slate-300 focus:outline-none focus:border-[#f28e2b] text-[14px]"
               />
-              <button 
+              <button
                 onClick={handleSend}
                 className="absolute right-1 top-1 w-10 h-10 rounded-full bg-[#f28e2b] grid place-items-center hover:bg-[#e07d1e] transition-colors"
                 aria-label="Send"

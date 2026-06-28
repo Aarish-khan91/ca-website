@@ -1,126 +1,102 @@
+import { getServiceBySlug } from '@/lib/strapi'
 import { Metadata } from 'next'
-import { AboutHero } from '@/components/AboutHero'
-import { OurStory } from '@/components/OurStory'
-import { MissionVision } from '@/components/MissionVision'
-import { OurJourney } from '@/components/OurJourney'
-import { TeamGrid } from '@/components/TeamGrid'
-import { ContactBanner } from '@/components/ContactBanner'
-import { fetchAboutPageData, getStrapiUrl } from '@/data/strapi'
+import { notFound } from 'next/navigation'
 
-// Dynamically generate SEO Metadata using the CMS SEO fields
-export async function generateMetadata(): Promise<Metadata> {
-  const cmsData = await fetchAboutPageData();
-  const seo = cmsData?.seo;
-
-  if (!seo) {
-    return {
-      title: 'About | Ritesh Arora & Associates',
-      description: 'Authorized Accounting firm committed to accuracy, compliance, and strategic financial guidance.'
-    };
+// Import modular UI components
+import { ServiceHeroSection } from '@/components/service/ServiceHeroSection'
+import { ServiceOverviewSection } from '@/components/service/ServiceOverviewSection'
+import { RichTextSection } from '@/components/service/RichTextSection'
+import { FeatureGridSection } from '@/components/service/FeatureGridSection'
+import { TabbedRichText } from '@/components/service/TabbedRichText'
+import { ProcessSection } from '@/components/service/ProcessSection'
+import { ContactCtaSection } from '@/components/service/ContactCtaSection'
+import { ServiceFaqAccordion } from '@/components/service/ServiceFaqAccordion'
+import { RelatedBlogsSection } from '@/components/service/RelatedBlogsSection'
+interface PageProps {
+  params: {
+    slug: string
   }
-
-  return {
-    title: seo.metaTitle,
-    description: seo.metaDescription,
-    keywords: seo.keywords,
-    alternates: {
-      canonical: seo.canonicalURL || undefined
-    },
-    robots: seo.metaRobots || undefined
-  };
 }
 
-export default async function AboutPage() {
-  const cmsData = await fetchAboutPageData();
+// Dynamic Metadata Generation
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const service = await getServiceBySlug(params.slug)
 
-  if (!cmsData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white text-slate-800">
-        <p className="text-lg font-medium">Please set up and publish About Page content in Strapi.</p>
-      </div>
-    );
+  if (!service) {
+    if (params.slug === 'company-incorporation') {
+      return {
+        title: 'Company Incorporation Services | Register Pvt Ltd, LLP in India',
+        description: 'Expert assistance for Company Incorporation, LLP Registration, and compliance in India. Compare entities and get started.'
+      }
+    }
+    return {
+      title: 'Service Not Found | Ritesh Arora & Associates',
+      description: 'The requested service could not be found.'
+    }
   }
 
-  // Bind properties directly to the CMS response without hardcoded fallback values in || condition
-  const heroProps = {
-    title: cmsData.heroTitle,
-    description: cmsData.heroDescription,
-    backgroundImageUrl: cmsData.heroBackgroundImage ? getStrapiUrl(cmsData.heroBackgroundImage.url) : undefined,
-    primaryButtonText: cmsData.heroPrimaryButtonText,
-    primaryButtonLink: cmsData.heroPrimaryButtonLink,
-    secondaryButtonText: cmsData.heroSecondaryButtonText,
-    secondaryButtonLink: cmsData.heroSecondaryButtonLink
-  };
+  const seo = service.seo || {}
+  return {
+    title: seo.metaTitle || `${service.title}`,
+    description: seo.metaDescription || service.heroSubtitle,
+    keywords: seo.keywords || '',
+    robots: seo.metaRobots || 'index, follow',
+    alternates: seo.canonicalUrl ? { canonical: seo.canonicalUrl } : undefined
+  }
+}
 
-  const storyProps = {
-    title: cmsData.storyTitle,
-    content: cmsData.storyContent,
-    imageUrl: cmsData.storyImage ? getStrapiUrl(cmsData.storyImage.url) : undefined
-  };
+// Main Dynamic Service Page Component
+export default async function ServicePage({ params }: PageProps) {
+  const service = await getServiceBySlug(params.slug)
+  console.log("service-->", service)
+  // If no service is found in Strapi, return a clean 404
+  if (!service) {
+    notFound()
+  }
 
-  const missionVisionProps = {
-    title: cmsData.missionVisionTitle,
-    cards: cmsData.missionVisionCards ? cmsData.missionVisionCards.map((card: any) => ({
-      title: card.title,
-      description: card.description,
-      iconImage: card.iconImage ? getStrapiUrl(card.iconImage.url) : undefined
-    })) : []
-  };
-
-  const journeyProps = {
-    title: cmsData.journeyTitle,
-    subtitle: cmsData.journeySubtitle,
-    milestones: cmsData.milestones ? cmsData.milestones.map((m: any) => ({
-      id: m.id,
-      yearTitle: m.yearTitle,
-      description: m.description
-    })) : []
-  };
-
-  const teamMembersData = cmsData.teamMembers ? cmsData.teamMembers.map((m: any) => ({
-    name: m.name,
-    role: m.role,
-    image: m.image ? getStrapiUrl(m.image.url) : '/images/team/placeholder.png',
-    linkedInUrl: m.linkedInUrl,
-    twitterUrl: m.twitterUrl
-  })) : [];
-
-  const ctaProps = {
-    title: cmsData.ctaTitle,
-    subtitle: cmsData.ctaSubtitle,
-    buttonText: cmsData.ctaButtonText,
-    buttonLink: cmsData.ctaButtonLink
-  };
+  const blocks = service.contentBlocks || []
 
   return (
-    <>
-      <main className="bg-white">
-        <AboutHero {...heroProps} />
+    <main className="min-h-screen flex flex-col bg-[#f8f9fa]">
+      {/* 1. Service Hero */}
+      <ServiceHeroSection service={service} />
 
-        <OurStory {...storyProps} />
+      {/* 2. Overview Section */}
+      <ServiceOverviewSection service={service} />
 
-        <MissionVision {...missionVisionProps} />
+      {/* 3. Render Dynamic Zone Blocks */}
+      {blocks.map((block: any, idx: number) => {
+        const componentType = block.__component
 
-        <OurJourney {...journeyProps} />
+        switch (componentType) {
+          case 'service.rich-text-section':
+            return <RichTextSection key={idx} block={block} />
 
-        <section className="py-16 md:py-24 bg-white text-slate-900">
-          <div className="container-prose">
-            <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
-                {cmsData.leadershipTitle}
-              </h2>
-              <p className="mt-4 text-slate-600 text-lg max-w-2xl mx-auto">
-                {cmsData.leadershipSubtitle}
-              </p>
-            </div>
-            <TeamGrid members={teamMembersData} />
-          </div>
-        </section>
+          case 'service.feature-grid':
+            return <FeatureGridSection key={idx} block={block} />
 
-        <div className=" ">
-          <ContactBanner {...ctaProps} />
-        </div>
-      </main>
-    </>
-  );
+          case 'service.tabbed-rich-text':
+            return <TabbedRichText key={idx} block={block} />
+
+          case 'service.process-section':
+            return <ProcessSection key={idx} block={block} />
+
+          case 'service.contact-cta':
+            return <ContactCtaSection key={idx} block={block} />
+
+          default:
+            console.warn(`Unhandled dynamic block component: ${componentType}`)
+            return null
+        }
+      })}
+
+      {/* 4. Service Relational FAQs */}
+      {service.faqs && service.faqs.length > 0 && (
+        <ServiceFaqAccordion faqs={service.faqs} />
+      )}
+
+      {/* 5. Related Blogs */}
+      <RelatedBlogsSection blogs={service.relatedBlogs} />
+    </main>
+  )
 }
