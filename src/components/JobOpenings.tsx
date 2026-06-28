@@ -119,8 +119,53 @@ const ClockIcon = () => (
     </svg>
 )
 
-export function JobOpenings() {
-    const [selectedJob, setSelectedJob] = useState<typeof MOCK_JOBS[0] | null>(null)
+import { StrapiJob } from '@/lib/strapi'
+
+interface JobOpeningsProps {
+    jobs?: StrapiJob[];
+}
+
+export function JobOpenings({ jobs = [] }: JobOpeningsProps) {
+    const displayJobs = jobs && jobs.length > 0 ? jobs.map(job => {
+        const parsedResponsibilities = job.responsibilities
+            ? typeof job.responsibilities === 'string'
+                ? job.responsibilities.split('\n').map(r => r.replace(/^- /, '').trim()).filter(Boolean)
+                : []
+            : [];
+
+        const parsedRequirements = job.requirements
+            ? typeof job.requirements === 'string'
+                ? job.requirements.split('\n').map(r => r.replace(/^- /, '').trim()).filter(Boolean)
+                : []
+            : [];
+
+        return {
+            id: job.id,
+            title: job.title,
+            department: job.department,
+            type: job.jobType || 'Full Time',
+            location: job.location,
+            experience: job.experience,
+            postedDate: job.postedDate || (job.publishedAt ? new Date(job.publishedAt).toLocaleDateString('en-GB').replace(/\//g, '-') : ''),
+            description: job.shortDescription || job.description || '',
+            fullDescription: job.fullDescription || job.description || '',
+            responsibilities: parsedResponsibilities,
+            requirements: parsedRequirements
+        }
+    }) : [];
+
+    const [selectedJob, setSelectedJob] = useState<typeof displayJobs[0] | null>(null)
+    const [filterDepartment, setFilterDepartment] = useState('')
+    const [filterLocation, setFilterLocation] = useState('')
+
+    const uniqueDepartments = Array.from(new Set(displayJobs.map(job => job.department).filter(Boolean)));
+    const uniqueLocations = Array.from(new Set(displayJobs.map(job => job.location).filter(Boolean)));
+
+    const filteredJobs = displayJobs.filter(job => {
+        const matchDepartment = filterDepartment ? job.department === filterDepartment : true;
+        const matchLocation = filterLocation ? job.location === filterLocation : true;
+        return matchDepartment && matchLocation;
+    });
     const [isApplying, setIsApplying] = useState(false)
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
@@ -129,6 +174,7 @@ export function JobOpenings() {
     const [message, setMessage] = useState('')
     const [resumeFile, setResumeFile] = useState<File | null>(null)
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [isSubmittingForm, setIsSubmittingForm] = useState(false)
 
     const resetForm = () => {
         setFullName('')
@@ -152,27 +198,107 @@ export function JobOpenings() {
         }
     }
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!resumeFile || !selectedJob) return;
+
+        setIsSubmittingForm(true);
+
+        try {
+            const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+            let resumeId = null;
+
+            // 1. Upload Resume
+            const uploadFormData = new FormData();
+            uploadFormData.append('files', resumeFile);
+
+            const uploadResponse = await fetch(`${STRAPI_URL}/api/upload`, {
+                method: 'POST',
+                body: uploadFormData
+            });
+
+            if (!uploadResponse.ok) {
+                const errJson = await uploadResponse.json();
+                console.error('File upload error:', errJson);
+                throw new Error(errJson?.error?.message || 'Failed to upload resume');
+            }
+
+            const uploadData = await uploadResponse.json();
+            if (Array.isArray(uploadData) && uploadData.length > 0) {
+                resumeId = uploadData[0].id;
+            }
+
+            // 2. Submit Application Data
+            const payload = {
+                data: {
+                    fullName,
+                    email,
+                    phone,
+                    jobAppliedFor: selectedJob.title,
+                    portfolioLink: portfolio,
+                    message,
+                    resume: resumeId
+                }
+            };
+            
+            const response = await fetch(`${STRAPI_URL}/api/job-applications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                setIsSubmitted(true);
+            } else {
+                const err = await response.json();
+                console.error('Failed to submit application', err);
+                alert(`Failed to submit your application: ${err?.error?.message || 'Please verify all fields.'}`);
+            }
+        } catch (error) {
+            console.error('Error submitting application:', error);
+            alert('An error occurred while submitting. Please try again later.');
+        } finally {
+            setIsSubmittingForm(false);
+        }
+    }
+
     return (
         <section className="py-16 md:py-24 bg-[#f8f9fa] min-h-screen">
             <div className="container-prose max-w-6xl mx-auto px-4">
 
                 {/* Filters */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                    <select className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]">
-                        <option value="">Department</option>
-                        <option value="audit">Audit & Assurance</option>
-                        <option value="tax">Tax</option>
+                    <select 
+                        value={filterDepartment}
+                        onChange={(e) => setFilterDepartment(e.target.value)}
+                        className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]"
+                    >
+                        <option value="">All Departments</option>
+                        {uniqueDepartments.map(dept => (
+                            <option key={dept} value={dept}>{dept}</option>
+                        ))}
                     </select>
-                    <select className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]">
-                        <option value="">Location</option>
-                        <option value="delhi">New Delhi</option>
-                        <option value="mumbai">Mumbai</option>
+                    <select 
+                        value={filterLocation}
+                        onChange={(e) => setFilterLocation(e.target.value)}
+                        className="border border-slate-200 rounded-[8px] px-4 py-2.5 text-[14px] text-slate-500 w-full sm:w-64 bg-white outline-none focus:border-[#f28e2b]"
+                    >
+                        <option value="">All Locations</option>
+                        {uniqueLocations.map(loc => (
+                            <option key={loc} value={loc}>{loc}</option>
+                        ))}
                     </select>
                 </div>
 
                 {/* Job Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {MOCK_JOBS.map((job) => (
+                    {filteredJobs.length === 0 ? (
+                        <div className="col-span-full py-12 text-center text-slate-500">
+                            No open positions found matching your filters.
+                        </div>
+                    ) : filteredJobs?.map((job) => (
                         <div key={job.id} className="bg-[#0b293d] rounded-[12px] p-6 flex flex-col h-full hover:-translate-y-1 transition-transform duration-300">
                             <h3 className="text-[18px] md:text-[20px] font-medium text-white mb-3">
                                 {job.title}
@@ -263,7 +389,7 @@ export function JobOpenings() {
                                     </button>
                                 </div>
                             ) : isApplying ? (
-                                <form onSubmit={(e) => { e.preventDefault(); setIsSubmitted(true); }} className="space-y-6">
+                                <form onSubmit={handleSubmit} className="space-y-6">
                                     {/* Header info */}
                                     <div>
                                         <div className="flex flex-wrap gap-2.5 mb-4">
@@ -309,7 +435,7 @@ export function JobOpenings() {
                                             <input
                                                 type="email"
                                                 required
-                                                placeholder="Naveed@gmail.com"
+                                                placeholder="example@gmail.com"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 className="w-full h-11 border border-slate-200 rounded-[8px] px-4 text-[14px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#F19020] focus:ring-1 focus:ring-[#F19020] transition-colors bg-white"
@@ -413,9 +539,10 @@ export function JobOpenings() {
                                     <div className="flex items-center justify-end pt-6">
                                         <button
                                             type="submit"
-                                            className="px-8 py-3 bg-[#F19020] hover:bg-[#D87F1C] text-white font-semibold rounded-[8px] text-[14px] shadow-md hover:shadow-lg transition-all focus:outline-none active:scale-[0.98]"
+                                            disabled={isSubmittingForm}
+                                            className="px-8 py-3 bg-[#F19020] hover:bg-[#D87F1C] text-white font-semibold rounded-[8px] text-[14px] shadow-md hover:shadow-lg transition-all focus:outline-none active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                                         >
-                                            Submit Application
+                                            {isSubmittingForm ? 'Submitting...' : 'Submit Application'}
                                         </button>
                                     </div>
                                 </form>
@@ -454,10 +581,22 @@ export function JobOpenings() {
 
                                         <h3 className="text-[20px] font-medium text-[#0b293d] mb-4">Key Responsibilities</h3>
                                         <ul className="space-y-3">
-                                            {selectedJob.responsibilities.map((resp, i) => (
+                                            {selectedJob.responsibilities.map((resp: any, i: any) => (
                                                 <li key={i} className="flex items-start text-slate-600 font-light text-[15px]">
                                                     <span className="text-slate-400 mr-3 mt-1">•</span>
                                                     {resp}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="prose prose-slate max-w-none mt-5">
+                                        <h3 className="text-[20px] font-medium text-[#0b293d] mb-4">Requirements</h3>
+                                        <ul className="space-y-3">
+                                            {selectedJob?.requirements?.map((req, i) => (
+                                                <li key={i} className="flex items-start text-slate-600 font-light text-[15px]">
+                                                    <span className="text-slate-400 mr-3 mt-1">•</span>
+                                                    {req}
                                                 </li>
                                             ))}
                                         </ul>

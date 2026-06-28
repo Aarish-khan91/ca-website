@@ -80,7 +80,7 @@ export async function fetchAboutPageData() {
 }
 
 export async function fetchPricingPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
   const populateQuery = [
     'packages',
@@ -112,7 +112,7 @@ export async function fetchPricingPageData() {
 }
 
 export async function fetchNewsletterPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
   const populateQuery = [
     'features',
@@ -139,7 +139,7 @@ export async function fetchNewsletterPageData() {
 }
 
 export async function fetchContactPageData() {
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
   const populateQuery = [
     'seo',
