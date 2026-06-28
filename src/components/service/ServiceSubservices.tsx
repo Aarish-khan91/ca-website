@@ -25,7 +25,7 @@ export function ServiceSubservices({ subServices }: ServiceSubservicesProps) {
               
               {sub.childServices && sub.childServices.length > 0 ? (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sub.childServices.map((child, cIdx) => (
+                  {sub.childServices.map((child: any, cIdx: number) => (
                     <Link href={`/services/${child.slug}`} key={child.id || cIdx} className="group block h-full">
                       <div className="bg-white h-full p-6 rounded-[12px] border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 hover:border-[#f28e2b]">
                         <div className="flex items-start justify-between">
