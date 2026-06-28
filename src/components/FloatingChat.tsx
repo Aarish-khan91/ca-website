@@ -72,7 +72,7 @@ export function FloatingChat() {
 
   const handleWhatsApp = () => {
     const message = encodeURIComponent('Hi, I would like to know more about your services.')
-    window.open(`https://wa.me/917841805400?text=${message}`, '_blank')
+    window.open(`https://wa.me/919888466739?text=${message}`, '_blank')
   }
 
   return (

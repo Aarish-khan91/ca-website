@@ -5,8 +5,8 @@ interface ServiceHeroSectionProps {
 }
 
 export function ServiceHeroSection({ service }: ServiceHeroSectionProps) {
-  const bgUrl = service.coverImage?.url
-    && getStrapiMedia(service.coverImage.url)
+  const bgUrl = service.image?.url
+    && getStrapiMedia(service.image.url)
 
   return (
     <section className="relative overflow-hidden h-[400px] md:h-[450px] flex items-center bg-[#0b293d]">

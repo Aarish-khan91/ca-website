@@ -2,14 +2,6 @@ import { getServiceBySlug } from '@/lib/strapi'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-// Import static fallbacks
-import { IncorporationHero } from '@/components/incorporation/IncorporationHero'
-import { IncorporationOverview } from '@/components/incorporation/IncorporationOverview'
-import { HowWeHelp } from '@/components/incorporation/HowWeHelp'
-import { IncorporationSteps } from '@/components/incorporation/IncorporationSteps'
-import { WhoShouldOpt } from '@/components/incorporation/WhoShouldOpt'
-import { IncorporationFAQ } from '@/components/incorporation/IncorporationFAQ'
-
 // Import modular UI components
 import { ServiceHeroSection } from '@/components/service/ServiceHeroSection'
 import { ServiceOverviewSection } from '@/components/service/ServiceOverviewSection'
@@ -20,7 +12,6 @@ import { ProcessSection } from '@/components/service/ProcessSection'
 import { ContactCtaSection } from '@/components/service/ContactCtaSection'
 import { ServiceFaqAccordion } from '@/components/service/ServiceFaqAccordion'
 import { RelatedBlogsSection } from '@/components/service/RelatedBlogsSection'
-
 interface PageProps {
   params: {
     slug: string
@@ -58,21 +49,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ServicePage({ params }: PageProps) {
   const service = await getServiceBySlug(params.slug)
   console.log("service-->", service)
-  // Graceful static fallback if no service is found in Strapi for 'company-incorporation'
+  // If no service is found in Strapi, return a clean 404
   if (!service) {
-    if (params.slug === 'company-incorporation') {
-      return (
-        <main className="min-h-screen flex flex-col bg-[#f8f9fa]">
-          <IncorporationHero />
-          <IncorporationOverview />
-          <HowWeHelp />
-          <IncorporationSteps />
-          <WhoShouldOpt />
-          <IncorporationFAQ />
-        </main>
-      )
-    }
-    // For other slugs that don't exist in Strapi, return a clean 404
     notFound()
   }
 

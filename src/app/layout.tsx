@@ -1,10 +1,10 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Montserrat } from 'next/font/google'
 import '../styles/globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { FloatingChat } from '@/components/FloatingChat'
-import { getServices, getServicesPage } from '@/lib/strapi'
+import { getServices, getServicesPage, getMainModules } from '@/lib/strapi'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   },
   description: 'Consulting and advisory services. Built with Next.js and Tailwind CSS.',
   metadataBase: new URL('https://example.com'),
-  themeColor: '#F19020',
   alternates: {
     canonical: 'https://example.com'
   },
@@ -47,14 +46,19 @@ export const metadata: Metadata = {
   }
 }
 
+export const viewport: Viewport = {
+  themeColor: '#F19020'
+}
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const servicePageData = await getServicesPage()
+  const mainModules = await getMainModules()
 
   return (
     <html lang="en" className={montserrat.variable}>
       <body className="font-sans bg-slate-950 text-white antialiased">
         <div className="mb-28">
-          <Navbar services={servicePageData?.services} />
+          <Navbar services={servicePageData?.services} mainModules={mainModules} />
         </div>
         {children}
         <div className="">

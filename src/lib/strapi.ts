@@ -1,4 +1,6 @@
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+import qs from 'qs';
+
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1338';
 export interface StrapiBlogPost {
   id: number;
   documentId: string;
@@ -99,6 +101,30 @@ export async function getBlogSubscribe(): Promise<StrapiBlogSubscribe | null> {
   }
 }
 
+export interface StrapiServiceSubcategory {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  services?: StrapiService[];
+}
+
+export interface StrapiServiceCategory {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  subcategories?: StrapiServiceSubcategory[];
+}
+
+export interface StrapiMainModule {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  categories?: StrapiServiceCategory[];
+}
+
 export interface StrapiService {
   id: number;
   documentId: string;
@@ -149,6 +175,25 @@ export interface StrapiServicesPage {
   faqs?: StrapiFaq[];
 }
 
+export async function getMainModules(): Promise<StrapiMainModule[]> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/main-modules?populate[categories][populate][subcategories][populate][services][fields][0]=title&populate[categories][populate][subcategories][populate][services][fields][1]=slug`, {
+      cache: 'no-store'
+    });
+
+    if (!res.ok) {
+      console.error('Failed to fetch main modules from Strapi:', res.status, res.statusText);
+      return [];
+    }
+
+    const json = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error('Error fetching main modules:', error);
+    return [];
+  }
+}
+
 export async function getServices(): Promise<StrapiService[]> {
   try {
     const res = await fetch(`${STRAPI_URL}/api/services?populate=*`, {
@@ -170,16 +215,65 @@ export async function getServices(): Promise<StrapiService[]> {
 
 export async function getServiceBySlug(slug: string): Promise<StrapiService | null> {
   try {
-    // Populate dynamic zones, FAQs, related blogs, and SEO metadata
-    const query = new URLSearchParams({
-      'filters[slug][$eq]': slug,
-      'populate[contentBlocks][populate]': '*',
-      'populate[faqs][populate]': '*',
-      'populate[relatedBlogs][populate]': '*',
-      'populate[seo][populate]': '*'
+    const query = qs.stringify({
+      filters: {
+        slug: {
+          $eq: slug,
+        },
+      },
+      populate: {
+        image: {
+          populate: '*',
+        },
+        seo: {
+          populate: '*',
+        },
+        faqs: {
+          populate: '*',
+        },
+        subcategory: {
+          populate: '*',
+        },
+        relatedBlogs: {
+          populate: '*',
+        },
+        contentBlocks: {
+          on: {
+            'service.process-section': {
+              populate: {
+                tabs: {
+                  populate: {
+                    steps: {
+                      populate: '*'
+                    },
+                    tab_image: {
+                      populate: '*'
+                    }
+                  }
+                }
+              }
+            },
+            'service.feature-grid': {
+              populate: '*'
+            },
+            'service.rich-text-section': {
+              populate: '*'
+            },
+            'service.tabbed-rich-text': {
+              populate: '*'
+            },
+            'service.contact-cta': {
+              populate: '*'
+            }
+          }
+        },
+      },
+    }, {
+      encodeValuesOnly: true,
     });
-    const res = await fetch(`${STRAPI_URL}/api/services?${query.toString()}`, {
-      next: { revalidate: 60 },
+    
+    const res = await fetch(`${STRAPI_URL}/api/services?${query}`, {
+      cache: 'no-store'
     });
 
     if (!res.ok) {

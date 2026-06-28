@@ -2,14 +2,37 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-import { StrapiService } from '@/lib/strapi'
+import { StrapiService, StrapiMainModule } from '@/lib/strapi'
 
-export function Navbar({ services = [] }: { services?: StrapiService[] }) {
+export function Navbar({ services = [], mainModules = [] }: { services?: StrapiService[], mainModules?: StrapiMainModule[] }) {
   const [open, setOpen] = useState(false)
+  const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null)
+  const [activeSubcategoryId, setActiveSubcategoryId] = useState<number | null>(null)
+  const [activeServiceId, setActiveServiceId] = useState<number | null>(null)
+
+  // Resolve active items hierarchically
+  const module = mainModules && mainModules.length > 0 ? mainModules[0] : null;
+  const categories = module?.categories || [];
+  
+  const activeCategory = categories.find(c => c.id === activeCategoryId) || categories[0] || null;
+  const subcategories = activeCategory?.subcategories || [];
+  
+  const activeSubcategory = subcategories.find(s => s.id === activeSubcategoryId) || subcategories[0] || null;
+  const servicesList = activeSubcategory?.services || [];
+  
+  const activeService = servicesList.find(s => s.id === activeServiceId) || servicesList[0] || null;
 
   const displayServices = services && services.length > 0 ? services.map(s => ({
     title: s.title,
-    href: `/services/${s.slug}`
+    href: `/services/${s.slug}`,
+    subServices: s.subServices?.map(sub => ({
+      title: sub.title,
+      href: `/services/${s.slug}/${sub.slug}`,
+      childServices: sub.childServices?.map(child => ({
+        title: child.title,
+        href: `/services/${s.slug}/${sub.slug}/${child.slug}`
+      }))
+    }))
   })) : []
   return (
     <header className="fixed w-full top-0 z-50 bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
@@ -79,21 +102,98 @@ export function Navbar({ services = [] }: { services?: StrapiService[] }) {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180"><path d="M6 9l6 6 6-6" /></svg>
             </Link>
 
-            <div className="absolute left-1/2 -translate-x-1/2 top-full w-[600px] bg-white border border-gray-100 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 p-6 z-50">
-              <div className="grid grid-cols-2 gap-4">
-                {displayServices.map((service, idx) => (
-                  <Link key={idx} href={service.href} className="group/item flex items-start p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                    <div className="text-[15px] font-medium text-brand-dark group-hover/item:text-[#F19020] transition-colors">
-                      {service.title}
+            <div className="absolute left-1/2 -translate-x-1/2 top-full w-[900px] max-w-[95vw] bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+              {categories.length > 0 ? (
+                <div className="flex h-[450px]">
+                  {/* Column 1: Categories */}
+                  <div className="w-1/3 bg-white border-r border-gray-100 flex flex-col pt-6">
+                    <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">
+                      CATEGORIES
                     </div>
-                  </Link>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-gray-100 text-center">
-                <Link href="/services" className="text-[#F19020] text-sm font-medium hover:text-[#d97c14] inline-flex items-center">
-                  View All Services <span className="ml-1">→</span>
-                </Link>
-              </div>
+                    <div className="flex-1 overflow-y-auto pb-4">
+                      {categories.map((cat, cIdx) => {
+                        const isActive = activeCategory?.id === cat.id;
+                        return (
+                          <div 
+                            key={cat.id || cIdx}
+                            onMouseEnter={() => {
+                              setActiveCategoryId(cat.id);
+                              setActiveSubcategoryId(null);
+                              setActiveServiceId(null);
+                            }}
+                            className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                          >
+                            <span className="text-[14px] truncate pr-2">{cat.title}</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Column 2: Subcategories */}
+                  <div className="w-1/3 bg-white border-r border-gray-100 flex flex-col pt-6">
+                    <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">
+                      SUBCATEGORIES
+                    </div>
+                    <div className="flex-1 overflow-y-auto pb-4">
+                      {subcategories.map((sub, sIdx) => {
+                        const isActive = activeSubcategory?.id === sub.id;
+                        return (
+                          <div 
+                            key={sub.id || sIdx}
+                            onMouseEnter={() => {
+                              setActiveSubcategoryId(sub.id);
+                              setActiveServiceId(null);
+                            }}
+                            className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                          >
+                            <span className="text-[14px] truncate pr-2">{sub.title}</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                          </div>
+                        )
+                      })}
+                      {subcategories.length === 0 && (
+                        <div className="px-8 text-gray-400 text-sm italic">No subcategories</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Column 3: Services */}
+                  <div className="w-1/3 bg-white flex flex-col pt-6">
+                    <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">
+                      SERVICES
+                    </div>
+                    <div className="flex-1 overflow-y-auto pb-4">
+                      {servicesList.map((srv, sIdx) => {
+                        const isActive = activeService?.id === srv.id;
+                        return (
+                          <div 
+                            key={srv.id || sIdx}
+                            onMouseEnter={() => setActiveServiceId(srv.id)}
+                            className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 ${isActive ? 'bg-[#f68b1e] text-white font-medium shadow-sm' : 'text-gray-700 hover:bg-gray-50'}`}
+                          >
+                            <Link href={`/services/${srv.slug}`} className="w-full text-[14px] truncate">
+                              {srv.title}
+                            </Link>
+                          </div>
+                        )
+                      })}
+                      {servicesList.length === 0 && (
+                        <div className="px-8 text-gray-400 text-sm italic">No services</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col py-2">
+                  {displayServices.map((service, idx) => (
+                    <Link key={idx} href={service.href} className="block px-4 py-2.5 hover:bg-slate-50 text-[15px] font-medium text-brand-dark hover:text-[#F19020] transition-colors">
+                      {service.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -131,7 +231,7 @@ export function Navbar({ services = [] }: { services?: StrapiService[] }) {
                 <Link
                   key={idx}
                   href={service.href}
-                  className="text-slate-500 hover:text-[#F19020] transition-colors text-[14px]"
+                  className="text-slate-500 hover:text-[#F19020] transition-colors text-[14px] py-1"
                   onClick={() => setOpen(false)}
                 >
                   {service.title}
