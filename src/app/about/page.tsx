@@ -1,102 +1,111 @@
-import { getServiceBySlug } from '@/lib/strapi'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getAboutPage, getStrapiMedia } from '@/lib/strapi'
 
-// Import modular UI components
-import { ServiceHeroSection } from '@/components/service/ServiceHeroSection'
-import { ServiceOverviewSection } from '@/components/service/ServiceOverviewSection'
-import { RichTextSection } from '@/components/service/RichTextSection'
-import { FeatureGridSection } from '@/components/service/FeatureGridSection'
-import { TabbedRichText } from '@/components/service/TabbedRichText'
-import { ProcessSection } from '@/components/service/ProcessSection'
-import { ContactCtaSection } from '@/components/service/ContactCtaSection'
-import { ServiceFaqAccordion } from '@/components/service/ServiceFaqAccordion'
-import { RelatedBlogsSection } from '@/components/service/RelatedBlogsSection'
-interface PageProps {
-  params: {
-    slug: string
-  }
-}
+import { AboutHero } from '@/components/AboutHero'
+import { OurStory } from '@/components/OurStory'
+import { MissionVision } from '@/components/MissionVision'
+import { OurJourney } from '@/components/OurJourney'
+import { TeamGrid } from '@/components/TeamGrid'
+import { ReadyToStart } from '@/components/ReadyToStart'
 
-// Dynamic Metadata Generation
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const service = await getServiceBySlug(params.slug)
-
-  if (!service) {
-    if (params.slug === 'company-incorporation') {
-      return {
-        title: 'Company Incorporation Services | Register Pvt Ltd, LLP in India',
-        description: 'Expert assistance for Company Incorporation, LLP Registration, and compliance in India. Compare entities and get started.'
-      }
-    }
+export async function generateMetadata(): Promise<Metadata> {
+  const about = await getAboutPage()
+  if (!about) {
     return {
-      title: 'Service Not Found | Ritesh Arora & Associates',
-      description: 'The requested service could not be found.'
+      title: 'About Us | Ritesh Arora & Associates',
+      description: 'Learn more about Ritesh Arora & Associates.'
     }
   }
 
-  const seo = service.seo || {}
+  const seo = about.seo || {}
   return {
-    title: seo.metaTitle || `${service.title}`,
-    description: seo.metaDescription || service.heroSubtitle,
+    title: seo.metaTitle || about.heroTitle,
+    description: seo.metaDescription || about.heroDescription,
     keywords: seo.keywords || '',
     robots: seo.metaRobots || 'index, follow',
     alternates: seo.canonicalUrl ? { canonical: seo.canonicalUrl } : undefined
   }
 }
 
-// Main Dynamic Service Page Component
-export default async function ServicePage({ params }: PageProps) {
-  const service = await getServiceBySlug(params.slug)
-  console.log("service-->", service)
-  // If no service is found in Strapi, return a clean 404
-  if (!service) {
+export default async function AboutPage() {
+  const about = await getAboutPage()
+
+  if (!about) {
     notFound()
   }
 
-  const blocks = service.contentBlocks || []
-
   return (
     <main className="min-h-screen flex flex-col bg-[#f8f9fa]">
-      {/* 1. Service Hero */}
-      <ServiceHeroSection service={service} />
+      <AboutHero
+        title={about.heroTitle}
+        description={about.heroDescription}
+        backgroundImageUrl={about.heroBackgroundImage?.url ? getStrapiMedia(about.heroBackgroundImage.url) as string : undefined}
+        primaryButtonText={about.heroPrimaryButtonText}
+        primaryButtonLink={about.heroPrimaryButtonLink}
+        secondaryButtonText={about.heroSecondaryButtonText}
+        secondaryButtonLink={about.heroSecondaryButtonLink}
+      />
 
-      {/* 2. Overview Section */}
-      <ServiceOverviewSection service={service} />
-
-      {/* 3. Render Dynamic Zone Blocks */}
-      {blocks.map((block: any, idx: number) => {
-        const componentType = block.__component
-
-        switch (componentType) {
-          case 'service.rich-text-section':
-            return <RichTextSection key={idx} block={block} />
-
-          case 'service.feature-grid':
-            return <FeatureGridSection key={idx} block={block} />
-
-          case 'service.tabbed-rich-text':
-            return <TabbedRichText key={idx} block={block} />
-
-          case 'service.process-section':
-            return <ProcessSection key={idx} block={block} />
-
-          case 'service.contact-cta':
-            return <ContactCtaSection key={idx} block={block} />
-
-          default:
-            console.warn(`Unhandled dynamic block component: ${componentType}`)
-            return null
-        }
-      })}
-
-      {/* 4. Service Relational FAQs */}
-      {service.faqs && service.faqs.length > 0 && (
-        <ServiceFaqAccordion faqs={service.faqs} />
+      {about.storyTitle && about.storyContent && (
+        <OurStory
+          title={about.storyTitle}
+          content={about.storyContent}
+          imageUrl={about.storyImage?.url ? getStrapiMedia(about.storyImage.url) as string : undefined}
+        />
       )}
 
-      {/* 5. Related Blogs */}
-      <RelatedBlogsSection blogs={service.relatedBlogs} />
+      {about.missionVisionTitle && about.missionVisionCards && about.missionVisionCards.length > 0 && (
+        <MissionVision
+          title={about.missionVisionTitle}
+          cards={about.missionVisionCards.map(c => ({
+            title: c.title,
+            description: c.description,
+            iconImage: c.iconImage?.url ? getStrapiMedia(c.iconImage.url) as string : undefined
+          }))}
+        />
+      )}
+
+      {about.journeyTitle && about.journeySubtitle && about.milestones && about.milestones.length > 0 && (
+        <OurJourney
+          title={about.journeyTitle}
+          subtitle={about.journeySubtitle}
+          milestones={about.milestones.map(m => ({
+            id: m.id,
+            yearTitle: m.year || m.title,
+            description: m.description
+          }))}
+        />
+      )}
+
+      {about.leadershipTitle && about.teamMembers && about.teamMembers.length > 0 && (
+        <section className="py-16 md:py-24 bg-slate-50">
+          <div className="container-prose">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">{about.leadershipTitle}</h2>
+              {about.leadershipSubtitle && <p className="text-slate-600 mt-4 max-w-2xl mx-auto leading-relaxed">{about.leadershipSubtitle}</p>}
+            </div>
+            <TeamGrid
+              members={about.teamMembers.map(t => ({
+                name: t.name,
+                role: t.role,
+                image: t.image?.url ? getStrapiMedia(t.image.url) as string : '',
+                linkedInUrl: t.linkedInUrl,
+                twitterUrl: t.twitterUrl
+              }))}
+            />
+          </div>
+        </section>
+      )}
+
+      {about.ctaTitle && about.ctaButtonText && about.ctaButtonLink && (
+        <ReadyToStart
+          title={about.ctaTitle}
+          subtitle={about.ctaSubtitle}
+          buttonText={about.ctaButtonText}
+          buttonLink={about.ctaButtonLink}
+        />
+      )}
     </main>
   )
 }

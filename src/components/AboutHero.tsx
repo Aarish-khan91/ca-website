@@ -30,10 +30,6 @@ export function AboutHero({
             className="w-full h-full object-cover object-center"
           />
         )}
-
-
-
-
       </div>
 
       <div className="relative container-prose w-full px-4 md:px-8">

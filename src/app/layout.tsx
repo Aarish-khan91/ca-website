@@ -4,7 +4,7 @@ import '../styles/globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { FloatingChat } from '@/components/FloatingChat'
-import { getServices, getServicesPage, getMainModules, getServiceCategories, getServiceSubcategories } from '@/lib/strapi'
+import { getServices, getServicesPage, getMainModules, getServiceCategories, getServiceSubcategories, getBlogPosts } from '@/lib/strapi'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -56,6 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const categories = await getServiceCategories()
   const subcategories = await getServiceSubcategories()
   const services = await getServices()
+  const blogs = await getBlogPosts()
 
   return (
     <html lang="en" className={montserrat.variable}>
@@ -66,6 +67,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             categories={categories} 
             subcategories={subcategories} 
             services={services} 
+            blogs={blogs}
           />
         </div>
         {children}

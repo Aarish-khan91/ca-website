@@ -284,24 +284,30 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-import { StrapiService, StrapiServiceCategory, StrapiMainModule, StrapiServiceSubcategory } from '@/lib/strapi'
+import { StrapiService, StrapiServiceCategory, StrapiMainModule, StrapiServiceSubcategory, StrapiBlogPost } from '@/lib/strapi'
 
 export function Navbar({
   mainModules = [],
   categories = [],
   subcategories = [],
-  services = []
+  services = [],
+  blogs = []
 }: {
   mainModules?: StrapiMainModule[],
   categories?: StrapiServiceCategory[],
   subcategories?: StrapiServiceSubcategory[],
-  services?: StrapiService[]
+  services?: StrapiService[],
+  blogs?: StrapiBlogPost[]
 }) {
   const [open, setOpen] = useState(false)
   const [activeMainModuleId, setActiveMainModuleId] = useState<number | null>(null)
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null)
   const [activeSubcategoryId, setActiveSubcategoryId] = useState<number | null>(null)
   const [activeServiceId, setActiveServiceId] = useState<number | null>(null)
+
+  // ── Search State ──────────────────────────────────────────────────────────
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
 
   // ── Mobile accordion state ────────────────────────────────────────────────
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
@@ -317,6 +323,12 @@ export function Navbar({
     { id: 1, subcategory: { id: 1 }, title: 'GST Registration & Filing', slug: 'gst-registration' } as any,
     { id: 2, subcategory: { id: 1 }, title: 'Company Incorporation', slug: 'company-incorporation' } as any
   ]
+
+  // ── Search Logic ──────────────────────────────────────────────────────────
+  const filteredServices = searchQuery.trim() === '' ? [] : safeServices.filter(s => s.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredBlogs = searchQuery.trim() === '' ? [] : blogs.filter(b => b.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  const hasSearchResults = filteredServices.length > 0 || filteredBlogs.length > 0
+
 
   // ── Desktop: resolve active items ─────────────────────────────────────────
   const activeMainModule = safeMainModules.find(m => m.id === activeMainModuleId) || safeMainModules[0] || null
@@ -355,25 +367,13 @@ export function Navbar({
   }
 
   return (
-    <header className="fixed w-full top-0 z-50 bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
+    <header className="fixed w-full top-0 z-50 bg-[#ffffff] border-b border-gray-200 shadow-sm">
       <div className="relative max-w-[1400px] mx-auto py-3 flex items-center justify-between px-4 lg:px-8">
 
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex flex-col items-center">
-            <div className="text-brand-dark text-xl lg:text-[22px] font-serif leading-none tracking-wide flex items-center">
-              <span>RITESH</span>
-              <span className="relative flex items-center justify-center w-[20px] h-[24px] mx-[3px] -mt-[2px]">
-                <svg viewBox="0 0 24 24" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
-                  <path d="M12 2 L3 22" stroke="#F19020" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M12 2 L21 22" stroke="#003B49" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span>RORA &</span>
-            </div>
-            <div className="text-brand-dark text-xl lg:text-[22px] font-serif leading-none tracking-wide mt-1.5">ASSOCIATES</div>
-            <div className="w-full h-[1px] bg-[#F19020] mt-2 mb-1.5 opacity-60"></div>
-            <div className="text-[#F19020] text-[9px] lg:text-[10px] tracking-[0.15em] uppercase font-medium">Chartered Accountants</div>
+            <img src="/logo.png" alt="Logo" className="h-20 w-auto" />
           </Link>
         </div>
 
@@ -395,7 +395,7 @@ export function Navbar({
         </button>
 
         {/* Desktop: Search */}
-        <div className="hidden lg:flex items-center flex-1 max-w-[180px] xl:max-w-[300px] 2xl:max-w-[400px] ml-6 xl:ml-12">
+        <div className="hidden lg:flex items-center flex-1 max-w-[180px] xl:max-w-[300px] 2xl:max-w-[400px] ml-6 xl:ml-12 relative">
           <div className="relative w-full">
             <svg width="18" height="18" viewBox="0 0 24 24" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -404,9 +404,61 @@ export function Navbar({
             <input
               type="text"
               placeholder="Pages..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
               className="w-full h-[42px] pl-12 pr-4 bg-transparent border border-gray-400 rounded-full text-sm text-brand-dark placeholder-gray-400 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-shadow"
             />
           </div>
+
+          {/* Desktop Search Results Dropdown */}
+          {isSearchFocused && searchQuery.trim() !== '' && (
+            <div 
+              className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 shadow-xl rounded-xl max-h-[400px] overflow-y-auto z-[60] p-2"
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              {filteredServices.length > 0 && (
+                <div className="mb-3">
+                  <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 tracking-wider uppercase">Services</div>
+                  {filteredServices.map(srv => (
+                    <Link 
+                      key={`srv-${srv.id}`} 
+                      href={`/services/${srv.slug}`} 
+                      onClick={() => {
+                        setSearchQuery('');
+                        setIsSearchFocused(false);
+                      }}
+                      className="block px-3 py-2 text-[14px] text-gray-700 hover:bg-orange-50 hover:text-brand-orange rounded-md transition-colors"
+                    >
+                      {srv.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {filteredBlogs.length > 0 && (
+                <div className="mb-3">
+                  <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 tracking-wider uppercase">Blogs</div>
+                  {filteredBlogs.map(blog => (
+                    <Link 
+                      key={`blog-${blog.id}`} 
+                      href={`/blog/${blog.slug}`} 
+                      onClick={() => {
+                        setSearchQuery('');
+                        setIsSearchFocused(false);
+                      }}
+                      className="block px-3 py-2 text-[14px] text-gray-700 hover:bg-orange-50 hover:text-brand-orange rounded-md transition-colors"
+                    >
+                      {blog.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {!hasSearchResults && (
+                <div className="px-3 py-4 text-sm text-gray-500 text-center">No results found</div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Desktop: Nav links */}
@@ -531,9 +583,56 @@ export function Navbar({
               <input
                 type="text"
                 placeholder="Pages..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-10 pl-12 pr-4 bg-transparent border border-gray-400 rounded-full text-sm text-brand-dark placeholder-gray-400 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange"
               />
             </div>
+
+            {/* Mobile Search Results */}
+            {searchQuery.trim() !== '' && (
+              <div className="mb-4 bg-white border border-gray-100 rounded-lg p-2 shadow-sm max-h-[300px] overflow-y-auto">
+                {filteredServices.length > 0 && (
+                  <div className="mb-2">
+                    <div className="px-2 py-1 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Services</div>
+                    {filteredServices.map(srv => (
+                      <Link 
+                        key={`m-srv-${srv.id}`} 
+                        href={`/services/${srv.slug}`} 
+                        onClick={() => {
+                          setOpen(false);
+                          setSearchQuery('');
+                        }} 
+                        className="block px-2 py-1.5 text-[14px] text-gray-700 hover:text-brand-orange"
+                      >
+                        {srv.title}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {filteredBlogs.length > 0 && (
+                  <div className="mb-2">
+                    <div className="px-2 py-1 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Blogs</div>
+                    {filteredBlogs.map(blog => (
+                      <Link 
+                        key={`m-blog-${blog.id}`} 
+                        href={`/blog/${blog.slug}`} 
+                        onClick={() => {
+                          setOpen(false);
+                          setSearchQuery('');
+                        }} 
+                        className="block px-2 py-1.5 text-[14px] text-gray-700 hover:text-brand-orange"
+                      >
+                        {blog.title}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {!hasSearchResults && (
+                  <div className="px-2 py-3 text-sm text-gray-500 text-center">No results found</div>
+                )}
+              </div>
+            )}
 
             <MobileNavLink href="/" label="Home" onClick={() => setOpen(false)} />
             <MobileNavLink href="/about" label="About" onClick={() => setOpen(false)} />

@@ -236,6 +236,89 @@ export async function getServices(): Promise<StrapiService[]> {
   }
 }
 
+export interface StrapiAboutPage {
+  id: number;
+  documentId: string;
+  heroTitle: string;
+  heroDescription: string;
+  heroBackgroundImage?: { url: string } | null;
+  heroPrimaryButtonText?: string;
+  heroPrimaryButtonLink?: string;
+  heroSecondaryButtonText?: string;
+  heroSecondaryButtonLink?: string;
+  storyTitle: string;
+  storyContent: string;
+  storyImage?: { url: string } | null;
+  missionVisionTitle: string;
+  missionVisionCards?: Array<{
+    id: number;
+    title: string;
+    description: string;
+    iconImage?: { url: string } | null;
+  }>;
+  journeyTitle: string;
+  journeySubtitle: string;
+  milestones?: Array<{
+    id: number;
+    year: string;
+    title: string;
+    description: string;
+  }>;
+  leadershipTitle: string;
+  leadershipSubtitle: string;
+  teamMembers?: Array<{
+    id: number;
+    name: string;
+    role: string;
+    image?: { url: string } | null;
+    linkedInUrl?: string;
+    twitterUrl?: string;
+  }>;
+  ctaTitle: string;
+  ctaSubtitle: string;
+  ctaButtonText: string;
+  ctaButtonLink: string;
+  seo?: any;
+}
+
+export async function getAboutPage(): Promise<StrapiAboutPage | null> {
+  try {
+    const query = qs.stringify({
+      populate: {
+        heroBackgroundImage: { populate: '*' },
+        storyImage: { populate: '*' },
+        missionVisionCards: {
+          populate: {
+            iconImage: { populate: '*' }
+          }
+        },
+        milestones: { populate: '*' },
+        teamMembers: {
+          populate: {
+            image: { populate: '*' }
+          }
+        },
+        seo: { populate: '*' }
+      }
+    }, { encodeValuesOnly: true });
+
+    const res = await fetch(`${STRAPI_URL}/api/about?${query}`, {
+      cache: 'no-store'
+    });
+
+    if (!res.ok) {
+      console.error('Failed to fetch about page:', res.status, res.statusText);
+      return null;
+    }
+
+    const json = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error('Error fetching about page:', error);
+    return null;
+  }
+}
+
 export async function getServiceBySlug(slug: string): Promise<StrapiService | null> {
   try {
     const query = qs.stringify({
