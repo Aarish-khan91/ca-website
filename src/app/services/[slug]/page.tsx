@@ -67,13 +67,14 @@ export default async function ServicePage({ params }: PageProps) {
       {/* 3. Render Dynamic Zone Blocks */}
       {blocks.map((block: any, idx: number) => {
         const componentType = block.__component
+        const featureGridCount = blocks.slice(0, idx).filter((b: any) => b.__component === 'service.feature-grid').length;
 
         switch (componentType) {
           case 'service.rich-text-section':
             return <RichTextSection key={idx} block={block} />
 
           case 'service.feature-grid':
-            return <FeatureGridSection key={idx} block={block} />
+            return <FeatureGridSection key={idx} block={block} gridIndex={featureGridCount} />
 
           case 'service.tabbed-rich-text':
             return <TabbedRichText key={idx} block={block} />
