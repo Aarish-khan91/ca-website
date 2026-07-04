@@ -49,7 +49,8 @@ export function TabbedRichText({ block }: TabbedRichTextProps) {
         <div className="bg-white p-2 rounded-[8px] border border-slate-100 shadow-sm transition-all duration-300 overflow-x-auto">
           <div
             className="prose max-w-none text-slate-700 leading-relaxed text-[14px] md:text-[15px] p-2 md:p-6
-                       [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:min-w-[600px]
+                       [&_div]:!flex-wrap [&_div]:!flex-col md:[&_div]:!flex-row [&_*]:max-w-full [&_p]:break-words
+                       [&_table]:block [&_table]:overflow-x-auto [&_table]:w-full [&_table]:max-w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:min-w-[600px]
                        [&_th]:bg-[#f28e2b] [&_th]:text-white [&_th]:p-3 [&_th]:border [&_th]:border-slate-200 [&_th]:text-left [&_th]:text-[14px] [&_th]:font-semibold
                        [&_td]:p-3 [&_td]:border [&_td]:border-slate-200 [&_td]:text-[14px] [&_tr:nth-child(even)]:bg-[#f8f9fa] [&_tr:hover]:bg-orange-50/40 [&_tr]:transition-colors"
             dangerouslySetInnerHTML={{ __html: tabs[activeTabIdx]?.content || '' }}

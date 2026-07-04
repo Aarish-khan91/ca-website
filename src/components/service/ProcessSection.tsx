@@ -29,7 +29,7 @@ export function ProcessSection({ block }: ProcessSectionProps) {
 
         {/* Tab Switcher */}
         {tabs.length > 1 && (
-          <div className="flex gap-4 mb-12 w-full">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-12 w-full">
             {tabs.map((tab: any, idx: number) => {
               const isActive = activeTabIdx === idx
               return (
