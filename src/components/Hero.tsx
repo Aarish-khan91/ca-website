@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from './Button'
 
@@ -21,16 +22,23 @@ export function Hero({
   backgroundImage
 }: HeroProps) {
   return (
-    <section className="relative overflow-hidden bg-brand-dark">
+    <section className="relative overflow-hidden bg-brand-dark min-h-[420px] sm:min-h-[520px] md:min-h-[620px]">
       {/* Background Image */}
-      <div className="absolute inset-0 ">
-        <img
-          src={backgroundImage}
-          alt="Office Background"
-          className="w-full h-full object-cover"
-        />
-
-      </div>
+      {backgroundImage && (
+        <>
+          <div className="absolute inset-0">
+            <Image
+              src={backgroundImage}
+              alt="Office Background"
+              fill
+              sizes="100vw"
+              className="object-cover object-[80%_50%] md:object-[right_center]"
+              priority
+            />
+          </div>
+          <div className="absolute inset-0 bg-slate-950/50" />
+        </>
+      )}
 
       <div className="container-prose py-20 md:py-32 relative z-10">
         <div className="max-w-2xl">

@@ -205,7 +205,7 @@ export function JobOpenings({ jobs = [] }: JobOpeningsProps) {
         setIsSubmittingForm(true);
 
         try {
-            const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+            const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
             let resumeId = null;
 
             // 1. Upload Resume
