@@ -22,43 +22,56 @@ export function Hero({
   backgroundImage
 }: HeroProps) {
   return (
-    <section className="relative overflow-hidden bg-brand-dark min-h-[420px] sm:min-h-[520px] md:min-h-[620px]">
+    <section className="relative overflow-hidden flex items-center">
       {/* Background Image */}
       {backgroundImage && (
         <>
-          <div className="absolute inset-0">
+          {/* Ambient blurred backdrop for small screens */}
+          <div className="absolute inset-0 overflow-hidden w-[100%] h-[100%] sm:hidden">
             <Image
               src={backgroundImage}
-              alt="Office Background"
+              alt=""
               fill
               sizes="100vw"
-              className="object-cover object-[80%_50%] md:object-[right_center]"
+              className="object-cover blur-xl opacity-40 scale-110"
+              aria-hidden="true"
+            />
+          </div>
+          {/* Main Background Image: contained on mobile to show all partners, cover on desktop */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Image
+              src={backgroundImage}
+              alt={title || "Hero Background"}
+              fill
+              sizes="100vw"
+              className="object-contain sm:object-cover object-center"
               priority
             />
           </div>
-          <div className="absolute inset-0 bg-slate-950/50" />
+          {/* Responsive readability gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/60 sm:from-slate-950/80 sm:via-slate-950/50 sm:to-slate-950/40" />
         </>
       )}
 
-      <div className="container-prose py-20 md:py-32 relative z-10">
+      <div className="container-prose py-12 sm:py-20 md:py-28 lg:py-32 relative z-10 w-full px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-wider text-white leading-wider">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white leading-tight sm:leading-snug md:leading-tight">
             {title}
           </h1>
-          <p className="mt-6 text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl">
+          <p className="mt-3 sm:mt-5 text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-normal max-w-2xl">
             {description}
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 w-full sm:w-auto">
             {primaryButtonText && primaryButtonLink && (
-              <Link href={primaryButtonLink}>
-                <Button variant="primary" size="lg" className="bg-brand-orange hover:bg-orange-600 text-white font-bold px-8">
+              <Link href={primaryButtonLink} className="w-full sm:w-auto">
+                <Button variant="primary" size="lg" className="w-full sm:w-auto bg-brand-orange hover:bg-orange-600 text-white font-bold px-6 sm:px-8 py-3 text-sm sm:text-base shadow-md">
                   {primaryButtonText}
                 </Button>
               </Link>
             )}
             {secondaryButtonText && secondaryButtonLink && (
-              <Link href={secondaryButtonLink}>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-brand-dark font-semibold px-8">
+              <Link href={secondaryButtonLink} className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-brand-dark font-semibold px-6 sm:px-8 py-3 text-sm sm:text-base">
                   {secondaryButtonText}
                 </Button>
               </Link>

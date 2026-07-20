@@ -4,7 +4,7 @@ import { Section } from '@/components/Section'
 import { ServiceCard } from '@/components/ServiceCard'
 import { Stats } from '@/components/Stats'
 import { Testimonials } from '@/components/Testimonials'
-import { TrustedBy } from '@/components/TrustedBy'
+import { PhotoGallery } from '@/components/PhotoGallery'
 import { AboutHome } from '@/components/AboutHome'
 import { InsightsHome } from '@/components/InsightsHome'
 import { ServiceContact } from '@/components/ServiceContact'
@@ -72,12 +72,12 @@ export default async function Page() {
     }))
     : undefined;
 
-  // 4. Map TrustedBy client logos
+  // 4. Map Photo Gallery images from Strapi if available
   const trustedByTitle = cmsData?.trustedByTitle;
   const trustedBySubtitle = cmsData?.trustedBySubtitle;
-  const trustedByLogosData = cmsData?.trustedByLogos && cmsData.trustedByLogos.length > 0
+  const galleryImagesData = cmsData?.trustedByLogos && cmsData.trustedByLogos.length > 0
     ? cmsData.trustedByLogos.map((l: any) => ({
-      name: l.alternativeText || l.name,
+      caption: l.alternativeText || l.name || undefined,
       url: getStrapiUrl(l.url)
     }))
     : undefined;
@@ -151,14 +151,12 @@ export default async function Page() {
         {/* Stats Strip - Full Width */}
         <Stats stats={statsData} />
 
-        {/* Trusted By Section */}
-        <section className="py-16 bg-slate-50">
-          <div className="container-prose text-center mb-10">
-            <h2 className="text-3xl font-bold text-slate-900">{trustedByTitle}</h2>
-            {trustedBySubtitle && <p className="text-slate-600 mt-2">{trustedBySubtitle}</p>}
-          </div>
-          <TrustedBy logos={trustedByLogosData} />
-        </section>
+        {/* Photo Gallery Section */}
+        <PhotoGallery
+          images={galleryImagesData}
+          title={trustedByTitle}
+          subtitle={trustedBySubtitle}
+        />
 
         {/* About Section - Dark Blue */}
         <AboutHome {...aboutProps} />
