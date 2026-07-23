@@ -4,6 +4,7 @@ interface RichTextSectionProps {
 
 export function RichTextSection({ block }: RichTextSectionProps) {
   if (!block.content) return null
+  console.log('block===', block)
   return (
     <section className="bg-white py-16 md:py-24 border-b border-slate-100">
       <div className="container-prose px-4 md:px-8 mx-auto max-w-5xl">
@@ -13,7 +14,7 @@ export function RichTextSection({ block }: RichTextSectionProps) {
           </h2>
         )}
         <div
-          className="prose max-w-none text-slate-700 leading-relaxed text-[14px] md:text-[15px]
+          className="prose max-w-none text-slate-700 leading-relaxed text-[14px] md:text-[15px] whitespace-pre-line
                      [&_div]:!flex-wrap [&_div]:!flex-col md:[&_div]:!flex-row [&_*]:max-w-full [&_p]:break-words
                      [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:overflow-x-auto [&_table]:block [&_table]:md:table [&_table]:rounded-[8px] [&_table]:border [&_table]:border-slate-200
                      [&_th]:bg-[#f28e2b] [&_th]:text-white [&_th]:p-3 [&_th]:border [&_th]:border-slate-200 [&_th]:text-center [&_th]:text-[14px] [&_th]:font-semibold

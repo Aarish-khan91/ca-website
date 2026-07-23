@@ -50,7 +50,7 @@ export function FeatureGridSection({ block, gridIndex = 0 }: FeatureGridSectionP
     if (imgUrl) {
       return <img src={imgUrl} alt={card.title} className="w-5 h-5 object-contain filter brightness-0 invert" />;
     }
-    
+
     // Return the mapped default icon based on its order matching the design
     return defaultIcons[idx % defaultIcons.length];
   }
@@ -149,7 +149,7 @@ export function FeatureGridSection({ block, gridIndex = 0 }: FeatureGridSectionP
             {cards.map((card: any, idx: number) => (
               <div key={idx} className="bg-white p-6 rounded-[8px] border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white mb-5 ${iconColors[idx % iconColors.length]}`}>
-                   {renderIcon(card, idx)}
+                  {renderIcon(card, idx)}
                 </div>
                 <h4 className="text-[#0b293d] font-bold text-[16px] mb-2">{card.title}</h4>
                 <p className="text-slate-500 text-[13px] font-light leading-relaxed whitespace-pre-line">{card.description}</p>
@@ -189,7 +189,7 @@ export function FeatureGridSection({ block, gridIndex = 0 }: FeatureGridSectionP
                 return (
                   <div
                     key={idx}
-                    className={`absolute ${b.htmlClass} w-52 flex flex-col z-10 transition-transform hover:-translate-y-1`}
+                    className={`absolute ${b.htmlClass} w-52 flex flex-col z-10`}
                   >
                     <h4 className={`${b.titleColor} font-bold text-[15px] mb-1 leading-tight`}>{card.title}</h4>
                     <p className="text-slate-500 text-[12px] font-medium leading-tight whitespace-pre-line">
@@ -203,8 +203,8 @@ export function FeatureGridSection({ block, gridIndex = 0 }: FeatureGridSectionP
             {/* Mobile Stacking List (Degrades gracefully from diagram) */}
             <div className="grid sm:grid-cols-2 gap-4 md:hidden mt-8">
               {cards.map((card: any, idx: number) => (
-                <div key={idx} className="bg-white p-6 rounded-[8px] border border-slate-200 shadow-sm border-l-4" style={{borderLeftColor: branches[idx % branches.length].color}}>
-                  <h4 className="font-bold text-[16px] mb-2" style={{color: branches[idx % branches.length].color}}>{card.title}</h4>
+                <div key={idx} className="bg-white p-6 rounded-[8px] border border-slate-200 shadow-sm border-l-4" style={{ borderLeftColor: branches[idx % branches.length].color }}>
+                  <h4 className="font-bold text-[16px] mb-2" style={{ color: branches[idx % branches.length].color }}>{card.title}</h4>
                   <p className="text-slate-600 text-[13px] font-medium leading-relaxed whitespace-pre-line">{card.description}</p>
                 </div>
               ))}
