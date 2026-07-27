@@ -11,39 +11,15 @@ export interface InsightItem {
 
 export interface InsightsHomeProps {
   title?: string
+  subTitle?: string
   updates?: InsightItem[]
 }
 
 export function InsightsHome({
-  title = "Latest Insights & Updates",
+  title,
+  subTitle,
   updates
 }: InsightsHomeProps) {
-  const defaultUpdates = [
-    {
-      title: 'Complete GST guide for Small Businesses in 2025',
-      category: 'Expert Advice, Industry insights.',
-      date: 'Nov 25, 2025',
-      excerpt: 'Stay ahead of the curve with emerging trends that are reshaping industries and customer expectations.',
-      imageSrc: '/images/home/1.png',
-      href: '/blog/gst-guide-2025'
-    },
-    {
-      title: 'How We Helped a Retail Brand Increase Sales by 45%',
-      category: 'Success Story',
-      date: 'November 19, 2025',
-      excerpt: 'AI, automation, and shifting consumer behavior are shaping industries. Stay ahead with these key trends for 2024.',
-      imageSrc: '/images/home/2.png',
-      href: '/blog/retail-brand-sales'
-    },
-    {
-      title: "From Startup to Scale: A Tech Company's Growth Journey",
-      category: 'Success Story',
-      date: 'November 03, 2025',
-      excerpt: 'Discover how one company navigated rapid growth, scaled operations, and stayed true to its vision.',
-      imageSrc: '/images/home/3.png',
-      href: '/blog/tech-company-growth'
-    }
-  ]
 
   const items = updates && updates
 
@@ -52,6 +28,7 @@ export function InsightsHome({
       <div className="container-prose max-w-7xl mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-[40px] font-bold text-brand-dark tracking-wide">{title}</h2>
+          <p className='mt-2 text-slate-700 text-[15px]'>{subTitle}</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-10">

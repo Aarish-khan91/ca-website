@@ -95,6 +95,8 @@ export default async function Page() {
 
   // 6. Map Latest Insights & Updates
   const insightsTitle = cmsData?.insightsTitle;
+  const insightsSubtitle = cmsData?.insightsSubtitle;
+
   const insightsData = cmsData?.insights && cmsData.insights.length > 0
     && cmsData.insights.map((ins: any) => ({
       title: ins.title,
@@ -162,7 +164,7 @@ export default async function Page() {
         <AboutHome {...aboutProps} />
 
         {/* Insights Section */}
-        <InsightsHome title={insightsTitle} updates={insightsData} />
+        <InsightsHome title={insightsTitle} subTitle={insightsSubtitle} updates={insightsData} />
 
         {/* Testimonials Section */}
         <section className="py-20 bg-slate-50">
