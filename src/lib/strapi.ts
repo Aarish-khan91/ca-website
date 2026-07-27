@@ -476,3 +476,50 @@ export async function getJobs(): Promise<StrapiJob[]> {
     return [];
   }
 }
+
+export interface StrapiFooter {
+  id: number;
+  documentId: string;
+  brandName?: string;
+  description?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+}
+
+export async function getFooter(): Promise<StrapiFooter | null> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/footer?populate=*`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error('Error fetching footer:', error);
+    return null;
+  }
+}
+
+export interface StrapiHeader {
+  id: number;
+  documentId: string;
+  logo?: {
+    url: string;
+  } | null;
+}
+
+export async function getHeader(): Promise<StrapiHeader | null> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/header?populate=*`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.error('Error fetching header:', error);
+    return null;
+  }
+}
+

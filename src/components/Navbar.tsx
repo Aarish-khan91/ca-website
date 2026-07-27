@@ -284,20 +284,22 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-import { StrapiService, StrapiServiceCategory, StrapiMainModule, StrapiServiceSubcategory, StrapiBlogPost } from '@/lib/strapi'
+import { StrapiService, StrapiServiceCategory, StrapiMainModule, StrapiServiceSubcategory, StrapiBlogPost, StrapiHeader, getStrapiMedia } from '@/lib/strapi'
 
 export function Navbar({
   mainModules = [],
   categories = [],
   subcategories = [],
   services = [],
-  blogs = []
+  blogs = [],
+  header = null
 }: {
   mainModules?: StrapiMainModule[],
   categories?: StrapiServiceCategory[],
   subcategories?: StrapiServiceSubcategory[],
   services?: StrapiService[],
-  blogs?: StrapiBlogPost[]
+  blogs?: StrapiBlogPost[],
+  header?: StrapiHeader | null
 }) {
   const [open, setOpen] = useState(false)
   const [activeMainModuleId, setActiveMainModuleId] = useState<number | null>(null)
@@ -373,7 +375,11 @@ export function Navbar({
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex flex-col items-center">
-            <img src="/logo.png" alt="Logo" className="h-20 w-auto" />
+            {header?.logo?.url ? (
+              <img src={getStrapiMedia(header.logo.url) || "/logo.png"} alt="Logo" className="h-20 w-auto" />
+            ) : (
+              <img src="/logo.png" alt="Logo" className="h-20 w-auto" />
+            )}
           </Link>
         </div>
 
