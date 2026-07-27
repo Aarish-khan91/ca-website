@@ -469,109 +469,214 @@ export function Navbar({
 
         {/* Desktop: Nav links */}
         <nav className="hidden lg:flex items-center gap-3 xl:gap-6 2xl:gap-8 ml-auto mr-6 xl:mr-12">
-          <Link href="/" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Home</Link>
-          <Link href="/about" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">About</Link>
-
-          {/* Desktop: Services mega-menu */}
-          <div className="group">
-            <Link href="/services" className="text-slate-600 group-hover:text-brand-dark transition-colors text-[14px] xl:text-[15px] flex items-center gap-1 py-4">
-              Services
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180"><path d="M6 9l6 6 6-6" /></svg>
-            </Link>
-
-            <div className="absolute left-0 right-0 mx-auto w-[1100px] max-w-[calc(100%-2rem)] lg:max-w-[calc(100%-4rem)] top-full bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-              <div className="flex h-[450px]">
-
-                {/* Col 1: Main Modules */}
-                <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
-                  <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">MAIN MODULES</div>
-                  <div className="flex-1 overflow-y-auto pb-4">
-                    {safeMainModules.map((module, mIdx) => {
-                      const isActive = activeMainModule?.id === module.id
-                      return (
-                        <div
-                          key={module.id || mIdx}
-                          onMouseEnter={() => { setActiveMainModuleId(module.id); setActiveCategoryId(null); setActiveSubcategoryId(null); setActiveServiceId(null) }}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-gray-800 text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                        >
-                          <span className="text-[14px] truncate pr-2 min-w-0">{module.title}</span>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+          {header?.navLinks && header.navLinks.length > 0 ? (
+            header.navLinks.map((link, idx) => {
+              if (link.label.toLowerCase() === 'services') {
+                return (
+                  <div className="group" key={`desk-nav-${idx}`}>
+                    <Link href={link.url} className="text-slate-600 group-hover:text-brand-dark transition-colors text-[14px] xl:text-[15px] flex items-center gap-1 py-4">
+                      {link.label}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180"><path d="M6 9l6 6 6-6" /></svg>
+                    </Link>
+                    {/* Services Dropdown (using existing mega-menu) */}
+                    <div className="absolute left-0 right-0 mx-auto w-[1100px] max-w-[calc(100%-2rem)] lg:max-w-[calc(100%-4rem)] top-full bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                      <div className="flex h-[450px]">
+                        {/* Col 1: Main Modules */}
+                        <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                          <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">MAIN MODULES</div>
+                          <div className="flex-1 overflow-y-auto pb-4">
+                            {safeMainModules.map((module, mIdx) => {
+                              const isActive = activeMainModule?.id === module.id
+                              return (
+                                <div
+                                  key={module.id || mIdx}
+                                  onMouseEnter={() => { setActiveMainModuleId(module.id); setActiveCategoryId(null); setActiveSubcategoryId(null); setActiveServiceId(null) }}
+                                  className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-gray-800 text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                >
+                                  <span className="text-[14px] truncate pr-2 min-w-0">{module.title}</span>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                                </div>
+                              )
+                            })}
+                          </div>
                         </div>
-                      )
-                    })}
+
+                        {/* Col 2: Categories */}
+                        <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                          <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">CATEGORIES</div>
+                          <div className="flex-1 overflow-y-auto pb-4">
+                            {activeCategories.map((cat, cIdx) => {
+                              const isActive = activeCategory?.id === cat.id
+                              return (
+                                <div
+                                  key={cat.id || cIdx}
+                                  onMouseEnter={() => { setActiveCategoryId(cat.id); setActiveSubcategoryId(null); setActiveServiceId(null) }}
+                                  className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                >
+                                  <span className="text-[14px] truncate pr-2 min-w-0">{cat.title}</span>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                                </div>
+                              )
+                            })}
+                            {activeCategories.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No categories</div>}
+                          </div>
+                        </div>
+
+                        {/* Col 3: Subcategories */}
+                        <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                          <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SUBCATEGORIES</div>
+                          <div className="flex-1 overflow-y-auto pb-4">
+                            {activeSubcategories.map((sub, sIdx) => {
+                              const isActive = activeSubcategory?.id === sub.id
+                              return (
+                                <div
+                                  key={sub.id || sIdx}
+                                  onMouseEnter={() => { setActiveSubcategoryId(sub.id); setActiveServiceId(null) }}
+                                  className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                >
+                                  <span className="text-[14px] truncate pr-2 min-w-0">{sub.title}</span>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                                </div>
+                              )
+                            })}
+                            {activeSubcategories.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No subcategories</div>}
+                          </div>
+                        </div>
+
+                        {/* Col 4: Services */}
+                        <div className="w-1/4 bg-white flex flex-col pt-6">
+                          <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SERVICES</div>
+                          <div className="flex-1 overflow-y-auto pb-4">
+                            {activeServices.map((srv, sIdx) => {
+                              const isActive = activeService?.id === srv.id
+                              return (
+                                <div
+                                  key={srv.id || sIdx}
+                                  onMouseEnter={() => setActiveServiceId(srv.id)}
+                                  className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex items-center rounded transition-all duration-200 min-w-0 ${isActive ? 'bg-[#f28e2b] text-white font-medium border border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]' : 'text-gray-700 hover:bg-gray-50'}`}
+                                >
+                                  <Link href={`/services/${srv.slug}`} className="w-full text-[14px] truncate block min-w-0">{srv.title}</Link>
+                                </div>
+                              )
+                            })}
+                            {activeServices.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No services</div>}
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+              return (
+                <Link key={`desk-nav-${idx}`} href={link.url} className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">
+                  {link.label}
+                </Link>
+              )
+            })
+          ) : (
+            <>
+              <Link href="/" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Home</Link>
+              <Link href="/about" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">About</Link>
+              <div className="group">
+                <Link href="/services" className="text-slate-600 group-hover:text-brand-dark transition-colors text-[14px] xl:text-[15px] flex items-center gap-1 py-4">
+                  Services
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180"><path d="M6 9l6 6 6-6" /></svg>
+                </Link>
+                <div className="absolute left-0 right-0 mx-auto w-[1100px] max-w-[calc(100%-2rem)] lg:max-w-[calc(100%-4rem)] top-full bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                  <div className="flex h-[450px]">
+                    {/* Col 1: Main Modules */}
+                    <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">MAIN MODULES</div>
+                      <div className="flex-1 overflow-y-auto pb-4">
+                        {safeMainModules.map((module, mIdx) => {
+                          const isActive = activeMainModule?.id === module.id
+                          return (
+                            <div
+                              key={module.id || mIdx}
+                              onMouseEnter={() => { setActiveMainModuleId(module.id); setActiveCategoryId(null); setActiveSubcategoryId(null); setActiveServiceId(null) }}
+                              className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-gray-800 text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                            >
+                              <span className="text-[14px] truncate pr-2 min-w-0">{module.title}</span>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Col 2: Categories */}
+                    <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">CATEGORIES</div>
+                      <div className="flex-1 overflow-y-auto pb-4">
+                        {activeCategories.map((cat, cIdx) => {
+                          const isActive = activeCategory?.id === cat.id
+                          return (
+                            <div
+                              key={cat.id || cIdx}
+                              onMouseEnter={() => { setActiveCategoryId(cat.id); setActiveSubcategoryId(null); setActiveServiceId(null) }}
+                              className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                            >
+                              <span className="text-[14px] truncate pr-2 min-w-0">{cat.title}</span>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                            </div>
+                          )
+                        })}
+                        {activeCategories.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No categories</div>}
+                      </div>
+                    </div>
+
+                    {/* Col 3: Subcategories */}
+                    <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SUBCATEGORIES</div>
+                      <div className="flex-1 overflow-y-auto pb-4">
+                        {activeSubcategories.map((sub, sIdx) => {
+                          const isActive = activeSubcategory?.id === sub.id
+                          return (
+                            <div
+                              key={sub.id || sIdx}
+                              onMouseEnter={() => { setActiveSubcategoryId(sub.id); setActiveServiceId(null) }}
+                              className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                            >
+                              <span className="text-[14px] truncate pr-2 min-w-0">{sub.title}</span>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
+                            </div>
+                          )
+                        })}
+                        {activeSubcategories.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No subcategories</div>}
+                      </div>
+                    </div>
+
+                    {/* Col 4: Services */}
+                    <div className="w-1/4 bg-white flex flex-col pt-6">
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SERVICES</div>
+                      <div className="flex-1 overflow-y-auto pb-4">
+                        {activeServices.map((srv, sIdx) => {
+                          const isActive = activeService?.id === srv.id
+                          return (
+                            <div
+                              key={srv.id || sIdx}
+                              onMouseEnter={() => setActiveServiceId(srv.id)}
+                              className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex items-center rounded transition-all duration-200 min-w-0 ${isActive ? 'bg-[#f28e2b] text-white font-medium border border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]' : 'text-gray-700 hover:bg-gray-50'}`}
+                            >
+                              <Link href={`/services/${srv.slug}`} className="w-full text-[14px] truncate block min-w-0">{srv.title}</Link>
+                            </div>
+                          )
+                        })}
+                        {activeServices.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No services</div>}
+                      </div>
+                    </div>
+
                   </div>
                 </div>
-
-                {/* Col 2: Categories */}
-                <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
-                  <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">CATEGORIES</div>
-                  <div className="flex-1 overflow-y-auto pb-4">
-                    {activeCategories.map((cat, cIdx) => {
-                      const isActive = activeCategory?.id === cat.id
-                      return (
-                        <div
-                          key={cat.id || cIdx}
-                          onMouseEnter={() => { setActiveCategoryId(cat.id); setActiveSubcategoryId(null); setActiveServiceId(null) }}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                        >
-                          <span className="text-[14px] truncate pr-2 min-w-0">{cat.title}</span>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
-                        </div>
-                      )
-                    })}
-                    {activeCategories.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No categories</div>}
-                  </div>
-                </div>
-
-                {/* Col 3: Subcategories */}
-                <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
-                  <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SUBCATEGORIES</div>
-                  <div className="flex-1 overflow-y-auto pb-4">
-                    {activeSubcategories.map((sub, sIdx) => {
-                      const isActive = activeSubcategory?.id === sub.id
-                      return (
-                        <div
-                          key={sub.id || sIdx}
-                          onMouseEnter={() => { setActiveSubcategoryId(sub.id); setActiveServiceId(null) }}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex justify-between items-center rounded transition-colors duration-200 min-w-0 ${isActive ? 'bg-[#e53e3e] text-white font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                        >
-                          <span className="text-[14px] truncate pr-2 min-w-0">{sub.title}</span>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`flex-shrink-0 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}><path d="M9 18l6-6-6-6" /></svg>
-                        </div>
-                      )
-                    })}
-                    {activeSubcategories.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No subcategories</div>}
-                  </div>
-                </div>
-
-                {/* Col 4: Services */}
-                <div className="w-1/4 bg-white flex flex-col pt-6">
-                  <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SERVICES</div>
-                  <div className="flex-1 overflow-y-auto pb-4">
-                    {activeServices.map((srv, sIdx) => {
-                      const isActive = activeService?.id === srv.id
-                      return (
-                        <div
-                          key={srv.id || sIdx}
-                          onMouseEnter={() => setActiveServiceId(srv.id)}
-                          className={`mx-4 px-4 py-2.5 mb-1 cursor-pointer flex items-center rounded transition-all duration-200 min-w-0 ${isActive ? 'bg-[#f28e2b] text-white font-medium border border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]' : 'text-gray-700 hover:bg-gray-50'}`}
-                        >
-                          <Link href={`/services/${srv.slug}`} className="w-full text-[14px] truncate block min-w-0">{srv.title}</Link>
-                        </div>
-                      )
-                    })}
-                    {activeServices.length === 0 && <div className="px-8 text-gray-400 text-sm italic">No services</div>}
-                  </div>
-                </div>
-
               </div>
-            </div>
-          </div>
 
-          <Link href="/blog" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Blog</Link>
-          <Link href="/pricing" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Pricing</Link>
-          <Link href="/careers" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Careers</Link>
-          <Link href="/contact" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Contact</Link>
+              <Link href="/blog" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Blog</Link>
+              <Link href="/pricing" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Pricing</Link>
+              <Link href="/careers" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Careers</Link>
+              <Link href="/contact" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Contact</Link>
+            </>
+          )}
         </nav>
       </div>
 
@@ -640,116 +745,231 @@ export function Navbar({
               </div>
             )}
 
-            <MobileNavLink href="/" label="Home" onClick={() => setOpen(false)} />
-            <MobileNavLink href="/about" label="About" onClick={() => setOpen(false)} />
-
-            {/* ── Mobile: Services accordion ── */}
-            <div className="border-b border-gray-100">
-              <button
-                onClick={() => setMobileServicesOpen(v => !v)}
-                className="w-full flex items-center justify-between px-2 py-3 text-[15px] font-medium text-slate-600 hover:text-brand-dark"
-              >
-                <Link href="/services" onClick={e => e.stopPropagation()} className="hover:text-[#F19020]">Services</Link>
-                <svg
-                  width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  className={`transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`}
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </button>
-
-              {mobileServicesOpen && (
-                <div className="pb-2">
-                  {/* Level 1: Main Modules */}
-                  {safeMainModules.map(module => {
-                    const isModuleOpen = mobileActiveModuleId === module.id
-                    const moduleCats = safeCategories.filter(c => c.mainModule?.id === module.id)
-
-                    return (
-                      <div key={module.id} className="ml-2 border-l-2 border-gray-200">
-                        <button
-                          onClick={() => toggleMobileModule(module.id)}
-                          className={`w-full flex items-center justify-between pl-4 pr-2 py-2.5 text-[14px] font-medium transition-colors ${isModuleOpen ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+            {header?.navLinks && header.navLinks.length > 0 ? (
+              header.navLinks.map((link, idx) => {
+                if (link.label.toLowerCase() === 'services') {
+                  return (
+                    <div key={`m-nav-${idx}`} className="border-b border-gray-100">
+                      <button
+                        onClick={() => setMobileServicesOpen(v => !v)}
+                        className="w-full flex items-center justify-between px-2 py-3 text-[15px] font-medium text-slate-600 hover:text-brand-dark"
+                      >
+                        <Link href={link.url} onClick={e => e.stopPropagation()} className="hover:text-[#F19020]">{link.label}</Link>
+                        <svg
+                          width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                          strokeLinecap="round" strokeLinejoin="round"
+                          className={`transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`}
                         >
-                          <span>{module.title}</span>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ${isModuleOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
-                        </button>
+                          <path d="M6 9l6 6 6-6" />
+                        </svg>
+                      </button>
 
-                        {/* Level 2: Categories */}
-                        {isModuleOpen && (
-                          <div className="ml-3 border-l-2 border-gray-100">
-                            {moduleCats.length === 0 && <p className="pl-4 py-2 text-[13px] text-gray-400 italic">No categories</p>}
-                            {moduleCats.map(cat => {
-                              const isCatOpen = mobileActiveCategoryId === cat.id
-                              const catSubs = safeSubcategories.filter(s => s.category?.id === cat.id)
+                      {mobileServicesOpen && (
+                        <div className="pb-2">
+                          {/* Level 1: Main Modules */}
+                          {safeMainModules.map(module => {
+                            const isModuleOpen = mobileActiveModuleId === module.id
+                            const moduleCats = safeCategories.filter(c => c.mainModule?.id === module.id)
 
-                              return (
-                                <div key={cat.id}>
-                                  <button
-                                    onClick={() => toggleMobileCategory(cat.id)}
-                                    className={`w-full flex items-center justify-between pl-4 pr-2 py-2.5 text-[13px] font-medium transition-colors ${isCatOpen ? 'text-[#e53e3e]' : 'text-gray-500 hover:text-gray-800'}`}
-                                  >
-                                    <span className="text-left">{cat.title}</span>
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ml-2 ${isCatOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
-                                  </button>
+                            return (
+                              <div key={module.id} className="ml-2 border-l-2 border-gray-200">
+                                <button
+                                  onClick={() => toggleMobileModule(module.id)}
+                                  className={`w-full flex items-center justify-between pl-4 pr-2 py-2.5 text-[14px] font-medium transition-colors ${isModuleOpen ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                                >
+                                  <span>{module.title}</span>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ${isModuleOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                                </button>
 
-                                  {/* Level 3: Subcategories */}
-                                  {isCatOpen && (
-                                    <div className="ml-3 border-l-2 border-gray-100">
-                                      {catSubs.length === 0 && <p className="pl-4 py-2 text-[13px] text-gray-400 italic">No subcategories</p>}
-                                      {catSubs.map(sub => {
-                                        const isSubOpen = mobileActiveSubcategoryId === sub.id
-                                        const subServices = safeServices.filter(s => s.subcategory?.id === sub.id)
+                                {/* Level 2: Categories */}
+                                {isModuleOpen && (
+                                  <div className="ml-3 border-l-2 border-gray-100">
+                                    {moduleCats.length === 0 && <p className="pl-4 py-2 text-[13px] text-gray-400 italic">No categories</p>}
+                                    {moduleCats.map(cat => {
+                                      const isCatOpen = mobileActiveCategoryId === cat.id
+                                      const catSubs = safeSubcategories.filter(s => s.category?.id === cat.id)
 
-                                        return (
-                                          <div key={sub.id}>
-                                            <button
-                                              onClick={() => toggleMobileSubcategory(sub.id)}
-                                              className={`w-full flex items-center justify-between pl-4 pr-2 py-2 text-[13px] transition-colors ${isSubOpen ? 'text-[#e53e3e] font-medium' : 'text-gray-500 hover:text-gray-800'}`}
-                                            >
-                                              <span className="text-left">{sub.title}</span>
-                                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ml-2 ${isSubOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
-                                            </button>
+                                      return (
+                                        <div key={cat.id}>
+                                          <button
+                                            onClick={() => toggleMobileCategory(cat.id)}
+                                            className={`w-full flex items-center justify-between pl-4 pr-2 py-2.5 text-[13px] font-medium transition-colors ${isCatOpen ? 'text-[#e53e3e]' : 'text-gray-500 hover:text-gray-800'}`}
+                                          >
+                                            <span className="text-left">{cat.title}</span>
+                                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ml-2 ${isCatOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                                          </button>
 
-                                            {/* Level 4: Services */}
-                                            {isSubOpen && (
-                                              <div className="ml-3 border-l-2 border-[#F19020]/30 pb-1">
-                                                {subServices.length === 0 && <p className="pl-4 py-2 text-[12px] text-gray-400 italic">No services</p>}
-                                                {subServices.map(srv => (
-                                                  <Link
-                                                    key={srv.id}
-                                                    href={`/services/${srv.slug}`}
-                                                    onClick={() => setOpen(false)}
-                                                    className="flex items-center pl-4 pr-2 py-2 text-[13px] text-gray-500 hover:text-[#F19020] hover:bg-orange-50 rounded transition-colors"
-                                                  >
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-[#F19020] mr-2.5 flex-shrink-0" />
-                                                    {srv.title}
-                                                  </Link>
-                                                ))}
+                                          {/* Level 3: Subcategories */}
+                                          {isCatOpen && (
+                                            <div className="ml-3 border-l-2 border-gray-100">
+                                              {catSubs.length === 0 && <p className="pl-4 py-2 text-[13px] text-gray-400 italic">No subcategories</p>}
+                                              {catSubs.map(sub => {
+                                                const isSubOpen = mobileActiveSubcategoryId === sub.id
+                                                const subServices = safeServices.filter(s => s.subcategory?.id === sub.id)
+
+                                                return (
+                                                  <div key={sub.id}>
+                                                    <button
+                                                      onClick={() => toggleMobileSubcategory(sub.id)}
+                                                      className={`w-full flex items-center justify-between pl-4 pr-2 py-2 text-[13px] transition-colors ${isSubOpen ? 'text-[#e53e3e] font-medium' : 'text-gray-500 hover:text-gray-800'}`}
+                                                    >
+                                                      <span className="text-left">{sub.title}</span>
+                                                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ml-2 ${isSubOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                                                    </button>
+
+                                                    {/* Level 4: Services */}
+                                                    {isSubOpen && (
+                                                      <div className="ml-3 border-l-2 border-[#F19020]/30 pb-1">
+                                                        {subServices.length === 0 && <p className="pl-4 py-2 text-[12px] text-gray-400 italic">No services</p>}
+                                                        {subServices.map(srv => (
+                                                          <Link
+                                                            key={srv.id}
+                                                            href={`/services/${srv.slug}`}
+                                                            onClick={() => setOpen(false)}
+                                                            className="flex items-center pl-4 pr-2 py-2 text-[13px] text-gray-500 hover:text-[#F19020] hover:bg-orange-50 rounded transition-colors"
+                                                          >
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-[#F19020] mr-2.5 flex-shrink-0" />
+                                                            {srv.title}
+                                                          </Link>
+                                                        ))}
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                )
+                                              })}
+                                            </div>
+                                          )}
+                                        </div>
+                                      )
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+                return (
+                  <MobileNavLink key={`m-nav-${idx}`} href={link.url} label={link.label} onClick={() => setOpen(false)} />
+                )
+              })
+            ) : (
+              <>
+                <MobileNavLink href="/" label="Home" onClick={() => setOpen(false)} />
+                <MobileNavLink href="/about" label="About" onClick={() => setOpen(false)} />
+
+                {/* ── Mobile: Services accordion ── */}
+                <div className="border-b border-gray-100">
+                  <button
+                    onClick={() => setMobileServicesOpen(v => !v)}
+                    className="w-full flex items-center justify-between px-2 py-3 text-[15px] font-medium text-slate-600 hover:text-brand-dark"
+                  >
+                    <Link href="/services" onClick={e => e.stopPropagation()} className="hover:text-[#F19020]">Services</Link>
+                    <svg
+                      width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      className={`transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`}
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+
+                  {mobileServicesOpen && (
+                    <div className="pb-2">
+                      {/* Level 1: Main Modules */}
+                      {safeMainModules.map(module => {
+                        const isModuleOpen = mobileActiveModuleId === module.id
+                        const moduleCats = safeCategories.filter(c => c.mainModule?.id === module.id)
+
+                        return (
+                          <div key={module.id} className="ml-2 border-l-2 border-gray-200">
+                            <button
+                              onClick={() => toggleMobileModule(module.id)}
+                              className={`w-full flex items-center justify-between pl-4 pr-2 py-2.5 text-[14px] font-medium transition-colors ${isModuleOpen ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                            >
+                              <span>{module.title}</span>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ${isModuleOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                            </button>
+
+                            {/* Level 2: Categories */}
+                            {isModuleOpen && (
+                              <div className="ml-3 border-l-2 border-gray-100">
+                                {moduleCats.length === 0 && <p className="pl-4 py-2 text-[13px] text-gray-400 italic">No categories</p>}
+                                {moduleCats.map(cat => {
+                                  const isCatOpen = mobileActiveCategoryId === cat.id
+                                  const catSubs = safeSubcategories.filter(s => s.category?.id === cat.id)
+
+                                  return (
+                                    <div key={cat.id}>
+                                      <button
+                                        onClick={() => toggleMobileCategory(cat.id)}
+                                        className={`w-full flex items-center justify-between pl-4 pr-2 py-2.5 text-[13px] font-medium transition-colors ${isCatOpen ? 'text-[#e53e3e]' : 'text-gray-500 hover:text-gray-800'}`}
+                                      >
+                                        <span className="text-left">{cat.title}</span>
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ml-2 ${isCatOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                                      </button>
+
+                                      {/* Level 3: Subcategories */}
+                                      {isCatOpen && (
+                                        <div className="ml-3 border-l-2 border-gray-100">
+                                          {catSubs.length === 0 && <p className="pl-4 py-2 text-[13px] text-gray-400 italic">No subcategories</p>}
+                                          {catSubs.map(sub => {
+                                            const isSubOpen = mobileActiveSubcategoryId === sub.id
+                                            const subServices = safeServices.filter(s => s.subcategory?.id === sub.id)
+
+                                            return (
+                                              <div key={sub.id}>
+                                                <button
+                                                  onClick={() => toggleMobileSubcategory(sub.id)}
+                                                  className={`w-full flex items-center justify-between pl-4 pr-2 py-2 text-[13px] transition-colors ${isSubOpen ? 'text-[#e53e3e] font-medium' : 'text-gray-500 hover:text-gray-800'}`}
+                                                >
+                                                  <span className="text-left">{sub.title}</span>
+                                                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 flex-shrink-0 ml-2 ${isSubOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
+                                                </button>
+
+                                                {/* Level 4: Services */}
+                                                {isSubOpen && (
+                                                  <div className="ml-3 border-l-2 border-[#F19020]/30 pb-1">
+                                                    {subServices.length === 0 && <p className="pl-4 py-2 text-[12px] text-gray-400 italic">No services</p>}
+                                                    {subServices.map(srv => (
+                                                      <Link
+                                                        key={srv.id}
+                                                        href={`/services/${srv.slug}`}
+                                                        onClick={() => setOpen(false)}
+                                                        className="flex items-center pl-4 pr-2 py-2 text-[13px] text-gray-500 hover:text-[#F19020] hover:bg-orange-50 rounded transition-colors"
+                                                      >
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-[#F19020] mr-2.5 flex-shrink-0" />
+                                                        {srv.title}
+                                                      </Link>
+                                                    ))}
+                                                  </div>
+                                                )}
                                               </div>
-                                            )}
-                                          </div>
-                                        )
-                                      })}
+                                            )
+                                          })}
+                                        </div>
+                                      )}
                                     </div>
-                                  )}
-                                </div>
-                              )
-                            })}
+                                  )
+                                })}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    )
-                  })}
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            <MobileNavLink href="/blog" label="Blog" onClick={() => setOpen(false)} />
-            <MobileNavLink href="/pricing" label="Pricing" onClick={() => setOpen(false)} />
-            <MobileNavLink href="/careers" label="Careers" onClick={() => setOpen(false)} />
-            <MobileNavLink href="/contact" label="Contact" onClick={() => setOpen(false)} />
+                <MobileNavLink href="/blog" label="Blog" onClick={() => setOpen(false)} />
+                <MobileNavLink href="/pricing" label="Pricing" onClick={() => setOpen(false)} />
+                <MobileNavLink href="/careers" label="Careers" onClick={() => setOpen(false)} />
+                <MobileNavLink href="/contact" label="Contact" onClick={() => setOpen(false)} />
+              </>
+            )}
           </div>
         </div>
       )}

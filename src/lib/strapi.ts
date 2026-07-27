@@ -477,6 +477,12 @@ export async function getJobs(): Promise<StrapiJob[]> {
   }
 }
 
+export interface StrapiLink {
+  id: number;
+  label: string;
+  url: string;
+}
+
 export interface StrapiFooter {
   id: number;
   documentId: string;
@@ -485,11 +491,13 @@ export interface StrapiFooter {
   facebookUrl?: string;
   instagramUrl?: string;
   twitterUrl?: string;
+  quickLinks?: StrapiLink[];
+  servicesLinks?: StrapiLink[];
 }
 
 export async function getFooter(): Promise<StrapiFooter | null> {
   try {
-    const res = await fetch(`${STRAPI_URL}/api/footer?populate=*`, {
+    const res = await fetch(`${STRAPI_URL}/api/footer?populate[quickLinks]=*&populate[servicesLinks]=*`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) return null;
@@ -507,11 +515,12 @@ export interface StrapiHeader {
   logo?: {
     url: string;
   } | null;
+  navLinks?: StrapiLink[];
 }
 
 export async function getHeader(): Promise<StrapiHeader | null> {
   try {
-    const res = await fetch(`${STRAPI_URL}/api/header?populate=*`, {
+    const res = await fetch(`${STRAPI_URL}/api/header?populate[logo]=*&populate[navLinks]=*`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) return null;

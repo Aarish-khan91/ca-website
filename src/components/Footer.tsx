@@ -42,14 +42,22 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
           <div className="md:col-span-3 lg:col-span-3 lg:pl-10">
             <h4 className="text-white font-medium text-[15px] mb-5">Quick Links</h4>
             <ul className="space-y-3.5">
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/">Home</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/about">About</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Services</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/pricing">Pricing</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/contact">Contact</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/careers">Careers</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/blog">Blog</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/newsletter">Newsletter</Link></li>
+              {(footer?.quickLinks && footer.quickLinks.length > 0) ? (
+                footer.quickLinks.map(link => (
+                  <li key={link.id}><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href={link.url}>{link.label}</Link></li>
+                ))
+              ) : (
+                <>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/">Home</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/about">About</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Services</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/pricing">Pricing</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/contact">Contact</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/careers">Careers</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/blog">Blog</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/newsletter">Newsletter</Link></li>
+                </>
+              )}
             </ul>
           </div>
 
@@ -57,12 +65,20 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
           <div className="md:col-span-4 lg:col-span-4">
             <h4 className="text-white font-medium text-[15px] mb-5">Services</h4>
             <ul className="space-y-3.5">
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Company Incorporation</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">GST Registration & Filing</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Income Tax Advisory</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Accounting & Bookkeeping</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Audit & Assurance</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Business Compliance Management</Link></li>
+              {(footer?.servicesLinks && footer.servicesLinks.length > 0) ? (
+                footer.servicesLinks.map(link => (
+                  <li key={link.id}><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href={link.url}>{link.label}</Link></li>
+                ))
+              ) : (
+                <>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Company Incorporation</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">GST Registration & Filing</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Income Tax Advisory</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Accounting & Bookkeeping</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Audit & Assurance</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Business Compliance Management</Link></li>
+                </>
+              )}
             </ul>
           </div>
 
