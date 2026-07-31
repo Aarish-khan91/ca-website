@@ -17,7 +17,7 @@ export function ServiceOverviewSection({ service }: ServiceOverviewSectionProps)
           )}
           {service.introDescription && (
             <div
-              className="prose max-w-none text-slate-700 leading-relaxed text-[15px] md:text-[16px] space-y-6
+              className="prose max-w-none text-slate-700 leading-relaxed text-[15px] md:text-[16px] space-y-6 whitespace-pre-line
                          [&_p]:mb-4 [&_strong]:text-[#0b293d] [&_strong]:font-semibold [&_p]:font-light"
               dangerouslySetInnerHTML={{ __html: service.introDescription }}
             />

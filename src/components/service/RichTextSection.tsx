@@ -4,7 +4,6 @@ interface RichTextSectionProps {
 
 export function RichTextSection({ block }: RichTextSectionProps) {
   if (!block.content) return null
-  console.log('block===', block)
   return (
     <section className="bg-white py-16 md:py-24 border-b border-slate-100">
       <div className="container-prose px-4 md:px-8 mx-auto max-w-5xl">
