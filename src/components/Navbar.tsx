@@ -326,6 +326,22 @@ export function Navbar({
     { id: 2, subcategory: { id: 1 }, title: 'Company Incorporation', slug: 'company-incorporation' } as any
   ]
 
+  // ── Process header links to include FAQ ──────────────────────────────────
+  const processedNavLinks = (() => {
+    if (!header?.navLinks || header.navLinks.length === 0) return null
+    const links = [...header.navLinks]
+    const hasFaq = links.some(l => l.url === '/faq' || l.label.toLowerCase() === 'faq')
+    if (!hasFaq) {
+      const contactIdx = links.findIndex(l => l.label.toLowerCase() === 'contact')
+      if (contactIdx !== -1) {
+        links.splice(contactIdx, 0, { id: 999, label: 'FAQ', url: '/faq' })
+      } else {
+        links.push({ id: 999, label: 'FAQ', url: '/faq' })
+      }
+    }
+    return links
+  })()
+
   // ── Search Logic ──────────────────────────────────────────────────────────
   const filteredServices = searchQuery.trim() === '' ? [] : safeServices.filter(s => s.title.toLowerCase().includes(searchQuery.toLowerCase()))
   const filteredBlogs = searchQuery.trim() === '' ? [] : blogs.filter(b => b.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -469,8 +485,8 @@ export function Navbar({
 
         {/* Desktop: Nav links */}
         <nav className="hidden lg:flex items-center gap-3 xl:gap-6 2xl:gap-8 ml-auto mr-6 xl:mr-12">
-          {header?.navLinks && header.navLinks.length > 0 ? (
-            header.navLinks.map((link, idx) => {
+          {processedNavLinks && processedNavLinks.length > 0 ? (
+            processedNavLinks.map((link, idx) => {
               if (link.label.toLowerCase() === 'services') {
                 return (
                   <div className="group" key={`desk-nav-${idx}`}>
@@ -674,6 +690,7 @@ export function Navbar({
               <Link href="/blog" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Blog</Link>
               <Link href="/pricing" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Pricing</Link>
               <Link href="/careers" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Careers</Link>
+              <Link href="/faq" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">FAQ</Link>
               <Link href="/contact" className="text-slate-600 hover:text-brand-dark transition-colors text-[14px] xl:text-[15px]">Contact</Link>
             </>
           )}
@@ -745,8 +762,8 @@ export function Navbar({
               </div>
             )}
 
-            {header?.navLinks && header.navLinks.length > 0 ? (
-              header.navLinks.map((link, idx) => {
+            {processedNavLinks && processedNavLinks.length > 0 ? (
+              processedNavLinks.map((link, idx) => {
                 if (link.label.toLowerCase() === 'services') {
                   return (
                     <div key={`m-nav-${idx}`} className="border-b border-gray-100">
@@ -967,6 +984,7 @@ export function Navbar({
                 <MobileNavLink href="/blog" label="Blog" onClick={() => setOpen(false)} />
                 <MobileNavLink href="/pricing" label="Pricing" onClick={() => setOpen(false)} />
                 <MobileNavLink href="/careers" label="Careers" onClick={() => setOpen(false)} />
+                <MobileNavLink href="/faq" label="FAQ" onClick={() => setOpen(false)} />
                 <MobileNavLink href="/contact" label="Contact" onClick={() => setOpen(false)} />
               </>
             )}

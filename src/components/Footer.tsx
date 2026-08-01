@@ -15,7 +15,7 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
           
           {/* Brand & Description */}
-          <div className="md:col-span-5 lg:col-span-5">
+          <div className="md:col-span-4 lg:col-span-4">
             <h3 className="text-white text-[20px] md:text-[22px] font-medium mb-3">
               {brandName}
             </h3>
@@ -39,7 +39,7 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
           </div>
 
           {/* Quick Links */}
-          <div className="md:col-span-3 lg:col-span-3 lg:pl-10">
+          <div className="md:col-span-2 lg:col-span-2 lg:pl-6">
             <h4 className="text-white font-medium text-[15px] mb-5">Quick Links</h4>
             <ul className="space-y-3.5">
               {(footer?.quickLinks && footer.quickLinks.length > 0) ? (
@@ -53,16 +53,25 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
                   <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Services</Link></li>
                   <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/pricing">Pricing</Link></li>
                   <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/contact">Contact</Link></li>
-                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/careers">Careers</Link></li>
-                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/blog">Blog</Link></li>
-                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/newsletter">Newsletter</Link></li>
                 </>
               )}
             </ul>
           </div>
 
+          {/* Resources */}
+          <div className="md:col-span-3 lg:col-span-3 lg:pl-6">
+            <h4 className="text-white font-medium text-[15px] mb-5">Resources</h4>
+            <ul className="space-y-3.5">
+              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/faq">FAQs</Link></li>
+              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/blog">Blog</Link></li>
+              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/careers">Careers</Link></li>
+              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/newsletter">Newsletter</Link></li>
+              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/contact">Support</Link></li>
+            </ul>
+          </div>
+
           {/* Services */}
-          <div className="md:col-span-4 lg:col-span-4">
+          <div className="md:col-span-3 lg:col-span-3">
             <h4 className="text-white font-medium text-[15px] mb-5">Services</h4>
             <ul className="space-y-3.5">
               {(footer?.servicesLinks && footer.servicesLinks.length > 0) ? (

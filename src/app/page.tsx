@@ -10,7 +10,7 @@ import { InsightsHome } from '@/components/InsightsHome'
 import { ServiceContact } from '@/components/ServiceContact'
 import Link from 'next/link'
 import { Button } from '@/components/Button'
-import { fetchHomepageData, getStrapiUrl } from '@/data/strapi'
+import { fetchHomepageData, getStrapiUrl, fetchContactPageData } from '@/data/strapi'
 
 // Dynamically generate SEO Metadata using the CMS SEO fields
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,6 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Page() {
   const cmsData = await fetchHomepageData();
+  const contactCmsData = await fetchContactPageData();
 
   // 1. Map Hero component properties
   const heroProps = cmsData ? {
@@ -180,7 +181,16 @@ export default async function Page() {
         </section>
 
         {/* Contact Form Section - Deep Blue */}
-        <ServiceContact title={contactTitle} />
+        <ServiceContact 
+          title={contactTitle}
+          officeAddressTitle={contactCmsData?.officeAddressTitle}
+          officeAddress={contactCmsData?.officeAddress}
+          contactDetailsTitle={contactCmsData?.contactDetailsTitle}
+          email={contactCmsData?.email}
+          phone={contactCmsData?.phone}
+          officeHoursTitle={contactCmsData?.officeHoursTitle}
+          officeHours={contactCmsData?.officeHours}
+        />
 
       </main>
     </>
