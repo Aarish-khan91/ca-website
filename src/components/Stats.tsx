@@ -76,7 +76,7 @@ export function Stats({ stats }: StatsProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {items?.map((s) => (
             <div key={s.label} className="bg-white rounded-lg p-8 text-center shadow-lg transform hover:-translate-y-1 transition-transform">
-              <Counter end={s.value} suffix={s.suffix} />
+              <Counter end={s.value || 0} suffix={s.suffix} />
               <div className="mt-1 text-slate-800 font-medium text-sm">{s.label}</div>
             </div>
           ))}
