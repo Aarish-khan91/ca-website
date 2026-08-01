@@ -8,12 +8,13 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
   const facebookUrl = footer?.facebookUrl || '#';
   const instagramUrl = footer?.instagramUrl || '#';
   const twitterUrl = footer?.twitterUrl || '#';
-
+  console.log('footer?.resourcesLinks===', footer
+  )
   return (
     <footer className={clsx('bg-[#0b293d] py-16', className)}>
       <div className="container-prose px-4 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
-          
+
           {/* Brand & Description */}
           <div className="md:col-span-4 lg:col-span-4">
             <h3 className="text-white text-[20px] md:text-[22px] font-medium mb-3">
@@ -25,7 +26,7 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
             <div className="flex items-center gap-3">
               {/* Facebook */}
               <a href={facebookUrl} aria-label="Facebook" className="w-[30px] h-[30px] flex items-center justify-center rounded-[6px] bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-colors">
-                <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" /></svg>
               </a>
               {/* Instagram */}
               <a href={instagramUrl} aria-label="Instagram" className="w-[30px] h-[30px] flex items-center justify-center rounded-[6px] bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-colors">
@@ -33,7 +34,7 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
               </a>
               {/* X / Twitter */}
               <a href={twitterUrl} aria-label="X (Twitter)" className="w-[30px] h-[30px] flex items-center justify-center rounded-[6px] bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-colors">
-                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
               </a>
             </div>
           </div>
@@ -62,11 +63,19 @@ export function Footer({ className, footer }: { className?: string, footer?: Str
           <div className="md:col-span-3 lg:col-span-3 lg:pl-6">
             <h4 className="text-white font-medium text-[15px] mb-5">Resources</h4>
             <ul className="space-y-3.5">
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/faq">FAQs</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/blog">Blog</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/careers">Careers</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/newsletter">Newsletter</Link></li>
-              <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/contact">Support</Link></li>
+              {(footer?.resourcesLinks && footer.resourcesLinks.length > 0) ? (
+                footer.resourcesLinks.map(link => (
+                  <li key={link.id}><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href={link.url}>{link.label}</Link></li>
+                ))
+              ) : (
+                <>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/">Home</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/about">About</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/services">Services</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/pricing">Pricing</Link></li>
+                  <li><Link className="text-[14px] text-slate-300 hover:text-white transition-colors font-light" href="/contact">Contact</Link></li>
+                </>
+              )}
             </ul>
           </div>
 

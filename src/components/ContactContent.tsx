@@ -26,6 +26,7 @@ export function ContactContent({
     formDescription
 }: ContactContentProps) {
     const [fullName, setFullName] = useState('')
+    const [businessName, setBusinessName] = useState('')
     const [emailInput, setEmailInput] = useState('')
     const [phoneInput, setPhoneInput] = useState('')
     const [serviceInterest, setServiceInterest] = useState('Select a Service')
@@ -78,6 +79,7 @@ export function ContactContent({
             const payload = {
                 data: {
                     fullName,
+                    businessName,
                     email: emailInput,
                     phone: phoneInput,
                     serviceInterest: serviceInterest !== 'Select a Service' ? serviceInterest : '',
@@ -104,6 +106,7 @@ export function ContactContent({
 
             // Reset fields
             setFullName('')
+            setBusinessName('')
             setEmailInput('')
             setPhoneInput('')
             setServiceInterest('Select a Service')
@@ -190,6 +193,18 @@ export function ContactContent({
                                     onChange={(e) => setFullName(e.target.value)}
                                     className="w-full h-12 text-black rounded-lg border border-slate-300 px-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow"
                                     required
+                                    disabled={isSubmitting}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Business Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Business Name"
+                                    value={businessName}
+                                    onChange={(e) => setBusinessName(e.target.value)}
+                                    className="w-full h-12 text-black rounded-lg border border-slate-300 px-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow"
                                     disabled={isSubmitting}
                                 />
                             </div>

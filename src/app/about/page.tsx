@@ -91,7 +91,9 @@ export default async function AboutPage() {
                 role: t.role,
                 image: t.image?.url ? getStrapiMedia(t.image.url) as string : '',
                 linkedInUrl: t.linkedInUrl,
-                twitterUrl: t.twitterUrl
+                twitterUrl: t.twitterUrl,
+                biography: t.biography,
+                keyExpertise: t.keyExpertise
               }))}
             />
           </div>

@@ -24,6 +24,7 @@ export function ServiceContact({
     officeHours
 }: ServiceContactProps) {
     const [fullName, setFullName] = useState('')
+    const [businessName, setBusinessName] = useState('')
     const [emailInput, setEmailInput] = useState('')
     const [phoneInput, setPhoneInput] = useState('')
     const [serviceInterest, setServiceInterest] = useState('Select a Service')
@@ -76,6 +77,7 @@ export function ServiceContact({
             const payload = {
                 data: {
                     fullName,
+                    businessName,
                     email: emailInput,
                     phone: phoneInput,
                     serviceInterest: serviceInterest !== 'Select a Service' ? serviceInterest : '',
@@ -102,6 +104,7 @@ export function ServiceContact({
 
             // Reset fields
             setFullName('')
+            setBusinessName('')
             setEmailInput('')
             setPhoneInput('')
             setServiceInterest('Select a Service')
@@ -218,6 +221,19 @@ export function ServiceContact({
                                     className="w-full h-[46px] rounded-lg border border-slate-200 px-4 text-[14px] text-slate-700 placeholder-slate-400 focus:ring-1 focus:ring-brand-orange focus:border-brand-orange outline-none transition-colors"
                                 />
                             </div>
+                            <div>
+                                <label className="block text-[15px] text-slate-600 mb-2 font-medium">Business Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter your Business Name"
+                                    value={businessName}
+                                    onChange={(e) => setBusinessName(e.target.value)}
+                                    disabled={isSubmitting}
+                                    className="w-full h-[46px] rounded-lg border border-slate-200 px-4 text-[14px] text-slate-700 placeholder-slate-400 focus:ring-1 focus:ring-brand-orange focus:border-brand-orange outline-none transition-colors"
+                                />
+                            </div>
+
+                            {/* Row 1.5 (or keep in same grid) */}
                             <div>
                                 <label className="block text-[15px] text-slate-600 mb-2 font-medium">Email <span className="text-red-500">*</span></label>
                                 <input

@@ -65,7 +65,7 @@ export function Stats({ stats }: StatsProps) {
   const items = stats
     && stats.map((s) => {
       const numMatch = s.number.match(/\d+/)
-      const value = numMatch ? parseInt(numMatch[0], 10) : 0
+      const value = numMatch ? parseInt(numMatch[0], 10) : null
       const suffix = s.number.replace(/\d+/, '')
       return { label: s.label, value, suffix }
     })

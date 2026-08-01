@@ -436,7 +436,7 @@ export function Navbar({
 
           {/* Desktop Search Results Dropdown */}
           {isSearchFocused && searchQuery.trim() !== '' && (
-            <div 
+            <div
               className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 shadow-xl rounded-xl max-h-[400px] overflow-y-auto z-[60] p-2"
               onMouseDown={(e) => e.preventDefault()}
             >
@@ -444,9 +444,9 @@ export function Navbar({
                 <div className="mb-3">
                   <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 tracking-wider uppercase">Services</div>
                   {filteredServices.map(srv => (
-                    <Link 
-                      key={`srv-${srv.id}`} 
-                      href={`/services/${srv.slug}`} 
+                    <Link
+                      key={`srv-${srv.id}`}
+                      href={`/services/${srv.slug}`}
                       onClick={() => {
                         setSearchQuery('');
                         setIsSearchFocused(false);
@@ -462,9 +462,9 @@ export function Navbar({
                 <div className="mb-3">
                   <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 tracking-wider uppercase">Blogs</div>
                   {filteredBlogs.map(blog => (
-                    <Link 
-                      key={`blog-${blog.id}`} 
-                      href={`/blog/${blog.slug}`} 
+                    <Link
+                      key={`blog-${blog.id}`}
+                      href={`/blog/${blog.slug}`}
                       onClick={() => {
                         setSearchQuery('');
                         setIsSearchFocused(false);
@@ -498,7 +498,7 @@ export function Navbar({
                     <div className="absolute left-0 right-0 mx-auto w-[1100px] max-w-[calc(100%-2rem)] lg:max-w-[calc(100%-4rem)] top-full bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                       <div className="flex h-[450px]">
                         {/* Col 1: Main Modules */}
-                        <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
+                        {/* <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
                           <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">MAIN MODULES</div>
                           <div className="flex-1 overflow-y-auto pb-4">
                             {safeMainModules.map((module, mIdx) => {
@@ -515,7 +515,7 @@ export function Navbar({
                               )
                             })}
                           </div>
-                        </div>
+                        </div> */}
 
                         {/* Col 2: Categories */}
                         <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
@@ -724,13 +724,13 @@ export function Navbar({
                   <div className="mb-2">
                     <div className="px-2 py-1 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Services</div>
                     {filteredServices.map(srv => (
-                      <Link 
-                        key={`m-srv-${srv.id}`} 
-                        href={`/services/${srv.slug}`} 
+                      <Link
+                        key={`m-srv-${srv.id}`}
+                        href={`/services/${srv.slug}`}
                         onClick={() => {
                           setOpen(false);
                           setSearchQuery('');
-                        }} 
+                        }}
                         className="block px-2 py-1.5 text-[14px] text-gray-700 hover:text-brand-orange"
                       >
                         {srv.title}
@@ -742,13 +742,13 @@ export function Navbar({
                   <div className="mb-2">
                     <div className="px-2 py-1 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Blogs</div>
                     {filteredBlogs.map(blog => (
-                      <Link 
-                        key={`m-blog-${blog.id}`} 
-                        href={`/blog/${blog.slug}`} 
+                      <Link
+                        key={`m-blog-${blog.id}`}
+                        href={`/blog/${blog.slug}`}
                         onClick={() => {
                           setOpen(false);
                           setSearchQuery('');
-                        }} 
+                        }}
                         className="block px-2 py-1.5 text-[14px] text-gray-700 hover:text-brand-orange"
                       >
                         {blog.title}

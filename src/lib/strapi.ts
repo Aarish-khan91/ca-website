@@ -273,6 +273,8 @@ export interface StrapiAboutPage {
     image?: { url: string } | null;
     linkedInUrl?: string;
     twitterUrl?: string;
+    biography?: string;
+    keyExpertise?: string[];
   }>;
   ctaTitle: string;
   ctaSubtitle: string;
@@ -370,6 +372,30 @@ export async function getServiceBySlug(slug: string): Promise<StrapiService | nu
             },
             'service.contact-cta': {
               populate: '*'
+            },
+            'service.table-section': {
+              populate: {
+                headers: { populate: '*' },
+                rows: {
+                  populate: {
+                    cells: { populate: '*' }
+                  }
+                }
+              }
+            },
+            'service.tabbed-table-section': {
+              populate: {
+                tabs: {
+                  populate: {
+                    headers: { populate: '*' },
+                    rows: {
+                      populate: {
+                        cells: { populate: '*' }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -493,11 +519,12 @@ export interface StrapiFooter {
   twitterUrl?: string;
   quickLinks?: StrapiLink[];
   servicesLinks?: StrapiLink[];
+  resourcesLinks?: StrapiLink[];
 }
 
 export async function getFooter(): Promise<StrapiFooter | null> {
   try {
-    const res = await fetch(`${STRAPI_URL}/api/footer?populate[quickLinks]=*&populate[servicesLinks]=*`, {
+    const res = await fetch(`${STRAPI_URL}/api/footer?populate[quickLinks]=*&populate[servicesLinks]=*&populate[resourcesLinks]=*`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) return null;

@@ -5,9 +5,9 @@ import { notFound } from 'next/navigation'
 // Import modular UI components
 import { ServiceHeroSection } from '@/components/service/ServiceHeroSection'
 import { ServiceOverviewSection } from '@/components/service/ServiceOverviewSection'
-import { RichTextSection } from '@/components/service/RichTextSection'
+import { TableSection } from '@/components/service/TableSection'
 import { FeatureGridSection } from '@/components/service/FeatureGridSection'
-import { TabbedRichText } from '@/components/service/TabbedRichText'
+import { TabbedTableSection } from '@/components/service/TabbedTableSection'
 import { ProcessSection } from '@/components/service/ProcessSection'
 import { ContactCtaSection } from '@/components/service/ContactCtaSection'
 import { ServiceFaqAccordion } from '@/components/service/ServiceFaqAccordion'
@@ -70,14 +70,14 @@ export default async function ServicePage({ params }: PageProps) {
         const featureGridCount = blocks.slice(0, idx).filter((b: any) => b.__component === 'service.feature-grid').length;
 
         switch (componentType) {
-          case 'service.rich-text-section':
-            return <RichTextSection key={idx} block={block} />
+          case 'service.table-section':
+            return <TableSection key={idx} block={block} />
 
           case 'service.feature-grid':
             return <FeatureGridSection key={idx} block={block} gridIndex={featureGridCount} />
 
-          case 'service.tabbed-rich-text':
-            return <TabbedRichText key={idx} block={block} />
+          case 'service.tabbed-table-section':
+            return <TabbedTableSection key={idx} block={block} />
 
           case 'service.process-section':
             return <ProcessSection key={idx} block={block} />
