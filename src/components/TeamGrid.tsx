@@ -9,9 +9,7 @@ export interface TeamMember {
   linkedInUrl?: string
   twitterUrl?: string
   biography?: string
-  keyExpertise?: {
-    keyExpertise: string[]
-  }
+  keyExpertise?: any
 }
 
 export interface TeamGridProps {
