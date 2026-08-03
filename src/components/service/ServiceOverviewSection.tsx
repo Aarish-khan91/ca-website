@@ -1,3 +1,8 @@
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
+import { cleanMarkdown } from '@/lib/markdown'
+
 interface ServiceOverviewSectionProps {
   service: any
 }
@@ -17,10 +22,22 @@ export function ServiceOverviewSection({ service }: ServiceOverviewSectionProps)
           )}
           {service.introDescription && (
             <div
-              className="prose max-w-none text-slate-700 leading-relaxed text-[15px] md:text-[16px] space-y-6 whitespace-pre-line
-                         [&_p]:mb-4 [&_strong]:text-[#0b293d] [&_strong]:font-semibold [&_p]:font-light"
-              dangerouslySetInnerHTML={{ __html: service.introDescription }}
-            />
+              className="prose max-w-none text-slate-700 leading-relaxed text-[15px] md:text-[16px] space-y-6
+                         [&_p]:mb-4 [&_p]:font-light
+                         [&_strong]:text-[#0b293d] [&_strong]:font-semibold
+                         [&_em]:italic
+                         [&_u]:underline
+                         [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mb-1
+                         [&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold
+                         [&_h1]:text-[#0b293d] [&_h2]:text-[#0b293d] [&_h3]:text-[#0b293d] [&_h1]:mt-6 [&_h2]:mt-6 [&_h3]:mt-6
+                         [&_img]:rounded-[8px] [&_img]:max-w-full [&_img]:my-6 [&_img]:shadow-sm
+                         [&_a]:text-[#f28e2b] [&_a]:underline hover:[&_a]:text-[#d87f1c] transition-colors
+                         [&_blockquote]:border-l-4 [&_blockquote]:border-[#f28e2b] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-6 [&_blockquote]:text-[#0b293d]"
+            >
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {cleanMarkdown(service.introDescription)}
+              </ReactMarkdown>
+            </div>
           )}
         </div>
       </div>

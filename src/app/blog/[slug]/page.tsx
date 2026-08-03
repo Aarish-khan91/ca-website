@@ -3,17 +3,18 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
 import { NewsletterCTA } from '@/components/NewsletterCTA'
+import { cleanMarkdown } from '@/lib/markdown'
 import { getBlogPostBySlug, getBlogPosts, getStrapiMedia } from '@/lib/strapi'
 
 export default function BlogPostDetailPage({ params }: { params: any }) {
-  console.log("slug==>", params.slug)
   const [commentsList, setCommentsList] = useState<any[]>([])
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [commentText, setCommentText] = useState('')
   const [post, setPost] = useState<any>(null)
-  console.log("post==>", post)
 
   const [loading, setLoading] = useState(true)
   const [relatedPosts, setRelatedPosts] = useState<any[]>([])
@@ -80,7 +81,7 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
     setCommentText('')
   }
 
-  const heroImage = getStrapiMedia(post.coverImage?.url) || '/images/blog/blog_hero_1.jpg'
+  const heroImage = getStrapiMedia(post.coverImage?.url) || undefined
 
   // Extract table of contents directly from the markdown content string headings (## Heading)
   const headingMatches = post?.content?.match(/^##\s+(.*)$/gm) || []
@@ -123,6 +124,8 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
             <article className="col-span-1 lg:col-span-8 flex flex-col">
               <div className="prose max-w-none">
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
                   components={{
                     p: ({ children }) => (
                       <p className="text-slate-600 text-[16px] leading-relaxed mb-6 font-light">
@@ -167,7 +170,7 @@ export default function BlogPostDetailPage({ params }: { params: any }) {
                     )
                   }}
                 >
-                  {post.content}
+                  {cleanMarkdown(post.content)}
                 </ReactMarkdown>
               </div>
 
