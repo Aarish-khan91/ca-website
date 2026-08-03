@@ -603,7 +603,7 @@ export function Navbar({
                   <div className="flex h-[450px]">
                     {/* Col 1: Main Modules */}
                     <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
-                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">MAIN MODULES</div>
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">Practice Areas</div>
                       <div className="flex-1 overflow-y-auto pb-4">
                         {safeMainModules.map((module, mIdx) => {
                           const isActive = activeMainModule?.id === module.id
@@ -623,7 +623,7 @@ export function Navbar({
 
                     {/* Col 2: Categories */}
                     <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
-                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">CATEGORIES</div>
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">Service Categories</div>
                       <div className="flex-1 overflow-y-auto pb-4">
                         {activeCategories.map((cat, cIdx) => {
                           const isActive = activeCategory?.id === cat.id
@@ -644,7 +644,7 @@ export function Navbar({
 
                     {/* Col 3: Subcategories */}
                     <div className="w-1/4 bg-white border-r border-gray-100 flex flex-col pt-6">
-                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SUBCATEGORIES</div>
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">Services</div>
                       <div className="flex-1 overflow-y-auto pb-4">
                         {activeSubcategories.map((sub, sIdx) => {
                           const isActive = activeSubcategory?.id === sub.id
@@ -665,7 +665,7 @@ export function Navbar({
 
                     {/* Col 4: Services */}
                     <div className="w-1/4 bg-white flex flex-col pt-6">
-                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded">SERVICES</div>
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded text-nowrap">Our Expertis / Solutions</div>
                       <div className="flex-1 overflow-y-auto pb-4">
                         {activeServices.map((srv, sIdx) => {
                           const isActive = activeService?.id === srv.id
