@@ -665,7 +665,7 @@ export function Navbar({
 
                     {/* Col 4: Services */}
                     <div className="w-1/4 bg-white flex flex-col pt-6">
-                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded text-nowrap">Our Expertis / Solutions</div>
+                      <div className="px-6 mb-4 text-[13px] font-bold text-gray-400 tracking-wider uppercase bg-gray-100 mx-4 py-2 rounded text-nowrap">Our Expertise / Solutions</div>
                       <div className="flex-1 overflow-y-auto pb-4">
                         {activeServices.map((srv, sIdx) => {
                           const isActive = activeService?.id === srv.id
